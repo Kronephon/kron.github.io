@@ -1,0 +1,72 @@
+--- 
+
+
+--- 
+
+//https://coolors.co/d8cfaf-e6b89c-5b4b49-c46d5e-f56960 
+$cWhite: #F5F7F6;
+$cPaleYellow: #C9B08D;
+$cGrey: #82718B;
+$cPaleRed: #9E445B;
+$cDarkGrey: #1D171C;
+
+$BackgroundColor :$cDarkGrey;
+
+@font-face {
+    font-family: myTechFont;
+    src: url('/assets/fonts/myFont.ttf');
+}
+
+@font-face {
+    font-family: myNormFont;
+    src: url('/assets/fonts/fontawesome-webfont.ttf');
+}
+
+img, embed, object, video {
+	max-width: 100%;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+
+    background: $BackgroundColor;
+}
+
+header {
+    height: 50px;
+}
+
+footer {
+    height: 50px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+}
+
+header a{
+    text-transform: uppercase;
+    font-family: myTechFont;
+    font-size: 20px;
+}
+
+a {	
+    color: $cGrey;
+	text-decoration: none;
+    transition: 0.4s color;
+	&:hover {
+		color: $cPaleYellow;
+	}
+}
+
+p{
+    font-family: myTechFont;
+    font-size: 12px;
+}

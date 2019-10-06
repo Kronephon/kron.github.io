@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Your awesome title
+title: Krone.dev
 email: kronephon@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Made this website so that you, dear user, would know a bit more about me.
@@ -27,10 +27,53 @@ url: "http://krone.dev" # the base hostname & protocol for your site, e.g. http:
 twitter_username: jekyllrb
 github_username:  jekyll
 
+
+headerSubSections:
+  - music: 
+    name: music
+    url: construction
+  - machlearning:
+    name: machine learning
+    url: construction
+  - compVision:
+    name: computer vision
+    url: construction
+  - render:
+    name: art
+    url: construction
+  - gameDev:
+    name: gameDev
+    url: construction
+  - homeAI:
+    name: homeAI
+    url: construction
+
+construction: /construction
+
 # Build settings
-theme: minima
+
 plugins:
   - jekyll-feed
+
+assets:
+  sources:
+    - assets/fonts
+    - assets/img
+    - assets/scripts
+    - assets/stylesheets
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+
+gems:
+  - jekyll-feed
+  - jekyll-assets
+exclude:
+  - Gemfile
+  - Gemfile.lock
+
 
 
   
