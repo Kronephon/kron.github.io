@@ -53,9 +53,9 @@ function update() {
     canvas.height = windowsHeight - 25; // in pixels
 
     for (var i = 0; i < particleArray.length; i++) {
-        particleArray[i].X = (particleArray[i].X + (Math.random() * 2 - 1)*0.1)  % windowsWidth;
-        particleArray[i].Y = (particleArray[i].Y + (Math.random() * 2 - 1)*0.1)  % windowsHeight;
-        particleArray[i].Z = (particleArray[i].Z + (Math.random() * 2 - 1)*0.1)  % windowsHeight;
+        particleArray[i].X = (particleArray[i].X + (Math.random() * 2 - 1)*0.15)  % windowsWidth;
+        particleArray[i].Y = (particleArray[i].Y + (Math.random() * 2 - 1)*0.15)  % windowsHeight;
+        particleArray[i].Z = (particleArray[i].Z + (Math.random() * 2 - 1)*0.15)  % windowsHeight;
     }
 }
 
@@ -72,8 +72,8 @@ function draw() {
     for (var i = 0; i < particleArray.length; i++) {
         ctx.beginPath();
         ctx.arc(particleArray[i].X, particleArray[i].Y, particleArray[i].width, 0, 2 * Math.PI, false);
-        ctx.lineWidth = getDoF(particleArray[i].Z)* 5;
-        ctx.strokeStyle = '#82718B';
+        ctx.lineWidth = getDoF(particleArray[i].Z) * 10;
+        ctx.strokeStyle = "#82718B";
         ctx.stroke();
         //Do something
     }
