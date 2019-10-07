@@ -1,7 +1,41 @@
 ---
-title: home
+mainTitle: Pedro Pimentel
+tagline: Computer Engineer
 description: Hmm...
+instagram: null
+email: null
+linkedin: null
+github: null
+
 ---
+
+<style type="text/css" media="screen">
+  .centerContainer {
+    position: relative;
+    align-items: center;
+    left: 50vw;
+    right: 50vw;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+
+    background-color: green; //#{{site.cDarkGrey}};
+    color: #{{site.cPaleYellow}};
+    opacity: 0.8;
+  }
+  .homeMainTitle h1{
+    text-align: center;
+    font-family: myNormFont;
+    text-align: center;
+    background:rgba(0, 4, 255, 0.9);
+    opacity: 1.0;
+  }
+  .backgroundCanvas{
+    display: 
+  }
+</style>
+
+
 <!DOCTYPE html>
 <html lang="{{ page.lang | default: site.lang | default: "en" }}">
 
@@ -9,6 +43,8 @@ description: Hmm...
 
   <body>
     <canvas id="backgroundCanvas"></canvas>
+    <div class="centerContainer"><h1>{{layout.mainTitle}}</h1><h2>{{layout.tagline}}</h2></div>
+
     {% include footer.html %}
     {% include scripts.html %}
   </body>

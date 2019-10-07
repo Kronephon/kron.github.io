@@ -3,12 +3,11 @@
 
 --- 
 
-//https://coolors.co/d8cfaf-e6b89c-5b4b49-c46d5e-f56960 
-$cWhite: #F5F7F6;
-$cPaleYellow: #C9B08D;
-$cGrey: #82718B;
-$cPaleRed: #9E445B;
-$cDarkGrey: #1D171C;
+$cWhite: #{{site.cWhite}};
+$cPaleYellow: #{{site.cPaleYellow}};
+$cGrey: #{{site.cGrey}};
+$cPaleRed: #{{site.cPaleRed}};
+$cDarkGrey: #{{site.cDarkGrey}};
 
 $BackgroundColor :$cDarkGrey;
 
