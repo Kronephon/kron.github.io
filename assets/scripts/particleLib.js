@@ -1,20 +1,24 @@
 ---
+main:
+    framerate: 60
+
 particles:
-    number: 10
-    oddsOfGeneration: 1.0
+    number: 100
+    oddsOfGeneration: 0.002
 
 particle:
     width: 1 
     mass : 5
-    life : 25
+    life : 20000
     lifeRange : 5
 
     fade : 5
     color: 3
 
 force:
-    drag : 10
-    jitter : 3
+    drag : 5
+    jitter : 0.05
+    gravity : 3
 
 ---
 
@@ -23,7 +27,7 @@ var canvas = document.getElementById('backgroundCanvas');
 var screen = {width:0, height:0};
 var simu = {x:0,y:0,z:0};
 var particleArray = [];
-const particleType = ParticleType({{page.particle.width}},{{page.particle.color}},{{page.particle.mass}}); //one particle type for now
+const particleType = new ParticleType({{page.particle.width}},{{page.particle.color}},{{page.particle.mass}}); //one particle type for now
 
 //init routine
 
@@ -46,7 +50,10 @@ function Particle(X, Y, Z, N, S) {
     this.life = N;
     this.pos = new Vec(X,Y,Z);
     this.force = new Vec(0,0,0);
-    this.settings = S; //intented to be particle type
+    this.velocity = new Vec(0,0,0);
+    this.width = S.width; //intented to be particle type
+    this.color = S.color;
+    this.mass = S.mass;
 }
 
 function Vec(x,y,z){
@@ -71,34 +78,80 @@ function updateScreenSize(){
     canvas.height = screen.height - {{site.footerSize}}; // in pixels
 }
 
-function physics(particle){
-
-}
-
-function ageCheck(particle){
-    return particle.life <= 0;
+function removeCheck(particle){
+    if(particle.life < 0 || particle.pos.x > screen.width || particle.pos.x < 0|| particle.pos.y > screen.height || particle.pos.y < 0)
+        return false;
+    return true;
 }
 
 function processParticle(){
     for (var i = 0; i < particleArray.length; i++) {
-        //remove off screen ones
-
+        physics(particleArray[i]);
         //decrease life
+        particleArray[i].life--;
+        
     }
+}
+
+//f = m * a
+//a = m / f
+//a = dv / t
+//v = dx / t
+//dx = v * t
+//dx = dv
+function physics(particle){
+    aX = particle.force.x / particle.mass;
+    aY = particle.force.y / particle.mass;
+    aZ = particle.force.z / particle.mass;
+
+    particle.velocity.x += aX;
+    particle.velocity.y += aY;
+    particle.velocity.z += aZ;
+
+    particle.pos.x += particle.velocity.x;
+    particle.pos.y += particle.velocity.y;
+    particle.pos.z += particle.velocity.z;
+    
+    //drag
+
+
+    dragX = 0.5 * {{page.force.drag}} * particle.velocity.x * particle.velocity.x;
+    dragY = 0.5 * {{page.force.drag}} * particle.velocity.y * particle.velocity.y;
+    dragZ = 0.5 * {{page.force.drag}} * particle.velocity.z * particle.velocity.z;
+
+    if(particle.force.x > 0){
+        particle.force.x -= dragX;
+    }else{
+        particle.force.x += dragX;
+    }
+    if(particle.force.y > 0){
+        particle.force.y -= dragY;
+    }else{
+        particle.force.y += dragY;
+    }
+    if(particle.force.z > 0){
+        particle.force.z -= dragZ;
+    }else{
+        particle.force.z += dragZ;
+    }
+    //jitter 
+    particle.force.x += (Math.random() - 0.5)*{{page.force.jitter}};
+    particle.force.y += (Math.random() - 0.5)*{{page.force.jitter}};
+    particle.force.z += (Math.random() - 0.5)*{{page.force.jitter}};
+
 }
 
 function generateParticles(){
     let numberToGenerate = {{page.particles.number}} - particleArray.length;
-    console.log(particleArray.length);
     if (numberToGenerate > 0){
         for (var i = 0; i < numberToGenerate; i++) {
-            if(true){//Math.random() <= {{page.particles.oddsOfGeneration}} ){
+            if(Math.random() <= {{page.particles.oddsOfGeneration}}){
                 var X = Math.random() * simu.x; //this needs to be !=0
                 var Y = Math.random() * simu.y;
                 var Z = Math.random() * simu.z;
                 var life = Math.floor(Math.random()*{{page.particle.life}}); //revisit
 
-                particleArray.push(new Particle(X,Y,Z,life,particleType)); 
+                particleArray.push(new Particle(X,Y,Z,life, particleType)); 
             }
         }
     }
@@ -107,7 +160,7 @@ function generateParticles(){
 function update() {
 
     //kill off and remove off screen ones (mnaybe a good idea to add a buffer here because of big particles so edge + biggest size)
-    particleArray = particleArray.filter(ageCheck);
+    particleArray = particleArray.filter(removeCheck);
 
     //process particles
     processParticle();
@@ -118,9 +171,12 @@ function update() {
 
 function draw() {
     var context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
     for (var i = 0; i < particleArray.length; i++) {
-        context.fillStyle = "#0050F0";
+
         context.beginPath();
+        context.fillStyle = "#0050F0";
         context.arc(particleArray[i].pos.x, particleArray[i].pos.y, 2, 0, 2 * Math.PI);
         context.fill();
     }
@@ -132,7 +188,7 @@ function mainLoop() {
         update();
         draw();
     }
-    window.setTimeout(mainLoop, 1000/60);
+    window.setTimeout(mainLoop, 1000/{{page.main.framerate}});
 
 }
 requestAnimationFrame(init);
