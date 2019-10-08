@@ -57,6 +57,11 @@ cGrey: 82718B
 cPaleRed: 9E445B
 cDarkGrey: 1D171C
 
+# generics
+
+footerSize: 25
+
+
 # Build settings
 
 plugins:

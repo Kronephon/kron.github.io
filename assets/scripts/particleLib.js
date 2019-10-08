@@ -1,88 +1,129 @@
 ---
+particles:
+    number: 10
+    oddsOfGeneration: 1.0
+
+particle:
+    width: 1 
+    mass : 5
+    life : 25
+    lifeRange : 5
+
+    fade : 5
+    color: 3
+
+force:
+    drag : 10
+    jitter : 3
 
 ---
 
-// Draw whatever else over top of it on the canvas.
+//global vars
+var canvas = document.getElementById('backgroundCanvas');
+var screen = {width:0, height:0};
+var simu = {x:0,y:0,z:0};
+var particleArray = [];
+const particleType = ParticleType({{page.particle.width}},{{page.particle.color}},{{page.particle.mass}}); //one particle type for now
 
 //init routine
-window.addEventListener('resize', updateScreenSize);
 
-var canvas = document.getElementById('backgroundCanvas');
-//if(!canvas){
-//    alert("no canvas");
-//}
-
-var windowsWidth;
-var windowsHeight;
-updateScreenSize();
-
-
-var particleSettings = {
-    width: 1 //expressed in pixels
-};
-
-var particleArray = [];
-
-for (var i = 0; i < Math.floor(Math.random() * 20000); i++) { //todo: port number
-    var particle = {
-        width: particleSettings.width,
-        X: Math.random() * windowsWidth,
-        Y: Math.random() * windowsHeight,
-        Z: Math.random() * windowsHeight
+function init(){
+    if(!canvas){
+        return;
     }
-    particleArray[i] = particle;
-    // more statements
+    updateScreenSize();
+    window.addEventListener('resize', updateScreenSize);
+    mainLoop();
 }
 
+function ParticleType(W, C, M) {
+    this.width= W; 
+    this.color= C;
+    this.mass = M;
+}
 
-requestAnimationFrame(mainLoop);
+function Particle(X, Y, Z, N, S) {
+    this.life = N;
+    this.pos = new Vec(X,Y,Z);
+    this.force = new Vec(0,0,0);
+    this.settings = S; //intented to be particle type
+}
+
+function Vec(x,y,z){
+    this.x = x;
+    this.y = y;
+    this.z = z;
+}
 
 function updateScreenSize(){
-    var win = window,
-    doc = document,
-    docElem = doc.documentElement,
-    body = doc.getElementsByTagName('body')[0],
-    x = win.innerWidth || docElem.clientWidth || body.clientWidth,
-    y = win.innerHeight || docElem.clientHeight || body.clientHeight;
-    windowsWidth = win.innerWidth; // in pixels
-    windowsHeight = win.innerHeight; // in pixels
+    var win = window;
+    doc = document;
+    docElem = doc.documentElement;
+    body = doc.getElementsByTagName('body')[0];
+    screen.width = win.innerWidth; // in pixels
+    screen.height = win.innerHeight; // in pixels
+    
+    simu.x = screen.width;
+    simu.y = screen.height;
+    simu.z = screen.width;
+    
+    canvas.width = screen.width; // in pixels
+    canvas.height = screen.height - {{site.footerSize}}; // in pixels
+}
+
+function physics(particle){
+
+}
+
+function ageCheck(particle){
+    return particle.life <= 0;
+}
+
+function processParticle(){
+    for (var i = 0; i < particleArray.length; i++) {
+        //remove off screen ones
+
+        //decrease life
+    }
+}
+
+function generateParticles(){
+    let numberToGenerate = {{page.particles.number}} - particleArray.length;
+    console.log(particleArray.length);
+    if (numberToGenerate > 0){
+        for (var i = 0; i < numberToGenerate; i++) {
+            if(true){//Math.random() <= {{page.particles.oddsOfGeneration}} ){
+                var X = Math.random() * simu.x; //this needs to be !=0
+                var Y = Math.random() * simu.y;
+                var Z = Math.random() * simu.z;
+                var life = Math.floor(Math.random()*{{page.particle.life}}); //revisit
+
+                particleArray.push(new Particle(X,Y,Z,life,particleType)); 
+            }
+        }
+    }
 }
 
 function update() {
-    canvas.width = windowsWidth; // in pixels
-    canvas.height = windowsHeight - 25; // in pixels
 
-    for (var i = 0; i < particleArray.length; i++) {
-        particleArray[i].X = (particleArray[i].X + (Math.random() * 2 - 1)*0.15)  % windowsWidth;
-        particleArray[i].Y = (particleArray[i].Y + (Math.random() * 2 - 1)*0.15)  % windowsHeight;
-        particleArray[i].Z = (particleArray[i].Z + (Math.random() * 2 - 1)*0.15)  % windowsHeight;
-    }
-}
+    //kill off and remove off screen ones (mnaybe a good idea to add a buffer here because of big particles so edge + biggest size)
+    particleArray = particleArray.filter(ageCheck);
 
+    //process particles
+    processParticle();
 
-function getDoF(input) { //target is -1 to 1
-    var middle = windowsHeight/2;
-    var norm = (windowsHeight -input)/windowsHeight;
-    return Math.abs(norm);
+    //generate new particles
+    generateParticles();
 }
 
 function draw() {
-    var ctx = canvas.getContext('2d');
-
+    var context = canvas.getContext('2d');
     for (var i = 0; i < particleArray.length; i++) {
-        ctx.beginPath();
-        ctx.arc(particleArray[i].X, particleArray[i].Y, particleArray[i].width, 0, 2 * Math.PI, false);
-        ctx.lineWidth = getDoF(particleArray[i].Z) * 10;
-        ctx.strokeStyle = "#82718B";
-        ctx.stroke();
-        //Do something
+        context.fillStyle = "#0050F0";
+        context.beginPath();
+        context.arc(particleArray[i].pos.x, particleArray[i].pos.y, 2, 0, 2 * Math.PI);
+        context.fill();
     }
-    //ctx.beginPath();
-    //ctx.arc(X, Y, R, 0, 2 * Math.PI, false);
-    //ctx.lineWidth = 3;
-    //ctx.strokeStyle = '#FF0000';
-    // ctx.stroke();
-
 }
 
 function mainLoop() {
@@ -90,8 +131,8 @@ function mainLoop() {
     if (canvas.getContext) {
         update();
         draw();
-
     }
-    setTimeout(mainLoop, 1 / 60);
+    window.setTimeout(mainLoop, 1000/60);
 
 }
+requestAnimationFrame(init);
