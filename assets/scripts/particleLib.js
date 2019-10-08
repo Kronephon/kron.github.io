@@ -176,7 +176,7 @@ function draw() {
     for (var i = 0; i < particleArray.length; i++) {
 
         context.beginPath();
-        context.fillStyle = "#0050F0";
+        context.fillStyle = "#{{site.cPaleYellow}}";
         context.arc(particleArray[i].pos.x, particleArray[i].pos.y, 2, 0, 2 * Math.PI);
         context.fill();
     }
