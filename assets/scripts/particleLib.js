@@ -1,6 +1,6 @@
 ---
 main:
-    framerate: 99
+    framerate: 9999
 
 particles:
     number: 100
@@ -8,7 +8,7 @@ particles:
 
 particle:
     width: 1 
-    mass : 5
+    mass : 10
     life : 20000
     lifeRange : 5
 
@@ -16,8 +16,9 @@ particle:
     color: 3
 
 force:
-    drag : 0.005
-    jitter : 0.005
+    drag : 0.004
+    jitter : 0.004
+    gravity : 1
 
 ---
 
@@ -135,7 +136,7 @@ function physics(particle){
     }
     //jitter 
     particle.force.x += (Math.random() - 0.5)*{{page.force.jitter}};
-    particle.force.y += (Math.random() - 0.5)*{{page.force.jitter}};
+    particle.force.y += (Math.random() - 0.5)*{{page.force.jitter}} + 0.0003;
     particle.force.z += (Math.random() - 0.5)*{{page.force.jitter}};
 
 }
