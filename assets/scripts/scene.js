@@ -14,17 +14,10 @@ const FAR = 10000;
 // Get the DOM element to attach to
 const canvas = document.getElementById('backgroundCanvas'); 
 // Create a WebGL renderer, camera and a scene
-const renderer = new THREE.WebGLRenderer({canvas: canvas});
+const renderer = new THREE.WebGLRenderer({canvas: canvas, alpha: true});
 canvas.width  = canvas.clientWidth;
 canvas.height = canvas.clientHeight; // ?
 renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
-
-const scene = new THREE.Scene();
-// Start the renderer.
-renderer.setSize(WIDTH, HEIGHT, true);
-renderer.alpha = true;
-renderer.antialias = true;
-
 
 function updateScreenSize(){
   WIDTH = window.innerWidth;
@@ -39,7 +32,11 @@ function updateScreenSize(){
   renderer.setSize(WIDTH, HEIGHT);
 }
 
-
+const scene = new THREE.Scene();
+// Start the renderer.
+renderer.setSize(WIDTH, HEIGHT, true);
+renderer.alpha = true;
+renderer.antialias = true;
 
 
 const camera =
@@ -54,7 +51,7 @@ const camera =
 scene.add(camera);
 // create a point light
 const pointLight =
-  new THREE.PointLight(0xFFFFFF);
+  new THREE.PointLight(0x1D171C);
 
 // set its position
 pointLight.position.x = 10;
@@ -63,6 +60,9 @@ pointLight.position.z = 130;
 
 // add to the scene
 scene.add(pointLight);
+
+var ambientLight = new THREE.AmbientLight( 0x1D171C, 1 );
+scene.add(ambientLight);
 
 // create the sphere's material
 const sphereMaterial =
@@ -97,8 +97,9 @@ scene.add(sphere);
 function update() {
   // Draw!
   sphere.rotateX((Math.random()-0.5)*0.05);
-  sphere.rotateY((Math.random()-0.5)*0.05);
+  sphere.rotateY((Math.random()+0.5)*0.08);
   sphere.rotateZ((Math.random()-0.5)*0.05);
+  renderer.setClearColor( 0xffffff, 0);
   renderer.render(scene, camera);
 
   // Schedule the next frame.
