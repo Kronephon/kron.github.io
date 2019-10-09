@@ -1,4 +1,3 @@
-/*
 //settings
 const DRAG = 0.004;
 const JITTER = 0.004;
@@ -140,7 +139,7 @@ function generateParticles() {
 function update() {
 
     //kill off and remove off screen ones (mnaybe a good idea to add a buffer here because of big particles so edge + biggest size)
-    particleArray = particleArray.filter(removeCheck);
+    //particleArray = particleArray.filter(removeCheck);
 
     //process particles
     processParticle();
@@ -149,57 +148,3 @@ function update() {
     generateParticles();
 }
 
-function quickDoF(particle) { //should return -1 to 1
-    var norm = (particle.pos.z / (screen.z)) - 0.5;
-    if (norm > 0.5)
-        norm = 0.5;
-    if (norm < -0.5)
-        norm = -0.5;
-    return norm * 2;
-
-}
-
-function linearInterpolate(max, min, value) {
-    var norm = (value - min) / (max - min);
-    if (norm > 1)
-        norm = 1;
-    if (norm < 0)
-        norm = 0;
-    return norm;
-}
-
-function distanceFromCenter(value, max) {
-    center = max / 2;
-    return Math.abs((value - center) / (max - center));
-}
-
-function draw() {
-    var context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    let sizeM = 50;
-    let sizem = 0.25;
-
-    for (var i = 0; i < particleArray.length; i++) {
-        context.beginPath();
-        let s = (distanceFromCenter(particleArray[i].pos.z, simu.z) * (sizeM - sizem)) + sizem;
-        context.fillStyle = "rgba(255, 255, 255," + Math.abs(1 - distanceFromCenter(particleArray[i].pos.z, simu.z)) + ")";
-        context.arc(particleArray[i].pos.x, particleArray[i].pos.y, s, 0, 2 * Math.PI);
-        context.fill();
-    }
-}
-
-function mainLoop() {
-
-    if (canvas.getContext) {
-        update();
-        draw();
-    }
-    window.setTimeout(mainLoop, 1000 / {
-        {
-            page.main.framerate
-        }
-    });
-
-}
-requestAnimationFrame(init); */
