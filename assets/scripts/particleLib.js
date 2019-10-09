@@ -1,95 +1,64 @@
----
-main:
-    framerate: 9999
+/*
+//settings
+const DRAG = 0.004;
+const JITTER = 0.004;
+const GRAVITY = 1;
 
 particles:
-    number: 100
-    oddsOfGeneration: 1
+const PLIMIT = 100;
+const ODDS = 1;
 
-particle:
-    width: 1 
-    mass : 10
-    life : 20000
-    lifeRange : 5
-
-    fade : 5
-    color: 3
-
-force:
-    drag : 0.004
-    jitter : 0.004
-    gravity : 1
-
----
-/*
 //global vars
-var canvas = document.getElementById('backgroundCanvas');
-var screen = {width:0, height:0};
-var simu = {x:0,y:0,z:0};
+var simu {
+    x = 0, y = 0, z = 0
+};
 var particleArray = [];
-const particleType = new ParticleType({{page.particle.width}},{{page.particle.color}},{{page.particle.mass}}); //one particle type for now
+const particleType = new ParticleType(1, "color", 10); //one particle type for now
 
 //init routine
-
-function init(){
-    if(!canvas){
-        return;
-    }
-    updateScreenSize();
-    window.addEventListener('resize', updateScreenSize);
-    mainLoop();
+function updateSimu(x, y, z) {
+    simu.x = x;
+    simu.y = y;
+    simu.z = z;
 }
 
 function ParticleType(W, C, M) {
-    this.width= W; 
-    this.color= C;
+    this.width = W;
+    this.color = C;
     this.mass = M;
 }
 
 function Particle(X, Y, Z, N, S) {
     this.life = N;
-    this.pos = new Vec(X,Y,Z);
-    this.force = new Vec(0,0,0);
-    this.velocity = new Vec(0,0,0);
+    this.pos = new Vec(X, Y, Z);
+    this.force = new Vec(0, 0, 0);
+    this.velocity = new Vec(0, 0, 0);
     this.width = S.width; //intented to be particle type
     this.color = S.color;
     this.mass = S.mass;
 }
 
-function Vec(x,y,z){
+function Vec(x, y, z) {
     this.x = x;
     this.y = y;
     this.z = z;
 }
 
-function updateScreenSize(){
-    var win = window;
-    doc = document;
-    docElem = doc.documentElement;
-    body = doc.getElementsByTagName('body')[0];
-    screen.width = win.innerWidth; // in pixels
-    screen.height = win.innerHeight; // in pixels
-    
-    simu.x = screen.width;
-    simu.y = screen.height;
-    simu.z = screen.width ;
-    
-    canvas.width = screen.width; // in pixels
-    canvas.height = screen.height - {{site.footerSize}}; // in pixels
-}
-
-function removeCheck(particle){
-    if(particle.life < 0 || particle.pos.x > screen.width || particle.pos.x < 0|| particle.pos.y > screen.height || particle.pos.y < 0)
+function removeCheck(particle) {
+    if (particle.life < 0 || 
+        particle.pos.x > simu.x || particle.pos.x < 0 || 
+        particle.pos.y > simu.y || particle.pos.y < 0 ||
+        particle.pos.z > simu.z || particle.pos.z < 0)
         return false;
     return true;
 }
 
-function processParticle(){
+function processParticle() {
     for (var i = 0; i < particleArray.length; i++) {
         physics(particleArray[i]);
         //decrease life
         particleArray[i].life--;
-        
+
     }
 }
 
@@ -99,7 +68,7 @@ function processParticle(){
 //v = dx / t
 //dx = v * t
 //dx = dv
-function physics(particle){
+function physics(particle) {
     aX = particle.force.x / particle.mass;
     aY = particle.force.y / particle.mass;
     aZ = particle.force.z / particle.mass;
@@ -111,47 +80,58 @@ function physics(particle){
     particle.pos.x += particle.velocity.x;
     particle.pos.y += particle.velocity.y;
     particle.pos.z += particle.velocity.z;
-    
+
     //drag
 
+    dragX = 0.5 * DRAG * particle.velocity.x * particle.velocity.x;
+    dragY = 0.5 * DRAG * particle.velocity.y * particle.velocity.y;
+    dragZ = 0.5 * DRAG * particle.velocity.z * particle.velocity.z;
 
-    dragX = 0.5 * {{page.force.drag}} * particle.velocity.x * particle.velocity.x;
-    dragY = 0.5 * {{page.force.drag}} * particle.velocity.y * particle.velocity.y;
-    dragZ = 0.5 * {{page.force.drag}} * particle.velocity.z * particle.velocity.z;
-
-    if(particle.velocity.x > 0){
+    if (particle.velocity.x > 0) {
         particle.force.x -= dragX;
-    }else{
+    } else {
         particle.force.x += dragX;
     }
-    if(particle.velocity.y > 0){
+    if (particle.velocity.y > 0) {
         particle.force.y -= dragY;
-    }else{
+    } else {
         particle.force.y += dragY;
     }
-    if(particle.velocity.z > 0){
+    if (particle.velocity.z > 0) {
         particle.force.z -= dragZ;
-    }else{
+    } else {
         particle.force.z += dragZ;
     }
     //jitter 
-    particle.force.x += (Math.random() - 0.5)*{{page.force.jitter}};
-    particle.force.y += (Math.random() - 0.5)*{{page.force.jitter}} + 0.0003;
-    particle.force.z += (Math.random() - 0.5)*{{page.force.jitter}};
+    particle.force.x += (Math.random() - 0.5) * JITTER;
+    particle.force.y += (Math.random() - 0.5) * JITTER;
+    particle.force.z += (Math.random() - 0.5) * JITTER;
 
 }
 
-function generateParticles(){
-    let numberToGenerate = {{page.particles.number}} - particleArray.length;
-    if (numberToGenerate > 0){
+function generateParticles() {
+    let numberToGenerate = {
+        {
+            page.particles.number
+        }
+    } - particleArray.length;
+    if (numberToGenerate > 0) {
         for (var i = 0; i < numberToGenerate; i++) {
-            if(Math.random() <= {{page.particles.oddsOfGeneration}}){
+            if (Math.random() <= {
+                    {
+                        page.particles.oddsOfGeneration
+                    }
+                }) {
                 var X = Math.random() * simu.x; //this needs to be !=0
                 var Y = Math.random() * simu.y;
                 var Z = Math.random() * simu.z;
-                var life = Math.floor(Math.random()*{{page.particle.life}}); //revisit
+                var life = Math.floor(Math.random() * {
+                    {
+                        page.particle.life
+                    }
+                }); //revisit
 
-                particleArray.push(new Particle(X,Y,Z,life, particleType)); 
+                particleArray.push(new Particle(X, Y, Z, life, particleType));
             }
         }
     }
@@ -169,28 +149,28 @@ function update() {
     generateParticles();
 }
 
-function quickDoF(particle){ //should return -1 to 1
-    var norm = (particle.pos.z/(screen.z)) - 0.5;
-    if(norm > 0.5)
+function quickDoF(particle) { //should return -1 to 1
+    var norm = (particle.pos.z / (screen.z)) - 0.5;
+    if (norm > 0.5)
         norm = 0.5;
-    if(norm < -0.5)
+    if (norm < -0.5)
         norm = -0.5;
     return norm * 2;
 
 }
 
-function linearInterpolate(max, min, value){
-    var norm = (value - min)/(max - min);
-    if(norm > 1)
+function linearInterpolate(max, min, value) {
+    var norm = (value - min) / (max - min);
+    if (norm > 1)
         norm = 1;
-    if(norm < 0)
+    if (norm < 0)
         norm = 0;
     return norm;
 }
 
-function distanceFromCenter(value, max){
+function distanceFromCenter(value, max) {
     center = max / 2;
-    return Math.abs((value - center)/(max- center));
+    return Math.abs((value - center) / (max - center));
 }
 
 function draw() {
@@ -202,8 +182,8 @@ function draw() {
 
     for (var i = 0; i < particleArray.length; i++) {
         context.beginPath();
-        let s = (distanceFromCenter(particleArray[i].pos.z, simu.z)  * (sizeM - sizem)) + sizem;
-        context.fillStyle = "rgba(255, 255, 255," + Math.abs(1-distanceFromCenter(particleArray[i].pos.z, simu.z))  + ")";
+        let s = (distanceFromCenter(particleArray[i].pos.z, simu.z) * (sizeM - sizem)) + sizem;
+        context.fillStyle = "rgba(255, 255, 255," + Math.abs(1 - distanceFromCenter(particleArray[i].pos.z, simu.z)) + ")";
         context.arc(particleArray[i].pos.x, particleArray[i].pos.y, s, 0, 2 * Math.PI);
         context.fill();
     }
@@ -215,7 +195,11 @@ function mainLoop() {
         update();
         draw();
     }
-    window.setTimeout(mainLoop, 1000/{{page.main.framerate}});
+    window.setTimeout(mainLoop, 1000 / {
+        {
+            page.main.framerate
+        }
+    });
 
 }
-requestAnimationFrame(init);*/
+requestAnimationFrame(init); */
