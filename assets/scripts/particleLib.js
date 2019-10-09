@@ -21,7 +21,7 @@ force:
     gravity : 1
 
 ---
-
+/*
 //global vars
 var canvas = document.getElementById('backgroundCanvas');
 var screen = {width:0, height:0};
@@ -218,4 +218,4 @@ function mainLoop() {
     window.setTimeout(mainLoop, 1000/{{page.main.framerate}});
 
 }
-requestAnimationFrame(init);
+requestAnimationFrame(init);*/
