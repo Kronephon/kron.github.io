@@ -38,7 +38,7 @@ header {
 }
 
 footer {
-    height: 50px;
+    height: {{site.footerSize}}px;
 }
 
 body {
@@ -49,6 +49,8 @@ body {
 footer {
     margin-top: auto;
 }
+
+////////////////////
 
 header a{
     text-transform: uppercase;
@@ -62,10 +64,54 @@ a {
     transition: 0.4s color;
 	&:hover {
 		color: $cPaleYellow;
-	}
+    }
 }
 
-p{
+.centerContainer {
+    position: fixed;
+    min-width: 500px;
+    min-height: 300px;
+    width: auto;
+    height: auto;
+    left: 50vw;
+    bottom: 50vh;
+
+    align-items: center;
+    margin-right: auto;
+    margin-top: auto;
+
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    text-align: center;
+    color: $cWhite;
+    font-family: myTechFont;
+    font-size: 8px;
+}
+
+.centerContainer h1 {
+    cursor: pointer;
+    font-size: 24px;
+    color: red;
+}
+
+.centerContainer h2 {
+    cursor: pointer;
+    text-align: left;
+    margin-left: 10px;
+    font-size: 10px;
+}
+
+.backgroundCanvas {
+    z-index: -1;
+
+}
+
+footer {
+    text-transform: uppercase;
     font-family: myTechFont;
     font-size: 12px;
+    text-align: right;
+    //height: {{site.footerSize}}px;
 }
