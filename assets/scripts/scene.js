@@ -92,17 +92,17 @@ const SEGMENTS = 3;
 const RINGS = 3;
 
 
+var numParticle = 100;
 // https://github.com/collinhover/threeoctree
 
 var octree = new THREE.Octree({
 	undeferred: false, // optional, default = false, octree will defer insertion until you call octree.update();
 	depthMax: Infinity, // optional, default = Infinity, infinite depth
-	objectsThreshold: 3, // optional, default = 8
+	objectsThreshold: numParticle, // optional, default = 8
 	overlapPct: 0.15, // optional, default = 0.15 (15%), this helps sort objects that overlap nodes
 	//scene: scene // optional, pass scene as parameter only if you wish to visualize octree
 } );
 
-var numParticle = 500;
 
 //constructor(mesh, material, x,y,z,mass, vx, vy, vz, fx,fy,fz, colorHex, life, size) {
 var particle = new krParticle(new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS), sphereMaterial, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0xFFFFFF, 60, 1);
