@@ -67,9 +67,9 @@ const pointLight =
   new THREE.PointLight(0xFFFFFF);
 
 // set its position
-pointLight.position.x = 10;
-pointLight.position.y = 50;
-pointLight.position.z = 130;
+pointLight.position.x = 0;
+pointLight.position.y = 0;
+pointLight.position.z = 0;
 
 // add to the scene
 scene.add(pointLight);
@@ -97,18 +97,19 @@ const RINGS = 3;
 var octree = new THREE.Octree({
 	undeferred: false, // optional, default = false, octree will defer insertion until you call octree.update();
 	depthMax: Infinity, // optional, default = Infinity, infinite depth
-	objectsThreshold: 8, // optional, default = 8
+	objectsThreshold: 3, // optional, default = 8
 	overlapPct: 0.15, // optional, default = 0.15 (15%), this helps sort objects that overlap nodes
 	scene: scene // optional, pass scene as parameter only if you wish to visualize octree
 } );
 
-var numParticle = 10;
+var numParticle = 50;
 
-var particle = new krParticle(new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS), sphereMaterial, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0xFFFFFF, 10, 10);
+//constructor(mesh, material, x,y,z,mass, vx, vy, vz, fx,fy,fz, colorHex, life, size) {
+var particle = new krParticle(new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS), sphereMaterial, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0xFFFFFF, 60, 1);
 
 ksParticlesInit(numParticle, particle, -50, 50, -50, 50, -50, 50);
 
-camera.position.z += 60;
+camera.position.z += 400;
 camera.position.y = 5;
 
 
