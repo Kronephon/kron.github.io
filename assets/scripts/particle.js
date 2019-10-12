@@ -55,7 +55,7 @@ class krParticle extends THREE.Mesh { // perhaps look into making it into a poin
       this.position.z += this.velocity.z;
   
       //drag
-  
+        /*
       var dragX = 0.5 * this.DRAG * this.velocity.x * this.velocity.x;
       var dragY = 0.5 * this.DRAG * this.velocity.y * this.velocity.y;
       var dragZ = 0.5 * this.DRAG * this.velocity.z * this.velocity.z;
@@ -74,7 +74,7 @@ class krParticle extends THREE.Mesh { // perhaps look into making it into a poin
         this.force.z -= dragZ;
       } else {
         this.force.z += dragZ;
-      }
+      }*/
       //jitter 
       this.force.x += (Math.random() - 0.5) * this.JITTER;
       this.force.y += (Math.random() - 0.5) * this.JITTER;
