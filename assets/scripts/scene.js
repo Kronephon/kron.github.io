@@ -87,14 +87,12 @@ const sphereMaterial =
 
   
 // Set up the sphere vars
-const RADIUS = 50;
+const RADIUS = 5;
 const SEGMENTS = 3;
 const RINGS = 3;
 
 
 // https://github.com/collinhover/threeoctree
-
-
 
 var octree = new THREE.Octree({
 	undeferred: false, // optional, default = false, octree will defer insertion until you call octree.update();
@@ -104,48 +102,22 @@ var octree = new THREE.Octree({
 	scene: scene // optional, pass scene as parameter only if you wish to visualize octree
 } );
 
-var numObjects = 0;
+var numParticle = 10;
 
-function generateParticles() {
-  let numberToGenerate = particlesSpawn - numObjects;
-  if (numberToGenerate > 0) {
-      for (var i = 0; i < numberToGenerate; i++) {
-          if (Math.random() <= oddsOfGeneration) {
-              var X = (Math.random() - 0.5) * 300;
-              var Y = (Math.random() - 0.5) * 300;
-              var Z = (Math.random() - 0.5) * 300 - 300;
+var particle = new krParticle(new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS), sphereMaterial, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0xFFFFFF, 10, 10);
 
-              var sphere = new THREE.Mesh(new THREE.SphereGeometry(RADIUS,SEGMENTS,RINGS),sphereMaterial);
+ksParticlesInit(octree, numParticle, particle, -50, 50, -50, 50, -50, 50);
 
-              sphere.position.x = X;
-              sphere.position.y = Y;
-              sphere.position.z = Z;
-              
-              octree.add(sphere);
-              scene.add(sphere);
-              numObjects++;
-          }
-      }
-  }
-}
+camera.position.z += 60;
+camera.position.y = 5;
 
-//var sphere = new THREE.Mesh(new THREE.SphereGeometry(RADIUS,SEGMENTS,RINGS),sphereMaterial);
-//scene.add(sphere);
-//sphere.position.z = -300;
-///////////////////////////////////////////////////////////////////
-
-
-
-// Finally, add the sphere to the scene.
-//scene.add(sphere);
 
 function update() {
-  camera.position.z += 10;
   // Draw!
-  generateParticles();
+  KrParticlesUpdate();
+
   renderer.setClearColor( 0xffffff, 0);
   renderer.render(scene, camera);
-  octree.update();
   octree.rebuild();
 
   // Schedule the next frame.
