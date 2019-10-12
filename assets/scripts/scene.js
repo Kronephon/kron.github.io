@@ -106,7 +106,7 @@ var numParticle = 10;
 
 var particle = new krParticle(new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS), sphereMaterial, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0xFFFFFF, 10, 10);
 
-ksParticlesInit(octree, numParticle, particle, -50, 50, -50, 50, -50, 50);
+ksParticlesInit(numParticle, particle, -50, 50, -50, 50, -50, 50);
 
 camera.position.z += 60;
 camera.position.y = 5;
@@ -118,7 +118,6 @@ function update() {
 
   renderer.setClearColor( 0xffffff, 0);
   renderer.render(scene, camera);
-  octree.rebuild();
 
   // Schedule the next frame.
   requestAnimationFrame(update);

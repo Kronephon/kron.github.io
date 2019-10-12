@@ -18,7 +18,7 @@ class krParticle extends THREE.Mesh { // perhaps look into making it into a poin
         this.DRAG = 0.3;
 
     }
-    particleProcess(){
+    motion(){
       const aX = particle.force.x / particle.mass;
       const aY = particle.force.y / particle.mass;
       const aZ = particle.force.z / particle.mass;
@@ -60,16 +60,26 @@ class krParticle extends THREE.Mesh { // perhaps look into making it into a poin
     }
 }
 
+function physics(){
+    octree.search(new THREE.Vector3(0,0,0), 10000000000000 );
+}
+
+function KrParticlesUpdate(){
+    physics();
+    octree.rebuild();
+}
+
 //outStruct must have a save method
 //TODO maybe add velocity and force random inputs?
-function ksParticlesInit(outStruct, particleNumber, particle, xMin, xMax, yMin, yMax, zMin, zMax){
+function ksParticlesInit(particleNumber, particle, xMin, xMax, yMin, yMax, zMin, zMax){
     for(i = 0; i < particleNumber ;i++){
         var newParticle = particle.clone();
         newParticle.position.x = Math.random()*(xMax-xMin) + xMin;
         newParticle.position.y = Math.random()*(yMax-yMin) + yMin;
         newParticle.position.z = Math.random()*(zMax-zMin) + zMin;
         scene.add(newParticle);     //ported to global name?
-        outStruct.add(newParticle); //ported to global name?
+        octree.add(newParticle, { useVertices: true } ); //ported to global name?
+        octree.update();
     }
 }
 
