@@ -1,10 +1,11 @@
-const JITTER = 0.025;
-const DRAG = 0.003;
+const JITTER = 0.005;
+const DRAG = 0.05;
 const ATTRACTION = 0.001;
 const REPULSION = 0.001;
+const INITVELOCITY = 3;
 
-const PARTICLENUMBER = 80;
-const GENERATIONODDS = 0.003;    // 0 - 1
+const PARTICLENUMBER = 200;
+const GENERATIONODDS = 0.01;    // 0 - 1
 
 const PARTICLESIZE = 1;
 
@@ -21,6 +22,9 @@ const mainMaterial =
         color: 0xCC0000
     });
 
+const pointMaterial =
+    new THREE.PointsMaterial({ color: 0x888888 });
+
 
 //there needs to be a strict name adeharance to THREE.JS var names or else
 //settings import will NOT work. Also userData clones are picky and cannot
@@ -29,7 +33,7 @@ const mainMaterial =
 const pointSettings = {
     name: "point",
     geometry: new THREE.TetrahedronBufferGeometry(PARTICLESIZE),
-    //material: mainMaterial, TODO add proper sprite here
+    material: pointMaterial, 
     position: new THREE.Vector3(0, 0, 0),
     vx: 0,
     vy: 0,
@@ -203,6 +207,9 @@ class KRModel {
                 var particle = new KRParticle();
                 particle.loadSettings(pointSettings);
                 const startPos = this.generateSpawnPosition();
+                particle.userData.vx = (Math.random() - 0.5) * INITVELOCITY;
+                particle.userData.vy = (Math.random() - 0.5) * INITVELOCITY;
+                particle.userData.vz = (Math.random() - 0.5) * INITVELOCITY;
                 particle.position.x = startPos[0];
                 particle.position.y = startPos[1];
                 particle.position.z = startPos[2];

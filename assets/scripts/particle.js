@@ -48,6 +48,9 @@ class KRParticle extends THREE.Mesh {
   process() {
     //check for color and type differences
     //this.motion();
+    //TODO: add more dynamic color stuff here
+
+    this.material.color.setHex(this.userData.color);
   }
 }
 
