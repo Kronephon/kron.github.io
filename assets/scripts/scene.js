@@ -51,7 +51,7 @@ const CAMERA =
 
 // Add the camera to the scene.
 CAMERA.position.z += 400;
-CAMERA.position.y = 5;
+//CAMERA.position.y = 5;
 SCENE.add(CAMERA);
 
 // create a point light
