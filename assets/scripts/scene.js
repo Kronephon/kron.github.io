@@ -28,8 +28,8 @@ function updateScreenSize(){
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   
-  camera.aspect = ASPECT;
-  camera.updateProjectionMatrix();
+  CAMERA.aspect = ASPECT;
+  CAMERA.updateProjectionMatrix();
   renderer.setSize(WIDTH, HEIGHT);
 }
 

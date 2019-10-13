@@ -1,8 +1,8 @@
-const JITTER = 0.002;
-const DRAG = 0.06;
+const JITTER = 0.25;
+const DRAG = 2;
 
 const PARTICLENUMBER = 3000;
-const GENERATIONODDS = 0.01;    // 0 - 1
+const GENERATIONODDS = 0.003;    // 0 - 1
 
 const PARTICLESIZE = 1;
 
@@ -33,6 +33,7 @@ const pointSettings = {
     castShadow: true,
     color: 0xFFFFFF,
     life: 60,
+    mass: 1,
     size: PARTICLESIZE
 };
 
@@ -48,6 +49,7 @@ const tetraSettings = {
     castShadow: true,
     color: 0xFFFFFF,
     life: 60,
+    mass: 2,
     size: PARTICLESIZE
 };
 
@@ -80,7 +82,9 @@ class KRModel{
     }
 
     update(){
-        //var object = scene.getObjectbyName( "objectName" );
+        for(var i = 0 ; i < this.particles.children.length ; i++){
+            this.particles.children[i].process();
+        }
 
 
         //cull
