@@ -1,28 +1,16 @@
 const footerheight = 50;
-const particlesSpawn = 50;
-const oddsOfGeneration = 0.05;
 
 // Set the scene size
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight - footerheight;
+
+///////////////////////////////////////////////////////////////////
 
 // Set some camera attributes.
 var ASPECT = WIDTH / HEIGHT;
 const VIEW_ANGLE = 45;
 const NEAR = 0.1;
 const FAR = 10000;
-
-
-///////////////////////////////////////////////////////////////////
-
-
-//var frustum = new THREE.Frustum();
-//frustum.setFromMatrix( new THREE.Matrix4().multiply( camera.projectionMatrix, camera.matrixWorldInverse ) );
-
-//for (var i=0; i<objects.length; i++) {
-  //objects[i].visible = frustum.intersectsObject( objects[i] );
-//  frustum.
-
 
 // Get the DOM element to attach to
 const canvas = document.getElementById('backgroundCanvas'); 
@@ -45,14 +33,15 @@ function updateScreenSize(){
   renderer.setSize(WIDTH, HEIGHT);
 }
 
-const scene = new THREE.Scene();
+const SCENE = new THREE.Scene();
 // Start the renderer.
 renderer.setSize(WIDTH, HEIGHT, true);
 renderer.alpha = true;
 renderer.antialias = true;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-
-const camera =
+const CAMERA =
   new THREE.PerspectiveCamera(
     VIEW_ANGLE,
     ASPECT,
@@ -61,7 +50,10 @@ const camera =
   );
 
 // Add the camera to the scene.
-scene.add(camera);
+CAMERA.position.z += 400;
+CAMERA.position.y = 5;
+SCENE.add(CAMERA);
+
 // create a point light
 const pointLight =
   new THREE.PointLight(0xFFFFFF);
@@ -71,54 +63,23 @@ pointLight.position.x = 0;
 pointLight.position.y = 0;
 pointLight.position.z = 0;
 
+pointLight.castShadow = true; 
 // add to the scene
-scene.add(pointLight);
+SCENE.add(pointLight);
 
 var ambientLight = new THREE.AmbientLight( 0x1D171C, 1 );
-scene.add(ambientLight);
+SCENE.add(ambientLight);
 
 ///////////////////////////////////////////////////////////////////
-
-// create the sphere's material
-const sphereMaterial =
-  new THREE.MeshLambertMaterial({
-    color: 0xCC0000
-  });
-
-  
-// Set up the sphere vars
-const RADIUS = 5;
-const SEGMENTS = 3;
-const RINGS = 3;
-
-
-var numParticle = 100;
-// https://github.com/collinhover/threeoctree
-
-var octree = new THREE.Octree({
-	undeferred: false, // optional, default = false, octree will defer insertion until you call octree.update();
-	depthMax: Infinity, // optional, default = Infinity, infinite depth
-	objectsThreshold: numParticle, // optional, default = 8
-	overlapPct: 0.15, // optional, default = 0.15 (15%), this helps sort objects that overlap nodes
-	//scene: scene // optional, pass scene as parameter only if you wish to visualize octree
-} );
-
-
-//constructor(mesh, material, x,y,z,mass, vx, vy, vz, fx,fy,fz, colorHex, life, size) {
-var particle = new krParticle(new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS), sphereMaterial, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0xFFFFFF, 60, 1);
-
-ksParticlesInit(numParticle, particle, -50, 50, -50, 50, -50, 50);
-
-camera.position.z += 400;
-camera.position.y = 5;
-
+var model = new KRModel();
 
 function update() {
-  // Draw!
-  KrParticlesUpdate();
+  //logic
+  model.update();
 
-  renderer.setClearColor( 0xffffff, 0);
-  renderer.render(scene, camera);
+  // Draw!
+  renderer.setClearColor(0xffffff, 0);
+  renderer.render(SCENE, CAMERA);
 
   // Schedule the next frame.
   requestAnimationFrame(update);
