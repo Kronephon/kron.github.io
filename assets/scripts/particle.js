@@ -51,10 +51,7 @@ class KRParticle extends THREE.Mesh {
     //TODO: add more dynamic color stuff here
 
     this.material.color.setHex(this.userData.color);
-  }
-}
 
-function KrParticlesUpdate() {
-  physics();
-  octree.rebuild();
+    this.life--;
+  }
 }

@@ -1,10 +1,10 @@
 const JITTER = 0.005;
 const DRAG = 0.05;
-const ATTRACTION = 0.001;
-const REPULSION = 0.001;
+const ATTRACTION = 0.01;
+const REPULSION = 0.01;
 const INITVELOCITY = 3;
 
-const PARTICLENUMBER = 200;
+const PARTICLENUMBER = 50;
 const GENERATIONODDS = 0.01;    // 0 - 1
 
 const PARTICLESIZE = 1;
@@ -98,6 +98,7 @@ class KRModel {
             this.motion(this.particles.children[i]);
             this.particles.children[i].process();
         }
+        this.octree.update();
 
 
         //cull
@@ -111,6 +112,7 @@ class KRModel {
         if (this.particles.children.length < PARTICLENUMBER) {
             this.generateParticles(PARTICLENUMBER - this.particles.children.length);
         }
+        this.octree.rebuild();
     }
 
     motion(particle) {
@@ -141,13 +143,61 @@ class KRModel {
         particle.userData.fy = -(particle.position.y / (SIMUHEIGHT / 2)) * ATTRACTION;
         particle.userData.fz = -(particle.position.z / (SIMUDEPTH / 2)) * ATTRACTION;
 
-        //console.log(this.userData.force.x);
-        //console.log(this.userData.force.y);
-        //console.log(this.userData.force.z);
-
-
         //repulsion
+        // F = (G * m1 * m2) / (d*d) > Jitter Constant let's use mass for it
 
+        var radius = 1000;// Math.sqrt(REPULSION * particle.userData.mass * particle.userData.mass  / JITTER); //fair assumption though better would be biggest mass in the board
+        var search = this.octree.search( particle.position, radius ); 
+        
+        for(var i = 0; i < search.length; i++){
+            if(particle.uuid == search[i].object.uuid){
+                continue;
+            }
+            var p1 = particle.position;
+            var p2 = search[i].object.position;
+            //var distance = Math.sqrt(Math.pow(p2.x - p1.x, 2)+Math.pow(p2.y - p1.y, 2)+Math.pow(p2.z - p1.z, 2));
+
+            var distanceX = p2.x - p1.x;
+            var distanceY = p2.y - p1.y;
+            var distanceZ = p2.z - p1.z;
+
+            if(typeof distanceX === 'undefined'){
+                alert("oh no");
+            }
+            if(typeof distanceY === 'undefined'){
+                alert("oh no");
+            }
+            if(typeof distanceZ === 'undefined'){
+                alert("oh no");
+            }
+            if(typeof particle.userData.mass === 'undefined'){
+                alert("oh no");
+            }
+            if(typeof search[i].object.userData.mass === 'undefined'){
+                alert("oh no");
+            }
+
+            if(distanceX != 0){
+                particle.userData.fx -= (REPULSION * particle.userData.mass * search[i].object.userData.mass)/distanceX; 
+            }
+            if(distanceY != 0){
+                particle.userData.fy -= (REPULSION * particle.userData.mass * search[i].object.userData.mass)/distanceY;
+            }
+            if(distanceZ != 0){
+                particle.userData.fz -= (REPULSION * particle.userData.mass * search[i].object.userData.mass)/distanceZ;
+            }
+            if(typeof particle.userData.fz === 'undefined'){
+                alert("oh no");
+            }
+
+            
+            
+
+            //throw error();
+
+        }
+
+        
 
         //jitter 
         particle.userData.fx += (Math.random() - 0.5) * JITTER;
