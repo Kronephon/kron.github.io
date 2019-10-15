@@ -87,6 +87,27 @@ function update() {
 
 ///////////////////////////////////////////////////////////////////
 
+//IO
+
+document.onmousedown= function(event) {
+  // Compensate for IE<9's non-standard event model
+  //
+  if (event===undefined) event= window.event;
+  var target= 'target' in event? event.target : event.srcElement;
+
+  model.click();
+};
+
+document.onmouseup= function(event) {
+  // Compensate for IE<9's non-standard event model
+  //
+  if (event===undefined) event= window.event;
+  var target= 'target' in event? event.target : event.srcElement;
+
+  model.declick();
+};
+///////////////////////////////////////////////////////////////////
+
 // Linkers
 window.addEventListener('resize', updateScreenSize);
 requestAnimationFrame(update);

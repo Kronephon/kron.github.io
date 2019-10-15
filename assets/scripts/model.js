@@ -16,6 +16,9 @@ const SIMUHEIGHT = 200;
 const SIMUDEPTH = 300;
 
 
+const LINE_PROXIMITY = 5;
+
+
 
 ///////////////////////////////////////////////////////////////////
 
@@ -29,6 +32,10 @@ const pointMaterial =
         color: 0x888888
     });
 
+const lineMaterial =
+    new THREE.LineBasicMaterial({
+        color: 0x888888
+    });
 
 //there needs to be a strict name adeharance to THREE.JS var names or else
 //settings import will NOT work. Also userData clones are picky and cannot
@@ -83,6 +90,7 @@ class KRModel {
             scene: SCENE // optional, pass scene as parameter only if you wish to visualize octree
         });
 
+        this.ignoreForce = false;
         this.particles = new THREE.Group();
         SCENE.add(this.particles);
     }
@@ -140,6 +148,15 @@ class KRModel {
     }
 
     forceCompute(particle) {
+        
+        if(this.ignoreForce){
+            particle.userData.fx = 0;
+            particle.userData.fy = 0;
+            particle.userData.fz = 0;
+            return;
+        }
+
+
         //jitter 
 
         var jitterDirection = new THREE.Vector3(Math.random()-0.5,Math.random()-0.5,Math.random()-0.5);
@@ -253,6 +270,13 @@ class KRModel {
                 this.insertParticle(particle);
             }
         }
+    }
+
+    click(){
+        this.ignoreForce = true;
+    }
+    declick(){
+        this.ignoreForce = false;
     }
 
 }
