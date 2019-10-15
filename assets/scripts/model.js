@@ -1,8 +1,8 @@
 const JITTER = 0.005;
 const DRAG = 0.05;
-const ATTRACTION = 0.01;
-const REPULSION = 0.01;
-const INITVELOCITY = 3;
+const ATTRACTION = 1;
+const REPULSION = 5;
+const INITVELOCITY = 7;
 
 const PARTICLENUMBER = 50;
 const GENERATIONODDS = 0.01;    // 0 - 1
@@ -155,8 +155,15 @@ class KRModel {
             }
             var p1 = particle.position;
             var p2 = search[i].object.position;
+            
+            var repulsion = forceInteraction(p1,p2,particle.userData.mass, search[i].object.userData.mass, false,REPULSION);
+            
+            particle.userData.fx += repulsion.x;
+            particle.userData.fy += repulsion.y;
+            particle.userData.fz += repulsion.z;
+            
             //var distance = Math.sqrt(Math.pow(p2.x - p1.x, 2)+Math.pow(p2.y - p1.y, 2)+Math.pow(p2.z - p1.z, 2));
-
+            /*
             var distanceX = p2.x - p1.x;
             var distanceY = p2.y - p1.y;
             var distanceZ = p2.z - p1.z;
@@ -190,7 +197,7 @@ class KRModel {
                 alert("oh no");
             }
 
-            
+            */
             
 
             //throw error();
@@ -267,5 +274,40 @@ class KRModel {
             }
         }
     }
+
+}
+
+
+///////////////////////////////////////////////////////////////////
+
+//break force apart, direction must be ~1
+function forceDecomposer (intensity, direction){
+    return direction.setLength(intensity);
+}
+
+//calculates repulsion/attraction between particles, porportional to the sqr of their distance
+function forceInteraction (position1, position2, particleSpec1, particleSpec2, attract, constant){
+    var distance = position1.distanceTo(position2);
+    if(distance == 0){
+        return forceDecomposer(50, new THREE.Vector3(0,0,1));   //undefined case, particles can't ocupy the same space at the same time
+    }
+    var forceIntensity = constant * particleSpec1 * particleSpec2 / Math.pow(distance,2);
+    
+    if(attract){
+        forceIntensity *= -1;
+    }
+
+    var distanceVect = new THREE.Vector3();
+    distanceVect.x = position1.x;
+    distanceVect.y = position1.y;
+    distanceVect.z = position1.z;
+    distanceVect.sub(position2);
+
+    return forceDecomposer(forceIntensity,distanceVect);
+
+}
+
+//calculates force components of a field based interation
+function forceField (){
 
 }
