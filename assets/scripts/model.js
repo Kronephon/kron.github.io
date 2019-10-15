@@ -5,11 +5,11 @@ const REPULSION = 1;
 
 const INITVELOCITY = 10;
 const FORCE_LIMIT = 20;
-const PARTICLE_LIFE = 2000;
+const PARTICLE_LIFE = 1000;
 const PARTICLESIZE = 0.75;
 
-const PARTICLENUMBER = 200;
-const GENERATIONODDS = 0.001; // 0 - 1
+const PARTICLENUMBER = 700;
+const GENERATIONODDS = 0.0001; // 0 - 1
 
 
 
@@ -98,9 +98,10 @@ class KRModel {
             scene: SCENE // optional, pass scene as parameter only if you wish to visualize octree
         });
 
+        this.particleNumber = PARTICLENUMBER;
         this.ignoreForce = false;
         this.particles = new THREE.Group();
-        SCENE.add(this.particles);
+        SCENE.add(this.particles, { useVertices: true });
     }
 
     insertParticle(part) {
@@ -111,6 +112,19 @@ class KRModel {
     removeParticle(part) {
         this.octree.remove(part);
         this.particles.remove(part);
+    }
+
+    increasePerformance(){
+        if(this.particleNumber < PARTICLENUMBER){
+            this.particleNumber++;
+            //console.loconsole.log("increasing to: " + this.particleNumber);
+        }
+    }
+    decreasePerformance(){
+        if(this.particleNumber > 0){
+            this.particleNumber--;
+            //console.log("decreasing to: " + this.particleNumber);
+        }
     }
 
     update() {
@@ -133,8 +147,8 @@ class KRModel {
         //cull
 
         //generation
-        if (this.particles.children.length <= PARTICLENUMBER) {
-            this.generateParticles(PARTICLENUMBER - this.particles.children.length);
+        if (this.particles.children.length <= this.particleNumber) {
+            this.generateParticles(this.particleNumber - this.particles.children.length);
         }
         this.octree.rebuild();
 
@@ -198,9 +212,9 @@ class KRModel {
         //repulsion
         // F = (G * m1 * m2) / (d*d) > Jitter Constant let's use mass for it
 
-        var radius = Math.sqrt(REPULSION * particle.userData.mass * particle.userData.mass / JITTER); //fair assumption though better would be biggest mass in the board
+        var radius = 1; //Math.sqrt(REPULSION * particle.userData.mass * particle.userData.mass / JITTER); //fair assumption though better would be biggest mass in the board
         var search = this.octree.search(particle.position, radius);
-
+        
         for (var i = 0; i < search.length; i++) {
             if (particle.uuid == search[i].object.uuid) {
                 continue;

@@ -75,13 +75,26 @@ SCENE.add(ambientLight);
 
 ///////////////////////////////////////////////////////////////////
 var model = new KRModel();
+var performanceMetrics;
+
+var lastLoop = Date.now();
 
 function update() {
+  //performance
+  var thisLoop = Date.now();
+  var fps = 1000 / (thisLoop - lastLoop);
+  lastLoop = thisLoop;
+  if(fps < 40){
+    model.decreasePerformance();
+  }else{
+    model.increasePerformance();
+  }
+
   //logic
   model.update();
 
   // Draw!
-  renderer.setClearColor(0xffffff, 0);
+  //renderer.setClearColor(0xffffff, 0);
   renderer.render(SCENE, CAMERA);
 
   // Schedule the next frame.
