@@ -13,21 +13,24 @@ const NEAR = 0.1;
 const FAR = 10000;
 
 // Get the DOM element to attach to
-const canvas = document.getElementById('backgroundCanvas'); 
+const canvas = document.getElementById('backgroundCanvas');
 // Create a WebGL renderer, camera and a scene
-const renderer = new THREE.WebGLRenderer({canvas: canvas, alpha: true});
-canvas.width  = canvas.clientWidth;
+const renderer = new THREE.WebGLRenderer({
+  canvas: canvas,
+  alpha: true
+});
+canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight; // ?
 renderer.setViewport(0, 0, canvas.clientWidth, canvas.clientHeight);
 
-function updateScreenSize(){
+function updateScreenSize() {
   WIDTH = window.innerWidth;
   HEIGHT = window.innerHeight - footerheight;
   ASPECT = WIDTH / HEIGHT;
 
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
-  
+
   CAMERA.aspect = ASPECT;
   CAMERA.updateProjectionMatrix();
   renderer.setSize(WIDTH, HEIGHT);
@@ -63,11 +66,11 @@ pointLight.position.x = 0;
 pointLight.position.y = 0;
 pointLight.position.z = 0;
 
-pointLight.castShadow = true; 
+pointLight.castShadow = true;
 // add to the scene
 SCENE.add(pointLight);
 
-var ambientLight = new THREE.AmbientLight( 0x1D171C, 1 );
+var ambientLight = new THREE.AmbientLight(0x1D171C, 1);
 SCENE.add(ambientLight);
 
 ///////////////////////////////////////////////////////////////////
@@ -89,23 +92,58 @@ function update() {
 
 //IO
 
-document.onmousedown= function(event) {
+document.onmousedown = function (event) {
   // Compensate for IE<9's non-standard event model
   //
-  if (event===undefined) event= window.event;
-  var target= 'target' in event? event.target : event.srcElement;
+  if (event === undefined) event = window.event;
+  var target = 'target' in event ? event.target : event.srcElement;
 
   model.click();
 };
 
-document.onmouseup= function(event) {
+document.onmouseup = function (event) {
   // Compensate for IE<9's non-standard event model
   //
-  if (event===undefined) event= window.event;
-  var target= 'target' in event? event.target : event.srcElement;
+  if (event === undefined) event = window.event;
+  var target = 'target' in event ? event.target : event.srcElement;
 
   model.declick();
 };
+
+///////////////////////////////////////////////////////////////////
+
+function loadObjSettings(obj, param) {
+  if (typeof param === 'undefined') {
+    console.log("loadSettings param undefined.")
+    return;
+  }
+  //console.log("Creating new KRParticle type");
+  for (var key in param) {
+    if (obj.hasOwnProperty(key)) {
+      if (key == "geometry") {
+        obj.geometry = new THREE.TetrahedronBufferGeometry(PARTICLESIZE);
+      }
+      if (key == "material") {
+        obj.material = new THREE.PointsMaterial({
+          color: 0xFFFFFF,
+          opacity: 1.0
+        });
+      }
+      if (key == "position") {
+        obj.position.x = param[key].x;
+        obj.position.y = param[key].y;
+        obj.position.z = param[key].z;
+        //console.log(key + " -> " + this[key]);
+      } else {
+        obj[key] = param[key];
+        //console.log(key + " -> " + this[key]);
+      }
+    } else {
+      obj.userData[key] = param[key];
+      //console.log(key + " [userData]-> " + this.userData[key]);
+    }
+  }
+}
 ///////////////////////////////////////////////////////////////////
 
 // Linkers

@@ -1,3 +1,4 @@
+/*
 class KRParticle extends THREE.Mesh {
   constructor(param) {
     super();
@@ -50,8 +51,13 @@ class KRParticle extends THREE.Mesh {
     //this.motion();
     //TODO: add more dynamic color stuff here
 
-    this.material.color.setHex(this.userData.color);
+    //this.material.color.setHex(this.userData.color);
 
-    this.life--;
+    var dead = 0.9;// this.userData.life;
+
+    this.material.opacity = 1 + Math.sin(new Date().getTime() * .0025);
+
+    this.userData.life--;
   }
 }
+*/

@@ -5,11 +5,13 @@ const REPULSION = 1;
 
 const INITVELOCITY = 5;
 const FORCE_LIMIT = 20;
+const PARTICLE_LIFE = 280;
+const PARTICLESIZE = 1;
 
 const PARTICLENUMBER = 200;
-const GENERATIONODDS = 0.01; // 0 - 1
+const GENERATIONODDS = 0.001; // 0 - 1
 
-const PARTICLESIZE = 1;
+
 
 const SIMUWIDTH = 300;
 const SIMUHEIGHT = 200;
@@ -29,7 +31,8 @@ const mainMaterial =
 
 const pointMaterial =
     new THREE.PointsMaterial({
-        color: 0x888888
+        color: 0xFFFFFF,
+        opacity: 1.0
     });
 
 const lineMaterial =
@@ -54,8 +57,7 @@ const pointSettings = {
     fz: 0,
     receiveShadow: true,
     castShadow: true,
-    color: 0xFFFFFF,
-    life: 60,
+    life: PARTICLE_LIFE,
     mass: 1,
     size: PARTICLESIZE
 };
@@ -101,30 +103,46 @@ class KRModel {
     }
 
     removeParticle(part) {
-
+        this.octree.remove(part);
+        this.particles.remove(part);
     }
 
     update() {
         for (var i = 0; i < this.particles.children.length; i++) {
+            this.particleProcess(this.particles.children[i]);
+            //cull
+            if (this.particles.children[i].userData.life == 0) {
+                this.removeParticle(this.particles.children[i]);
+            }
+
+
             this.forceCompute(this.particles.children[i]);
             this.motion(this.particles.children[i]);
-            this.particles.children[i].process();
+
         }
         this.octree.update();
 
 
         //cull
 
-        //force
-        //(this.octree.search(new THREE.Vector3(0,0,0), 3000 )).forEach(function(element) {
-        //    element.object.process();
-        //});
-
         //generation
         if (this.particles.children.length < PARTICLENUMBER) {
             this.generateParticles(PARTICLENUMBER - this.particles.children.length);
         }
         this.octree.rebuild();
+    }
+    particleProcess(particle) {
+        //check for color and type differences
+        //this.motion();
+        //TODO: add more dynamic color stuff here
+
+        //this.material.color.setHex(this.userData.color);
+
+        var dead = 0.9; // this.userData.life;
+
+        //particle.material.opacity = 1 + Math.sin(new Date().getTime() * .0025);
+
+        particle.userData.life--;
     }
 
     motion(particle) {
@@ -148,8 +166,8 @@ class KRModel {
     }
 
     forceCompute(particle) {
-        
-        if(this.ignoreForce){
+
+        if (this.ignoreForce) {
             particle.userData.fx = 0;
             particle.userData.fy = 0;
             particle.userData.fz = 0;
@@ -159,8 +177,8 @@ class KRModel {
 
         //jitter 
 
-        var jitterDirection = new THREE.Vector3(Math.random()-0.5,Math.random()-0.5,Math.random()-0.5);
-        var jitterForce = forceDecomposer(JITTER,jitterDirection.normalize());
+        var jitterDirection = new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
+        var jitterForce = forceDecomposer(JITTER, jitterDirection.normalize());
 
         particle.userData.fx = jitterForce.x;
         particle.userData.fy = jitterForce.y;
@@ -197,8 +215,8 @@ class KRModel {
         }
         //drag
 
-        var velocity = new THREE.Vector3(particle.userData.vx,particle.userData.vy,particle.userData.vz);
-        var dragIntensity = 0.5 * DRAG * Math.pow(velocity.length(),2);
+        var velocity = new THREE.Vector3(particle.userData.vx, particle.userData.vy, particle.userData.vz);
+        var dragIntensity = 0.5 * DRAG * Math.pow(velocity.length(), 2);
         var dragForce = forceDecomposer(dragIntensity, velocity.multiplyScalar(-1).normalize());
         particle.userData.fx += dragForce.x;
         particle.userData.fy += dragForce.y;
@@ -206,24 +224,24 @@ class KRModel {
 
         //apply limit
 
-        if(particle.userData.fx > FORCE_LIMIT){
+        if (particle.userData.fx > FORCE_LIMIT) {
             particle.userData.fx = FORCE_LIMIT;
         }
-        if(particle.userData.fx < -FORCE_LIMIT){
+        if (particle.userData.fx < -FORCE_LIMIT) {
             particle.userData.fx = -FORCE_LIMIT;
         }
 
-        if(particle.userData.fy > FORCE_LIMIT){
+        if (particle.userData.fy > FORCE_LIMIT) {
             particle.userData.fy = FORCE_LIMIT;
         }
-        if(particle.userData.fy < -FORCE_LIMIT){
+        if (particle.userData.fy < -FORCE_LIMIT) {
             particle.userData.fy = -FORCE_LIMIT;
         }
 
-        if(particle.userData.fz > FORCE_LIMIT){
+        if (particle.userData.fz > FORCE_LIMIT) {
             particle.userData.fz = FORCE_LIMIT;
         }
-        if(particle.userData.fz < -FORCE_LIMIT){
+        if (particle.userData.fz < -FORCE_LIMIT) {
             particle.userData.fz = -FORCE_LIMIT;
         }
 
@@ -232,25 +250,25 @@ class KRModel {
 
     generateSpawnPosition() { //TODO add frustum here
         /*
-        if(CAMERA.isPerspectiveCamera){
-    
-            var near = CAMERA.near;
-            var far = CAMERA.far;
-            frustum.setFromMatrix( new THREE.Matrix4().multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse ) );
-    
-            CAMERA.updateMatrix(); 
-            CAMERA.updateMatrixWorld();  // TODO is this needed?
-    
-            var frustum = new THREE.Frustum();
-            var projScreenMatrix = new THREE.Matrix4();
-            projScreenMatrix.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse );
-    
-    
-            CAMERA.view.containsPoint(0,0,0);
-        }
-        //TODO only works with perspective cameras for now
-    
-         */
+            if(CAMERA.isPerspectiveCamera){
+        
+                var near = CAMERA.near;
+                var far = CAMERA.far;
+                frustum.setFromMatrix( new THREE.Matrix4().multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse ) );
+        
+                CAMERA.updateMatrix(); 
+                CAMERA.updateMatrixWorld();  // TODO is this needed?
+        
+                var frustum = new THREE.Frustum();
+                var projScreenMatrix = new THREE.Matrix4();
+                projScreenMatrix.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse );
+        
+        
+                CAMERA.view.containsPoint(0,0,0);
+            }
+            //TODO only works with perspective cameras for now
+        
+             */
 
         return [(Math.random() - 0.5) * SIMUWIDTH, (Math.random() - 0.5) * SIMUHEIGHT, (Math.random() - 0.5) * SIMUDEPTH];
     }
@@ -258,9 +276,15 @@ class KRModel {
     generateParticles(number) {
         for (var i = 0; i < number; i++) {
             if (Math.random() <= GENERATIONODDS) {
-                var particle = new KRParticle();
-                particle.loadSettings(pointSettings);
+
+                var particle = new THREE.Mesh();
+                var material = new THREE.Material();
+                loadObjSettings(particle, pointSettings);
+
+                /*var particle = new KRParticle();*/
+
                 const startPos = this.generateSpawnPosition();
+
                 particle.userData.vx = (Math.random() - 0.5) * INITVELOCITY;
                 particle.userData.vy = (Math.random() - 0.5) * INITVELOCITY;
                 particle.userData.vz = (Math.random() - 0.5) * INITVELOCITY;
@@ -272,14 +296,18 @@ class KRModel {
         }
     }
 
-    click(){
+    click() {
         this.ignoreForce = true;
     }
-    declick(){
+    declick() {
         this.ignoreForce = false;
     }
 
 }
+
+///////////////////////////////////////////////////////////////////
+
+
 
 
 ///////////////////////////////////////////////////////////////////
