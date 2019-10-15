@@ -40,4 +40,19 @@ class PointParticle extends THREE.Mesh{
         }
     }
 
+    setVelocity(newVel){ //TODO refactor this into vector3
+        this.userData.vx = newVel.x;
+        this.userData.vy = newVel.y;
+        this.userData.vz = newVel.z;
+    }
+    setPosition(newPosition){
+        this.position.x = newPosition.x;
+        this.position.y = newPosition.y;
+        this.position.z = newPosition.z;
+    }
+    setTargetPoint(newTarget){
+        this.userData.tx = newTarget.x;
+        this.userData.ty = newTarget.y;
+        this.userData.tz = newTarget.z;
+    }
 }

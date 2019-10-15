@@ -77,6 +77,7 @@ var material = new THREE.MeshPhongMaterial( { color: 0xAAAAAA, specular: 0x11111
 var loader = new THREE.STLLoader();
 loader.load( './assets/models/trajan_print.stl', function ( geometry ) {
   var mesh = new THREE.Mesh( geometry, material );
+  mesh.name = "target";
   mesh.position.set( 0, - 300, - 400 );
   mesh.rotation.set( - Math.PI / 2, 0, Math.PI );
   mesh.scale.set( 5, 5, 5 );

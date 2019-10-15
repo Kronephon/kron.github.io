@@ -1,6 +1,6 @@
 const JITTER = 0.005;
 const DRAG = 0.025;
-const ATTRACTION = 1;
+const ATTRACTION = 0.00025;
 const REPULSION = 1;
 
 const INITVELOCITY = 10;
@@ -49,6 +49,9 @@ const pointSettings = {
     geometry: particleTemplate,
     material: pointMaterial,
     position: new THREE.Vector3(0, 0, 0),
+    tx: 0,
+    ty: 0,
+    tz: 0,
     vx: 0,
     vy: 0,
     vz: 0,
@@ -62,20 +65,6 @@ const pointSettings = {
     size: PARTICLESIZE
 };
 
-
-/*const tetraSettings = {
-    name: "tetra",
-    geometry: new THREE.TetrahedronBufferGeometry(PARTICLESIZE),
-    material: mainMaterial,
-    position: new THREE.Vector3(0, 0, 0),
-    vx: new THREE.Vector3(0, 0, 0),
-    force: new THREE.Vector3(0, 0, 0), //maybe forces should be punctual?
-    receiveShadow: true,
-    castShadow: true,
-    life: 60,
-    mass: 2,
-    size: PARTICLESIZE
-};*/
 
 ///////////////////////////////////////////////////////////////////
 
@@ -94,6 +83,7 @@ class KRModel {
         this.particleNumber = PARTICLENUMBER;
         this.ignoreForce = false;
         this.particles = new THREE.Group();
+        this.target = SCENE.getObjectByName( "target" );
         SCENE.add(this.particles);
     }
 
@@ -107,17 +97,18 @@ class KRModel {
         this.particles.remove(part);
     }
 
+    //experimental
     increasePerformance(){
-        if(this.particleNumber < PARTICLENUMBER){
+        /*if(this.particleNumber < PARTICLENUMBER){
             this.particleNumber++;
             //console.loconsole.log("increasing to: " + this.particleNumber);
-        }
+        }*/
     }
     decreasePerformance(){
-        if(this.particleNumber > 0){
+        /*if(this.particleNumber > 0){
             this.particleNumber--;
             //console.log("decreasing to: " + this.particleNumber);
-        }
+        }*/
     }
 
     update() {
@@ -173,9 +164,6 @@ class KRModel {
     }
 
     forceCompute(particle) {
-
-
-
         if (this.ignoreForce) {
             particle.userData.fx = 0;
             particle.userData.fy = 0;
@@ -194,16 +182,17 @@ class KRModel {
 
 
         //attraction
+        var target = new THREE.Vector3(particle.userData.tx,particle.userData.ty,particle.userData.tz);
+        var attraction = forceInteraction(particle.position, target , 1, 1, true, ATTRACTION,true);
 
-        // let's try out attraction to center, porporcional to distance from it. This can later be changed into shape.
-        particle.userData.fx += -(particle.position.x / (SIMUWIDTH / 2)) * ATTRACTION;
-        particle.userData.fy += -(particle.position.y / (SIMUHEIGHT / 2)) * ATTRACTION;
-        particle.userData.fz += -(particle.position.z / (SIMUDEPTH / 2)) * ATTRACTION;
+        particle.userData.fx += attraction.x;
+        particle.userData.fy += attraction.y;
+        particle.userData.fz += attraction.z;
 
         //repulsion
         // F = (G * m1 * m2) / (d*d) > Jitter Constant let's use mass for it
 
-        var radius = 1; //Math.sqrt(REPULSION * particle.userData.mass * particle.userData.mass / JITTER); //fair assumption though better would be biggest mass in the board
+        var radius = Math.sqrt(REPULSION * particle.userData.mass * particle.userData.mass / JITTER); //fair assumption though better would be biggest mass in the board
         var search = this.octree.search(particle.position, radius);
         
         for (var i = 0; i < search.length; i++) {
@@ -214,7 +203,7 @@ class KRModel {
             var p2 = search[i].object.position;
 
             //TODO has a bug which eventually propagates through all the particles. I think it is a NaN. Add limits?
-            var repulsion = forceInteraction(p1, p2, particle.userData.mass, search[i].object.userData.mass, false, REPULSION);
+            var repulsion = forceInteraction(p1, p2, particle.userData.mass, search[i].object.userData.mass, false, REPULSION,false);
 
             particle.userData.fx += repulsion.x;
             particle.userData.fy += repulsion.y;
@@ -278,7 +267,7 @@ class KRModel {
         
              */
 
-        return [(Math.random() - 0.5) * SIMUWIDTH, (Math.random() - 0.5) * SIMUHEIGHT, (Math.random() - 0.5) * SIMUDEPTH];
+        return new THREE.Vector3((Math.random() - 0.5) * SIMUWIDTH, (Math.random() - 0.5) * SIMUHEIGHT, (Math.random() - 0.5) * SIMUDEPTH);
     }
 
 
@@ -288,18 +277,11 @@ class KRModel {
             if (Math.random() <= GENERATIONODDS) {
 
                 var particle = new PointParticle(pointSettings);
-                //loadObjSettings(particle, pointSettings);
-
-                /*var particle = new KRParticle();*/
 
                 const startPos = this.generateSpawnPosition();
-
-                particle.userData.vx = (Math.random() - 0.5) * INITVELOCITY;
-                particle.userData.vy = (Math.random() - 0.5) * INITVELOCITY;
-                particle.userData.vz = (Math.random() - 0.5) * INITVELOCITY;
-                particle.position.x = startPos[0];
-                particle.position.y = startPos[1];
-                particle.position.z = startPos[2];
+                particle.setPosition(startPos);
+                particle.setVelocity(new THREE.Vector3((Math.random() - 0.5) * INITVELOCITY, (Math.random() - 0.5) * INITVELOCITY, (Math.random() - 0.5) * INITVELOCITY));
+                particle.setTargetPoint(new THREE.Vector3(Math.random()*5,Math.random()*5,Math.random()*5));
 
                 this.insertParticle(particle);
             }
@@ -325,13 +307,18 @@ function forceDecomposer(intensity, direction) {
 }
 
 //calculates repulsion/attraction between particles, porportional to the sqr of their distance
-function forceInteraction(position1, position2, particleSpec1, particleSpec2, attract, constant) {
+function forceInteraction(position1, position2, particleSpec1, particleSpec2, attract, constant, distancePorporcional) {
     var distance = position1.distanceTo(position2);
     if (distance == 0) {
         alert("oh no");
         return forceDecomposer(0, new THREE.Vector3(0, 0, 1)); //undefined case, particles can't ocupy the same space at the same time
     }
-    var forceIntensity = constant * particleSpec1 * particleSpec2 / Math.pow(distance, 2);
+    var forceIntensity;
+    if(distancePorporcional){
+        forceIntensity = constant * particleSpec1 * particleSpec2 * Math.pow(distance, 2);
+    }else{
+        forceIntensity = constant * particleSpec1 * particleSpec2 / Math.pow(distance, 2);
+    }
 
     if (attract) {
         forceIntensity *= -1;
@@ -348,35 +335,3 @@ function forceInteraction(position1, position2, particleSpec1, particleSpec2, at
 }
 
 ///////////////////////////////////////////////////////////////////
-/*
-function loadObjSettings(obj, param) {
-    if (typeof param === 'undefined') {
-      console.log("loadSettings param undefined.")
-      return;
-    }
-    //console.log("Creating new KRParticle type");
-    for (var key in param) {
-      if (obj.hasOwnProperty(key)) {
-        if (key == "geometry") {
-            //obj.geometry = new THREE.BufferGeometry();
-            //obj.geometry = param[key].clone();
-        }
-        if (key == "material") {
-            //obj.material = new THREE.Material();
-            //obj.material = param[key].clone();
-        }
-        if (key == "position") {
-          //obj.position.x = param[key].x;
-          //obj.position.y = param[key].y;
-          //obj.position.z = param[key].z;
-          //console.log(key + " -> " + this[key]);
-        } else {
-          obj[key] = param[key];
-          //console.log(key + " -> " + this[key]);
-        }
-      } else {
-        obj.userData[key] = param[key];
-        //console.log(key + " [userData]-> " + this.userData[key]);
-      }
-    }
-  }*/
