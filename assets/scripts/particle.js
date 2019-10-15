@@ -1,63 +1,43 @@
-/*
-class KRParticle extends THREE.Mesh {
-  constructor(param) {
-    super();
-  }
+const pointMaterial =
+    new THREE.PointsMaterial({
+        color: 0xFFFFFF,
+        opacity: 1.0,
+        transparent: true
+    });
 
-  loadSettings(param) {
-    if (typeof param === 'undefined') {
-      console.log("KRParticle loadSettings param undefined.")
-      return;
-    }
-    //console.log("Creating new KRParticle type");
-    for (var key in param) {
-      if (this.hasOwnProperty(key)) {
-        if (key == "position") {
-          this.position.x = param[key].x;
-          this.position.y = param[key].y;
-          this.position.z = param[key].z;
-          //console.log(key + " -> " + this[key]);
-        } else {
-          this[key] = param[key];
-          //console.log(key + " -> " + this[key]);
+
+class PointParticle extends THREE.Mesh{
+    constructor(param){
+        var geometry;
+        if(param.hasOwnProperty('geometry')){
+            geometry = pointSettings.geometry.clone();
+        }else{
+            geometry = new THREE.TetrahedronBufferGeometry(PARTICLESIZE);
         }
-      } else {
-        this.userData[key] = param[key];
-        //console.log(key + " [userData]-> " + this.userData[key]);
-      }
+
+        var material;
+        if(param.hasOwnProperty('material')){
+            material = param['material'].clone();
+        }else{
+            material = new THREE.MeshLambertMaterial({
+                color: 0xCC0000,
+                transparency: true
+            });
+        }
+        super(geometry, material);
+
+        if(param.hasOwnProperty('position')){
+            this.position.copy(param['position']);
+        }
+
+        for (var key in pointSettings) {
+            if (this.hasOwnProperty(key)) {
+                continue;
+            } else {
+                this.userData[key] = pointSettings[key];
+                continue;
+            }
+        }
     }
-  }
 
-  changeMesh(mesh) {
-    super.geometry = mesh.geometry;
-    super.material = mesh.material;
-  }
-
-  setPosition(x, y, z) {
-    if (x === 'undefined' || y === 'undefined' || z === 'undefined') {
-      console.log("KRParticle setPosition has undefined args. Setting to 0.");
-      this.position.x = 0;
-      this.position.y = 0;
-      this.position.z = 0;
-    } else {
-      this.position.x = x;
-      this.position.y = y;
-      this.position.z = z;
-    }
-  }
-
-  process() {
-    //check for color and type differences
-    //this.motion();
-    //TODO: add more dynamic color stuff here
-
-    //this.material.color.setHex(this.userData.color);
-
-    var dead = 0.9;// this.userData.life;
-
-    this.material.opacity = 1 + Math.sin(new Date().getTime() * .0025);
-
-    this.userData.life--;
-  }
 }
-*/

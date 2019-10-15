@@ -73,12 +73,23 @@ SCENE.add(pointLight);
 var ambientLight = new THREE.AmbientLight(0x1D171C, 1);
 SCENE.add(ambientLight);
 
+var material = new THREE.MeshPhongMaterial( { color: 0xAAAAAA, specular: 0x111111, shininess: 200 , transparent: true, opacity: 0.10} );
+var loader = new THREE.STLLoader();
+loader.load( './assets/models/trajan_print.stl', function ( geometry ) {
+  var mesh = new THREE.Mesh( geometry, material );
+  mesh.position.set( 0, - 300, - 400 );
+  mesh.rotation.set( - Math.PI / 2, 0, Math.PI );
+  mesh.scale.set( 5, 5, 5 );
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  SCENE.add( mesh );
+} );
+
 ///////////////////////////////////////////////////////////////////
 var model = new KRModel();
 var performanceMetrics;
 
 var lastLoop = Date.now();
-
 function update() {
   //performance
   var thisLoop = Date.now();

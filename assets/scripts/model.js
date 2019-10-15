@@ -8,8 +8,8 @@ const FORCE_LIMIT = 20;
 const PARTICLE_LIFE = 1000;
 const PARTICLESIZE = 0.75;
 
-const PARTICLENUMBER = 700;
-const GENERATIONODDS = 0.0001; // 0 - 1
+const PARTICLENUMBER = 500;
+const GENERATIONODDS = 0.001; // 0 - 1
 
 
 
@@ -27,13 +27,6 @@ const LINE_PROXIMITY = 5;
 const mainMaterial =
     new THREE.MeshLambertMaterial({
         color: 0xCC0000
-    });
-
-const pointMaterial =
-    new THREE.PointsMaterial({
-        color: 0xFFFFFF,
-        opacity: 1.0,
-        transparent: true
     });
 
 const lineMaterial =
@@ -70,7 +63,7 @@ const pointSettings = {
 };
 
 
-const tetraSettings = {
+/*const tetraSettings = {
     name: "tetra",
     geometry: new THREE.TetrahedronBufferGeometry(PARTICLESIZE),
     material: mainMaterial,
@@ -82,7 +75,7 @@ const tetraSettings = {
     life: 60,
     mass: 2,
     size: PARTICLESIZE
-};
+};*/
 
 ///////////////////////////////////////////////////////////////////
 
@@ -93,15 +86,15 @@ class KRModel {
         this.octree = new THREE.Octree({
             undeferred: true, // optional, default = false, octree will defer insertion until you call octree.update();
             depthMax: Infinity, // optional, default = Infinity, infinite depth
-            objectsThreshold: 900, // optional, default = 8          //TODO what?
+            objectsThreshold: 8, // optional, default = 8          //TODO what?
             overlapPct: 0.15, // optional, default = 0.15 (15%), this helps sort objects that overlap nodes
-            scene: SCENE // optional, pass scene as parameter only if you wish to visualize octree
+            //scene: SCENE // optional, pass scene as parameter only if you wish to visualize octree
         });
 
         this.particleNumber = PARTICLENUMBER;
         this.ignoreForce = false;
         this.particles = new THREE.Group();
-        SCENE.add(this.particles, { useVertices: true });
+        SCENE.add(this.particles);
     }
 
     insertParticle(part) {
@@ -143,8 +136,6 @@ class KRModel {
         }
         this.octree.update();
 
-
-        //cull
 
         //generation
         if (this.particles.children.length <= this.particleNumber) {
@@ -295,37 +286,8 @@ class KRModel {
     generateParticles(number) {
         for (var i = 0; i < number; i++) {
             if (Math.random() <= GENERATIONODDS) {
-                var particle = new THREE.Mesh();
-                for (var key in pointSettings) {
-                    if (particle.hasOwnProperty(key)) {
-                        if (key == "geometry") {
-                            particle.geometry = pointSettings.geometry.clone();
-                            continue;
-                        }
-                        if (key == "material") {
-                            particle.material.copy(pointSettings.material);
-                            //obj.material = new THREE.Material();
-                            //obj.material = param[key].clone();
-                            continue;
-                        }
-                        if (key == "position") {
-                            //obj.position.x = param[key].x;
-                            //obj.position.y = param[key].y;
-                            //obj.position.z = param[key].z;
-                            //console.log(key + " -> " + this[key]);
-                            continue;
-                        } else {
-                            particle[key] = pointSettings[key];
-                            //console.log(key + " -> " + this[key]);
-                            continue;
-                        }
-                    } else {
-                        particle.userData[key] = pointSettings[key];
-                        //console.log(key + " [userData]-> " + this.userData[key]);
-                        continue;
-                    }
-                }
 
+                var particle = new PointParticle(pointSettings);
                 //loadObjSettings(particle, pointSettings);
 
                 /*var particle = new KRParticle();*/
@@ -338,6 +300,7 @@ class KRModel {
                 particle.position.x = startPos[0];
                 particle.position.y = startPos[1];
                 particle.position.z = startPos[2];
+
                 this.insertParticle(particle);
             }
         }
