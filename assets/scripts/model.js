@@ -3,10 +3,10 @@ const DRAG = 0.025;
 const ATTRACTION = 1;
 const REPULSION = 1;
 
-const INITVELOCITY = 5;
+const INITVELOCITY = 10;
 const FORCE_LIMIT = 20;
-const PARTICLE_LIFE = 280;
-const PARTICLESIZE = 2;
+const PARTICLE_LIFE = 2000;
+const PARTICLESIZE = 0.75;
 
 const PARTICLENUMBER = 200;
 const GENERATIONODDS = 0.001; // 0 - 1
@@ -32,7 +32,8 @@ const mainMaterial =
 const pointMaterial =
     new THREE.PointsMaterial({
         color: 0xFFFFFF,
-        opacity: 1.0
+        opacity: 1.0,
+        transparent: true
     });
 
 const lineMaterial =
@@ -78,7 +79,6 @@ const tetraSettings = {
     force: new THREE.Vector3(0, 0, 0), //maybe forces should be punctual?
     receiveShadow: true,
     castShadow: true,
-    color: 0xFFFFFF,
     life: 60,
     mass: 2,
     size: PARTICLESIZE
@@ -119,6 +119,7 @@ class KRModel {
             //cull
             if (this.particles.children[i].userData.life == 0) {
                 this.removeParticle(this.particles.children[i]);
+                continue;
             }
 
 
@@ -132,22 +133,17 @@ class KRModel {
         //cull
 
         //generation
-        if (this.particles.children.length < PARTICLENUMBER) {
+        if (this.particles.children.length <= PARTICLENUMBER) {
             this.generateParticles(PARTICLENUMBER - this.particles.children.length);
         }
         this.octree.rebuild();
+
     }
     particleProcess(particle) {
         //check for color and type differences
-        //this.motion();
-        //TODO: add more dynamic color stuff here
+        var dead = particle.userData.life / PARTICLE_LIFE;
 
-        //this.material.color.setHex(this.userData.color);
-
-        var dead = 0.9; // this.userData.life;
-
-        //particle.material.opacity = 1 + Math.sin(new Date().getTime() * .0025);
-
+        particle.material.opacity = Math.floor(dead * 10)/10; 
         particle.userData.life--;
     }
 
@@ -173,13 +169,14 @@ class KRModel {
 
     forceCompute(particle) {
 
+
+
         if (this.ignoreForce) {
             particle.userData.fx = 0;
             particle.userData.fy = 0;
             particle.userData.fz = 0;
             return;
         }
-
 
         //jitter 
 
@@ -279,13 +276,43 @@ class KRModel {
         return [(Math.random() - 0.5) * SIMUWIDTH, (Math.random() - 0.5) * SIMUHEIGHT, (Math.random() - 0.5) * SIMUDEPTH];
     }
 
+
+
     generateParticles(number) {
         for (var i = 0; i < number; i++) {
             if (Math.random() <= GENERATIONODDS) {
-
                 var particle = new THREE.Mesh();
-                var material = new THREE.Material();
-                loadObjSettings(particle, pointSettings);
+                for (var key in pointSettings) {
+                    if (particle.hasOwnProperty(key)) {
+                        if (key == "geometry") {
+                            particle.geometry = pointSettings.geometry.clone();
+                            continue;
+                        }
+                        if (key == "material") {
+                            particle.material.copy(pointSettings.material);
+                            //obj.material = new THREE.Material();
+                            //obj.material = param[key].clone();
+                            continue;
+                        }
+                        if (key == "position") {
+                            //obj.position.x = param[key].x;
+                            //obj.position.y = param[key].y;
+                            //obj.position.z = param[key].z;
+                            //console.log(key + " -> " + this[key]);
+                            continue;
+                        } else {
+                            particle[key] = pointSettings[key];
+                            //console.log(key + " -> " + this[key]);
+                            continue;
+                        }
+                    } else {
+                        particle.userData[key] = pointSettings[key];
+                        //console.log(key + " [userData]-> " + this.userData[key]);
+                        continue;
+                    }
+                }
+
+                //loadObjSettings(particle, pointSettings);
 
                 /*var particle = new KRParticle();*/
 
@@ -310,9 +337,6 @@ class KRModel {
     }
 
 }
-
-///////////////////////////////////////////////////////////////////
-
 
 
 
@@ -347,7 +371,7 @@ function forceInteraction(position1, position2, particleSpec1, particleSpec2, at
 }
 
 ///////////////////////////////////////////////////////////////////
-
+/*
 function loadObjSettings(obj, param) {
     if (typeof param === 'undefined') {
       console.log("loadSettings param undefined.")
@@ -357,15 +381,17 @@ function loadObjSettings(obj, param) {
     for (var key in param) {
       if (obj.hasOwnProperty(key)) {
         if (key == "geometry") {
-            obj.geometry = param[key].clone();
+            //obj.geometry = new THREE.BufferGeometry();
+            //obj.geometry = param[key].clone();
         }
         if (key == "material") {
-            obj.material = param[key].clone();
+            //obj.material = new THREE.Material();
+            //obj.material = param[key].clone();
         }
         if (key == "position") {
-          obj.position.x = param[key].x;
-          obj.position.y = param[key].y;
-          obj.position.z = param[key].z;
+          //obj.position.x = param[key].x;
+          //obj.position.y = param[key].y;
+          //obj.position.z = param[key].z;
           //console.log(key + " -> " + this[key]);
         } else {
           obj[key] = param[key];
@@ -376,4 +402,4 @@ function loadObjSettings(obj, param) {
         //console.log(key + " [userData]-> " + this.userData[key]);
       }
     }
-  }
+  }*/
