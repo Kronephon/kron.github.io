@@ -1,11 +1,13 @@
 const JITTER = 0.005;
-const DRAG = 0.05;
+const DRAG = 0.025;
 const ATTRACTION = 1;
-const REPULSION = 5;
-const INITVELOCITY = 7;
+const REPULSION = 1;
 
-const PARTICLENUMBER = 50;
-const GENERATIONODDS = 0.01;    // 0 - 1
+const INITVELOCITY = 5;
+const FORCE_LIMIT = 20;
+
+const PARTICLENUMBER = 200;
+const GENERATIONODDS = 0.01; // 0 - 1
 
 const PARTICLESIZE = 1;
 
@@ -23,7 +25,9 @@ const mainMaterial =
     });
 
 const pointMaterial =
-    new THREE.PointsMaterial({ color: 0x888888 });
+    new THREE.PointsMaterial({
+        color: 0x888888
+    });
 
 
 //there needs to be a strict name adeharance to THREE.JS var names or else
@@ -33,7 +37,7 @@ const pointMaterial =
 const pointSettings = {
     name: "point",
     geometry: new THREE.TetrahedronBufferGeometry(PARTICLESIZE),
-    material: pointMaterial, 
+    material: pointMaterial,
     position: new THREE.Vector3(0, 0, 0),
     vx: 0,
     vy: 0,
@@ -136,101 +140,77 @@ class KRModel {
     }
 
     forceCompute(particle) {
+        //jitter 
+
+        var jitterDirection = new THREE.Vector3(Math.random()-0.5,Math.random()-0.5,Math.random()-0.5);
+        var jitterForce = forceDecomposer(JITTER,jitterDirection.normalize());
+
+        particle.userData.fx = jitterForce.x;
+        particle.userData.fy = jitterForce.y;
+        particle.userData.fz = jitterForce.z;
+
+
         //attraction
 
         // let's try out attraction to center, porporcional to distance from it. This can later be changed into shape.
-        particle.userData.fx = -(particle.position.x / (SIMUWIDTH / 2)) * ATTRACTION;
-        particle.userData.fy = -(particle.position.y / (SIMUHEIGHT / 2)) * ATTRACTION;
-        particle.userData.fz = -(particle.position.z / (SIMUDEPTH / 2)) * ATTRACTION;
+        particle.userData.fx += -(particle.position.x / (SIMUWIDTH / 2)) * ATTRACTION;
+        particle.userData.fy += -(particle.position.y / (SIMUHEIGHT / 2)) * ATTRACTION;
+        particle.userData.fz += -(particle.position.z / (SIMUDEPTH / 2)) * ATTRACTION;
 
         //repulsion
         // F = (G * m1 * m2) / (d*d) > Jitter Constant let's use mass for it
 
-        var radius = 1000;// Math.sqrt(REPULSION * particle.userData.mass * particle.userData.mass  / JITTER); //fair assumption though better would be biggest mass in the board
-        var search = this.octree.search( particle.position, radius ); 
-        
-        for(var i = 0; i < search.length; i++){
-            if(particle.uuid == search[i].object.uuid){
+        var radius = Math.sqrt(REPULSION * particle.userData.mass * particle.userData.mass / JITTER); //fair assumption though better would be biggest mass in the board
+        var search = this.octree.search(particle.position, radius);
+
+        for (var i = 0; i < search.length; i++) {
+            if (particle.uuid == search[i].object.uuid) {
                 continue;
             }
             var p1 = particle.position;
             var p2 = search[i].object.position;
-            
-            var repulsion = forceInteraction(p1,p2,particle.userData.mass, search[i].object.userData.mass, false,REPULSION);
-            
+
+            //TODO has a bug which eventually propagates through all the particles. I think it is a NaN. Add limits?
+            var repulsion = forceInteraction(p1, p2, particle.userData.mass, search[i].object.userData.mass, false, REPULSION);
+
             particle.userData.fx += repulsion.x;
             particle.userData.fy += repulsion.y;
             particle.userData.fz += repulsion.z;
-            
-            //var distance = Math.sqrt(Math.pow(p2.x - p1.x, 2)+Math.pow(p2.y - p1.y, 2)+Math.pow(p2.z - p1.z, 2));
-            /*
-            var distanceX = p2.x - p1.x;
-            var distanceY = p2.y - p1.y;
-            var distanceZ = p2.z - p1.z;
-
-            if(typeof distanceX === 'undefined'){
-                alert("oh no");
-            }
-            if(typeof distanceY === 'undefined'){
-                alert("oh no");
-            }
-            if(typeof distanceZ === 'undefined'){
-                alert("oh no");
-            }
-            if(typeof particle.userData.mass === 'undefined'){
-                alert("oh no");
-            }
-            if(typeof search[i].object.userData.mass === 'undefined'){
-                alert("oh no");
-            }
-
-            if(distanceX != 0){
-                particle.userData.fx -= (REPULSION * particle.userData.mass * search[i].object.userData.mass)/distanceX; 
-            }
-            if(distanceY != 0){
-                particle.userData.fy -= (REPULSION * particle.userData.mass * search[i].object.userData.mass)/distanceY;
-            }
-            if(distanceZ != 0){
-                particle.userData.fz -= (REPULSION * particle.userData.mass * search[i].object.userData.mass)/distanceZ;
-            }
-            if(typeof particle.userData.fz === 'undefined'){
-                alert("oh no");
-            }
-
-            */
-            
-
-            //throw error();
 
         }
-
-        
-
-        //jitter 
-        particle.userData.fx += (Math.random() - 0.5) * JITTER;
-        particle.userData.fy += (Math.random() - 0.5) * JITTER;
-        particle.userData.fz += (Math.random() - 0.5) * JITTER;
         //drag
 
-        var dragX = 0.5 * DRAG * particle.userData.vx * particle.userData.vx;
-        var dragY = 0.5 * DRAG * particle.userData.vy * particle.userData.vy;
-        var dragZ = 0.5 * DRAG * particle.userData.vz * particle.userData.vz;
+        var velocity = new THREE.Vector3(particle.userData.vx,particle.userData.vy,particle.userData.vz);
+        var dragIntensity = 0.5 * DRAG * Math.pow(velocity.length(),2);
+        var dragForce = forceDecomposer(dragIntensity, velocity.multiplyScalar(-1).normalize());
+        particle.userData.fx += dragForce.x;
+        particle.userData.fy += dragForce.y;
+        particle.userData.fz += dragForce.z;
 
-        if (particle.userData.vx > 0) {
-            particle.userData.fx -= dragX;
-        } else {
-            particle.userData.fx += dragX;
+        //apply limit
+
+        if(particle.userData.fx > FORCE_LIMIT){
+            particle.userData.fx = FORCE_LIMIT;
         }
-        if (particle.userData.vy > 0) {
-            particle.userData.fy -= dragY;
-        } else {
-            particle.userData.fy += dragY;
+        if(particle.userData.fx < -FORCE_LIMIT){
+            particle.userData.fx = -FORCE_LIMIT;
         }
-        if (particle.userData.vz > 0) {
-            particle.userData.fz -= dragZ;
-        } else {
-            particle.userData.fz += dragZ;
+
+        if(particle.userData.fy > FORCE_LIMIT){
+            particle.userData.fy = FORCE_LIMIT;
         }
+        if(particle.userData.fy < -FORCE_LIMIT){
+            particle.userData.fy = -FORCE_LIMIT;
+        }
+
+        if(particle.userData.fz > FORCE_LIMIT){
+            particle.userData.fz = FORCE_LIMIT;
+        }
+        if(particle.userData.fz < -FORCE_LIMIT){
+            particle.userData.fz = -FORCE_LIMIT;
+        }
+
+
     }
 
     generateSpawnPosition() { //TODO add frustum here
@@ -281,19 +261,20 @@ class KRModel {
 ///////////////////////////////////////////////////////////////////
 
 //break force apart, direction must be ~1
-function forceDecomposer (intensity, direction){
+function forceDecomposer(intensity, direction) {
     return direction.setLength(intensity);
 }
 
 //calculates repulsion/attraction between particles, porportional to the sqr of their distance
-function forceInteraction (position1, position2, particleSpec1, particleSpec2, attract, constant){
+function forceInteraction(position1, position2, particleSpec1, particleSpec2, attract, constant) {
     var distance = position1.distanceTo(position2);
-    if(distance == 0){
-        return forceDecomposer(50, new THREE.Vector3(0,0,1));   //undefined case, particles can't ocupy the same space at the same time
+    if (distance == 0) {
+        alert("oh no");
+        return forceDecomposer(0, new THREE.Vector3(0, 0, 1)); //undefined case, particles can't ocupy the same space at the same time
     }
-    var forceIntensity = constant * particleSpec1 * particleSpec2 / Math.pow(distance,2);
-    
-    if(attract){
+    var forceIntensity = constant * particleSpec1 * particleSpec2 / Math.pow(distance, 2);
+
+    if (attract) {
         forceIntensity *= -1;
     }
 
@@ -303,11 +284,6 @@ function forceInteraction (position1, position2, particleSpec1, particleSpec2, a
     distanceVect.z = position1.z;
     distanceVect.sub(position2);
 
-    return forceDecomposer(forceIntensity,distanceVect);
-
-}
-
-//calculates force components of a field based interation
-function forceField (){
+    return forceDecomposer(forceIntensity, distanceVect);
 
 }
