@@ -109,7 +109,7 @@ function update() {
   }
 
 
-  rotation += 0.05;
+  rotation += 0.02;
   CAMERA.position.x = Math.sin(rotation) * 700 + center.x;
   CAMERA.position.y = 500 + center.y;
   CAMERA.position.z = Math.cos(rotation) * 700 + center.y;
