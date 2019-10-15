@@ -6,7 +6,7 @@ const REPULSION = 1;
 const INITVELOCITY = 5;
 const FORCE_LIMIT = 20;
 const PARTICLE_LIFE = 280;
-const PARTICLESIZE = 1;
+const PARTICLESIZE = 2;
 
 const PARTICLENUMBER = 200;
 const GENERATIONODDS = 0.001; // 0 - 1
@@ -40,13 +40,19 @@ const lineMaterial =
         color: 0x888888
     });
 
+///////////////////////////////////////////////////////////////////
+
+const particleTemplate = new THREE.TetrahedronBufferGeometry(PARTICLESIZE);
+
+///////////////////////////////////////////////////////////////////
+
 //there needs to be a strict name adeharance to THREE.JS var names or else
 //settings import will NOT work. Also userData clones are picky and cannot
 //receive references.
 
 const pointSettings = {
     name: "point",
-    geometry: new THREE.TetrahedronBufferGeometry(PARTICLESIZE),
+    geometry: particleTemplate,
     material: pointMaterial,
     position: new THREE.Vector3(0, 0, 0),
     vx: 0,
@@ -339,3 +345,35 @@ function forceInteraction(position1, position2, particleSpec1, particleSpec2, at
     return forceDecomposer(forceIntensity, distanceVect);
 
 }
+
+///////////////////////////////////////////////////////////////////
+
+function loadObjSettings(obj, param) {
+    if (typeof param === 'undefined') {
+      console.log("loadSettings param undefined.")
+      return;
+    }
+    //console.log("Creating new KRParticle type");
+    for (var key in param) {
+      if (obj.hasOwnProperty(key)) {
+        if (key == "geometry") {
+            obj.geometry = param[key].clone();
+        }
+        if (key == "material") {
+            obj.material = param[key].clone();
+        }
+        if (key == "position") {
+          obj.position.x = param[key].x;
+          obj.position.y = param[key].y;
+          obj.position.z = param[key].z;
+          //console.log(key + " -> " + this[key]);
+        } else {
+          obj[key] = param[key];
+          //console.log(key + " -> " + this[key]);
+        }
+      } else {
+        obj.userData[key] = param[key];
+        //console.log(key + " [userData]-> " + this.userData[key]);
+      }
+    }
+  }

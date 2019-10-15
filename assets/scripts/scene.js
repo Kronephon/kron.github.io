@@ -112,40 +112,6 @@ document.onmouseup = function (event) {
 
 ///////////////////////////////////////////////////////////////////
 
-function loadObjSettings(obj, param) {
-  if (typeof param === 'undefined') {
-    console.log("loadSettings param undefined.")
-    return;
-  }
-  //console.log("Creating new KRParticle type");
-  for (var key in param) {
-    if (obj.hasOwnProperty(key)) {
-      if (key == "geometry") {
-        obj.geometry = new THREE.TetrahedronBufferGeometry(PARTICLESIZE);
-      }
-      if (key == "material") {
-        obj.material = new THREE.PointsMaterial({
-          color: 0xFFFFFF,
-          opacity: 1.0
-        });
-      }
-      if (key == "position") {
-        obj.position.x = param[key].x;
-        obj.position.y = param[key].y;
-        obj.position.z = param[key].z;
-        //console.log(key + " -> " + this[key]);
-      } else {
-        obj[key] = param[key];
-        //console.log(key + " -> " + this[key]);
-      }
-    } else {
-      obj.userData[key] = param[key];
-      //console.log(key + " [userData]-> " + this.userData[key]);
-    }
-  }
-}
-///////////////////////////////////////////////////////////////////
-
 // Linkers
 window.addEventListener('resize', updateScreenSize);
 requestAnimationFrame(update);
