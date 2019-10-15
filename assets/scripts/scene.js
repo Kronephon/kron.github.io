@@ -73,7 +73,7 @@ SCENE.add(pointLight);
 var ambientLight = new THREE.AmbientLight(0x1D171C, 1);
 SCENE.add(ambientLight);
 
-var material = new THREE.MeshPhongMaterial( { color: 0xAAAAAA, specular: 0x111111, shininess: 200 , transparent: true, opacity: 0.10} );
+var material = new THREE.MeshPhongMaterial( { color: 0xAAAAAA, specular: 0x111111, shininess: 200 , transparent: true, opacity: 0.01} );
 var loader = new THREE.STLLoader();
 loader.load( './assets/models/trajan_print.stl', function ( geometry ) {
   var mesh = new THREE.Mesh( geometry, material );
@@ -81,9 +81,11 @@ loader.load( './assets/models/trajan_print.stl', function ( geometry ) {
   mesh.position.set( 0, - 300, - 400 );
   mesh.rotation.set( - Math.PI / 2, 0, Math.PI );
   mesh.scale.set( 5, 5, 5 );
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
+  //mesh.castShadow = true;
+  //mesh.receiveShadow = true;
+  mesh.visible = false;
   SCENE.add( mesh );
+  model.setTargets(mesh);
 } );
 
 ///////////////////////////////////////////////////////////////////
@@ -91,6 +93,10 @@ var model = new KRModel();
 var performanceMetrics;
 
 var lastLoop = Date.now();
+
+var rotation = 0;
+var center = new THREE.Vector3( 0, - 300, - 400 );
+
 function update() {
   //performance
   var thisLoop = Date.now();
@@ -101,6 +107,13 @@ function update() {
   }else{
     model.increasePerformance();
   }
+
+
+  rotation += 0.05;
+  CAMERA.position.x = Math.sin(rotation) * 700 + center.x;
+  CAMERA.position.y = 500 + center.y;
+  CAMERA.position.z = Math.cos(rotation) * 700 + center.y;
+  CAMERA.lookAt( new THREE.Vector3( 0, 0, - 400 )); // the origin
 
   //logic
   model.update();
@@ -140,3 +153,4 @@ document.onmouseup = function (event) {
 // Linkers
 window.addEventListener('resize', updateScreenSize);
 requestAnimationFrame(update);
+

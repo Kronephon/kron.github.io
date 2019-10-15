@@ -1,15 +1,15 @@
-const JITTER = 0.005;
+const JITTER = 0.05;
 const DRAG = 0.025;
-const ATTRACTION = 0.00025;
-const REPULSION = 1;
+const ATTRACTION = 0.000025;
+const REPULSION = 0;
 
-const INITVELOCITY = 10;
+const INITVELOCITY = 40;
 const FORCE_LIMIT = 20;
-const PARTICLE_LIFE = 1000;
+const PARTICLE_LIFE = 20000;
 const PARTICLESIZE = 0.75;
 
-const PARTICLENUMBER = 500;
-const GENERATIONODDS = 0.001; // 0 - 1
+const PARTICLENUMBER = 6000;
+const GENERATIONODDS = 0.005; // 0 - 1
 
 
 
@@ -83,11 +83,24 @@ class KRModel {
         this.particleNumber = PARTICLENUMBER;
         this.ignoreForce = false;
         this.particles = new THREE.Group();
-        this.target = SCENE.getObjectByName( "target" );
         SCENE.add(this.particles);
+        
+        this.worldMatrix = new THREE.Matrix4();
+        this.unassignedVertices = [];
+        this.assignedVertices = [];
     }
 
     insertParticle(part) {
+        var point = this.unassignedVertices.pop();
+        point.applyMatrix4(this.matrixWorld);
+        //console.log();
+        //console.log();
+        
+        part.setTargetPoint(point);
+        
+        //console.log(point);
+
+
         this.octree.add(part);
         this.particles.add(part);
     }
@@ -95,6 +108,9 @@ class KRModel {
     removeParticle(part) {
         this.octree.remove(part);
         this.particles.remove(part);
+        var targetPoint = new THREE.Vector3(part.userData.tx, part.userData.ty, part.userData.tz);
+        this.unassignedVertices.push(targetPoint);
+        //part.dispose();
     }
 
     //experimental
@@ -191,7 +207,7 @@ class KRModel {
 
         //repulsion
         // F = (G * m1 * m2) / (d*d) > Jitter Constant let's use mass for it
-
+        /*
         var radius = Math.sqrt(REPULSION * particle.userData.mass * particle.userData.mass / JITTER); //fair assumption though better would be biggest mass in the board
         var search = this.octree.search(particle.position, radius);
         
@@ -209,7 +225,7 @@ class KRModel {
             particle.userData.fy += repulsion.y;
             particle.userData.fz += repulsion.z;
 
-        }
+        }*/
         //drag
 
         var velocity = new THREE.Vector3(particle.userData.vx, particle.userData.vy, particle.userData.vz);
@@ -270,19 +286,38 @@ class KRModel {
         return new THREE.Vector3((Math.random() - 0.5) * SIMUWIDTH, (Math.random() - 0.5) * SIMUHEIGHT, (Math.random() - 0.5) * SIMUDEPTH);
     }
 
+    setTargets(mesh){
+        this.matrixWorld = mesh.matrixWorld;
+        
+        var buffer = mesh.geometry.attributes.position.array;
 
+        for(var i = 0; i < buffer.length /3; i = i + 3){
+            var point = new THREE.Vector3(buffer[i], buffer[i+1],buffer[i+2]);
+            //point.applyMatrix4(this.matrixWorld); //TODO DOES NOT WORK WHY?
+            this.unassignedVertices.push(point);
+        }
+        /*var point = this.unassignedVertices[0].clone();
+        console.log(point);
+        console.log(mesh.matrix);
+        var res = point.applyMatrix4(mesh.matrix);
+        console.log(res);*/
+        console.log("end");
+
+        
+        //console.log(this.unassignedVertices);
+    }
 
     generateParticles(number) {
         for (var i = 0; i < number; i++) {
             if (Math.random() <= GENERATIONODDS) {
-
+                if(this.unassignedVertices.length == 0){
+                    continue;
+                }
                 var particle = new PointParticle(pointSettings);
 
                 const startPos = this.generateSpawnPosition();
                 particle.setPosition(startPos);
                 particle.setVelocity(new THREE.Vector3((Math.random() - 0.5) * INITVELOCITY, (Math.random() - 0.5) * INITVELOCITY, (Math.random() - 0.5) * INITVELOCITY));
-                particle.setTargetPoint(new THREE.Vector3(Math.random()*5,Math.random()*5,Math.random()*5));
-
                 this.insertParticle(particle);
             }
         }
