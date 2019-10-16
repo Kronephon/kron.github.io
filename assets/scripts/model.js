@@ -8,7 +8,7 @@ const FORCE_LIMIT = 20;
 const PARTICLE_LIFE = 20000;
 const PARTICLESIZE = 2;
 
-const PARTICLENUMBER = 1500;
+const PARTICLENUMBER = 9000;
 const GENERATIONODDS = 0.005; // 0 - 1
 
 const SIMUWIDTH = 300;
@@ -90,15 +90,9 @@ class KRModel {
         this.loadedTarget = false;
         
         STL_LOADER.load(TARGET,     function ( geometry ) {
-            var targetMesh = new THREE.Mesh( geometry, mainMaterial );
-            targetMesh.name = "target";
-            targetMesh.position.set( 0, - 300, - 400 );
-            targetMesh.rotation.set( - Math.PI / 2, 0, Math.PI );
-            targetMesh.scale.set( 5, 5, 5 );
-            targetMesh.castShadow = false;
-            targetMesh.receiveShadow = true;
-            targetMesh.visible = false;
-            SCENE.add( targetMesh );
+            //var targetMesh = new THREE.Mesh( geometry, mainMaterial );
+            //targetMesh.name = "target";
+            //SCENE.add( targetMesh );
           } );
     }
 
@@ -107,6 +101,12 @@ class KRModel {
 
         //console.log();
         //console.log();
+        if(typeof point === 'undefined'){
+            point = new THREE.Vector3(0,0,0);
+            return;
+        }
+
+        this.loadedTarget = true;
         
         part.setTargetPoint(point);
         
@@ -309,29 +309,33 @@ class KRModel {
         return new THREE.Vector3((Math.random() - 0.5) * SIMUWIDTH, (Math.random() - 0.5) * SIMUHEIGHT, (Math.random() - 0.5) * SIMUDEPTH);
     }
     setTargets(input){
-        console.log(input);
-        var buffer = put.geometry.attributes.position.array;
+        input.position.set( 0, - 100, - 400 );
+        //input.rotation.set( Math.PI / 2, 0, Math.PI);
+        input.scale.set( 45, 45, 45 );
+        input.castShadow = false;
+        input.receiveShadow = true;
+        input.visible = false;
 
-        for(var i = 0; i < buffer.length; i++){
-            var point = buffer[i], buffer[i+1],buffer[i+2]);
+        console.log(input);
+        var buffer = input.geometry.getAttribute("position");//.position.array;
+        console.log(buffer);
+        
+        input.updateMatrix();
+        for(var i = 0; i < input.geometry.attributes.position.count  ; i = i + 3 ){
+            var point = buffer[i];
+            //console.log(input.matrix);
+            point = point.applyMatrix4(input.matrix);
+
             if(this.unassignedVertices.indexOf(point) > -1){
                 continue;
             }else{
+
                 this.unassignedVertices.push(point);
                 
             }
             
         }
         console.log(buffer.length);
-
-        /*var point = this.unassignedVertices[0].clone();
-        console.log(point);
-        console.log(mesh.matrix);
-        var res = point.applyMatrix4(mesh.matrix);
-        console.log(res);*/
-
-        
-        //console.log(this.unassignedVertices);
     }
 
     generateParticles(number) {

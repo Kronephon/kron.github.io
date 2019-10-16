@@ -78,6 +78,33 @@ var ambientLight = new THREE.AmbientLight(0x1D171C, 1);
 SCENE.add(ambientLight);
 
 var STL_LOADER = new THREE.STLLoader();
+const GLTF_LOADER = new THREE.GLTFLoader();
+
+GLTF_LOADER.load(
+
+  // parameter 1: The URL
+  'assets/models/venus.gltf',
+
+  // parameter 2:The onLoad callback
+  gltf => onLoad( gltf, )
+
+);
+
+const onLoad = ( gltf) => {
+
+  const model = gltf.scene.children[0]; //check model for it
+  //const animation = gltf.animations[ 0 ];
+
+  //const mixer = new THREE.AnimationMixer( model );
+  //mixers.push( mixer );
+
+  //const action = mixer.clipAction( animation );
+  //action.play();
+  model.name = "target";
+  SCENE.add( model );
+
+};
+
 
 ///////////////////////////////////////////////////////////////////
 var model = new KRModel();
