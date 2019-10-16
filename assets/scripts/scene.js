@@ -6,6 +6,10 @@ var HEIGHT = window.innerHeight - footerheight;
 
 ///////////////////////////////////////////////////////////////////
 
+var TARGET = './assets/models/trajan_print.stl';
+
+///////////////////////////////////////////////////////////////////
+
 // Set some camera attributes.
 var ASPECT = WIDTH / HEIGHT;
 const VIEW_ANGLE = 45;
@@ -73,20 +77,7 @@ SCENE.add(pointLight);
 var ambientLight = new THREE.AmbientLight(0x1D171C, 1);
 SCENE.add(ambientLight);
 
-var material = new THREE.MeshPhongMaterial( { color: 0xAAAAAA, specular: 0x111111, shininess: 200 , transparent: true, opacity: 0.01} );
-var loader = new THREE.STLLoader();
-loader.load( './assets/models/trajan_print.stl', function ( geometry ) {
-  var mesh = new THREE.Mesh( geometry, material );
-  mesh.name = "target";
-  mesh.position.set( 0, - 300, - 400 );
-  mesh.rotation.set( - Math.PI / 2, 0, Math.PI );
-  mesh.scale.set( 5, 5, 5 );
-  //mesh.castShadow = true;
-  //mesh.receiveShadow = true;
-  mesh.visible = false;
-  SCENE.add( mesh );
-  model.setTargets(mesh);
-} );
+var STL_LOADER = new THREE.STLLoader();
 
 ///////////////////////////////////////////////////////////////////
 var model = new KRModel();

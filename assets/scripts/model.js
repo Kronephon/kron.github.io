@@ -1,17 +1,15 @@
-const JITTER = 0.05;
+const JITTER = 0.00005;
 const DRAG = 0.025;
 const ATTRACTION = 0.000025;
 const REPULSION = 0;
 
-const INITVELOCITY = 40;
+const INITVELOCITY = 0; //4;
 const FORCE_LIMIT = 20;
 const PARTICLE_LIFE = 20000;
-const PARTICLESIZE = 0.75;
+const PARTICLESIZE = 2;
 
-const PARTICLENUMBER = 4000;
+const PARTICLENUMBER = 1500;
 const GENERATIONODDS = 0.005; // 0 - 1
-
-
 
 const SIMUWIDTH = 300;
 const SIMUHEIGHT = 200;
@@ -70,6 +68,8 @@ const pointSettings = {
 
 class KRModel {
 
+    //mesh.geometry.__dirtyVertices for changing vertices in buffer
+
     constructor() {
         // https://github.com/collinhover/threeoctree
         this.octree = new THREE.Octree({
@@ -85,14 +85,26 @@ class KRModel {
         this.particles = new THREE.Group();
         SCENE.add(this.particles);
         
-        this.worldMatrix = new THREE.Matrix4();
+
         this.unassignedVertices = [];
-        this.assignedVertices = [];
+        this.loadedTarget = false;
+        
+        STL_LOADER.load(TARGET,     function ( geometry ) {
+            var targetMesh = new THREE.Mesh( geometry, mainMaterial );
+            targetMesh.name = "target";
+            targetMesh.position.set( 0, - 300, - 400 );
+            targetMesh.rotation.set( - Math.PI / 2, 0, Math.PI );
+            targetMesh.scale.set( 5, 5, 5 );
+            targetMesh.castShadow = false;
+            targetMesh.receiveShadow = true;
+            targetMesh.visible = false;
+            SCENE.add( targetMesh );
+          } );
     }
 
     insertParticle(part) {
-        var point = this.unassignedVertices.pop();
-        point.applyMatrix4(this.matrixWorld);
+        var point = this.unassignedVertices.shift();
+
         //console.log();
         //console.log();
         
@@ -128,6 +140,17 @@ class KRModel {
     }
 
     update() {
+        if(!this.loadedTarget){
+            var object = SCENE.getObjectByName( "target", true );
+            if(typeof object === 'undefined'){
+                return;
+            }
+
+            this.loadedTarget = true;
+            this.setTargets(object);
+        }
+
+
         for (var i = 0; i < this.particles.children.length; i++) {
             this.particleProcess(this.particles.children[i]);
             //cull
@@ -208,7 +231,7 @@ class KRModel {
         //repulsion
         // F = (G * m1 * m2) / (d*d) > Jitter Constant let's use mass for it
         /*
-        var radius = Math.sqrt(REPULSION * particle.userData.mass * particle.userData.mass / JITTER); //fair assumption though better would be biggest mass in the board
+        var radius = 2; //Math.sqrt(REPULSION * particle.userData.mass * particle.userData.mass / JITTER); //fair assumption though better would be biggest mass in the board
         var search = this.octree.search(particle.position, radius);
         
         for (var i = 0; i < search.length; i++) {
@@ -257,7 +280,7 @@ class KRModel {
         if (particle.userData.fz < -FORCE_LIMIT) {
             particle.userData.fz = -FORCE_LIMIT;
         }
-
+        
 
     }
 
@@ -285,23 +308,27 @@ class KRModel {
 
         return new THREE.Vector3((Math.random() - 0.5) * SIMUWIDTH, (Math.random() - 0.5) * SIMUHEIGHT, (Math.random() - 0.5) * SIMUDEPTH);
     }
+    setTargets(input){
+        console.log(input);
+        var buffer = put.geometry.attributes.position.array;
 
-    setTargets(mesh){
-        this.matrixWorld = mesh.matrixWorld;
-        
-        var buffer = mesh.geometry.attributes.position.array;
-
-        for(var i = 0; i < buffer.length /3; i = i + 3){
-            var point = new THREE.Vector3(buffer[i], buffer[i+1],buffer[i+2]);
-            //point.applyMatrix4(this.matrixWorld); //TODO DOES NOT WORK WHY?
-            this.unassignedVertices.push(point);
+        for(var i = 0; i < buffer.length; i++){
+            var point = buffer[i], buffer[i+1],buffer[i+2]);
+            if(this.unassignedVertices.indexOf(point) > -1){
+                continue;
+            }else{
+                this.unassignedVertices.push(point);
+                
+            }
+            
         }
+        console.log(buffer.length);
+
         /*var point = this.unassignedVertices[0].clone();
         console.log(point);
         console.log(mesh.matrix);
         var res = point.applyMatrix4(mesh.matrix);
         console.log(res);*/
-        console.log("end");
 
         
         //console.log(this.unassignedVertices);
@@ -310,9 +337,6 @@ class KRModel {
     generateParticles(number) {
         for (var i = 0; i < number; i++) {
             if (Math.random() <= GENERATIONODDS) {
-                if(this.unassignedVertices.length == 0){
-                    continue;
-                }
                 var particle = new PointParticle(pointSettings);
 
                 const startPos = this.generateSpawnPosition();
