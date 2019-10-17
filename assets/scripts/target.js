@@ -14,6 +14,8 @@ class KRTarget {
         this.particleToIndex = {}; //map particle index. particleAssignments[particleID] = index
         this.indexToParticle = {}; //map particle index. particleAssignments[index] = particleID
 
+        this.indexesToWireframe = {};
+
         this.vertexConnections = []; //index is vertex ID, content is array of connected indexes [[[a b][c f]]  [[f c][c d]] ], in which a b c f are all point indices
         
         this.unAssignedVertices = [];
@@ -50,6 +52,23 @@ class KRTarget {
 
     targetsLeftToAssign(){
         return this.unAssignedVertices.length;
+    }
+/*
+    assignWireframe(line, particle1, particle2){
+        this.indexesToWireframe[particle1.uuid + particle2.uuid] = wireframe.uuid;
+        this.indexesToWireframe[particle2.uuid + particle1.uuid] = wireframe.uuid;
+    }
+
+    getWireframe(particle1, particle2){
+        var line = this.indexesToWireframe[particle1.uuid + particle2.uuid];
+        if(typeof line === 'undefined'){
+            line = this.indexesToWireframe[particle2.uuid + particle1.uuid];
+        }
+        return line;
+    }
+*/
+    removeWireFrame(line){
+
     }
 
     assignParticle(particle){

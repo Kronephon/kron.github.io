@@ -36,6 +36,7 @@ class PointParticle extends THREE.Mesh{
                 continue;
             }
         }
+        this.userData.connectedLines = [];
     }
 
     setVelocity(newVel){ //TODO refactor this into vector3
@@ -63,5 +64,22 @@ class PointParticle extends THREE.Mesh{
         this.userData.tx,
         this.userData.ty,
         this.userData.tz);
+    }
+
+    addLine(line){
+        this.userData.connectedLines.push(line);
+    }
+
+    checkLine(particle){
+        for(var i = 0 ; i < this.userData.connectedLines.length; i++){
+            var line = this.userData.connectedLines[i];
+            if(line.userData.particleA.uuid == this.uuid && line.userData.particleB.uuid == particle.uuid){
+                return true;
+            }
+            if(line.userData.particleB.uuid == this.uuid && line.userData.particleA.uuid == particle.uuid){
+                return true;
+            }
+        }
+        return false;
     }
 }

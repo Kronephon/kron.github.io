@@ -1,15 +1,15 @@
-const JITTER = 0.0005;
-const DRAG = 0.025;
-const ATTRACTION = 0.000025;
+const JITTER = 0.05;
+const DRAG = 3;
+const ATTRACTION = 0.05;
 const REPULSION = 0;
 
-const INITVELOCITY = 50; //4;
-const FORCE_LIMIT = 30;
+const INITVELOCITY = 3; //4;
+const FORCE_LIMIT = 3;
 const PARTICLE_LIFE = 20000;
 const PARTICLESIZE = 1;
 
 const PARTICLENUMBER = 2000;
-const GENERATIONODDS = 0.0005; // 0 - 1
+const GENERATIONODDS = 0.005; // 0 - 1
 const POSITION_THRESHOLD = 5;
 
 const SIMUWIDTH = 300;
@@ -17,7 +17,6 @@ const SIMUHEIGHT = 200;
 const SIMUDEPTH = 300;
 
 
-const LINE_PROXIMITY = 3;
 
 
 
@@ -26,11 +25,6 @@ const LINE_PROXIMITY = 3;
 const mainMaterial =
     new THREE.MeshLambertMaterial({
         color: 0xCC0000
-    });
-
-const lineMaterial =
-    new THREE.LineBasicMaterial({
-        color: 0x888888
     });
 
 ///////////////////////////////////////////////////////////////////
@@ -85,9 +79,12 @@ class KRModel {
 
         this.particleNumber = PARTICLENUMBER;
         this.ignoreForce = false;
+        this.canGenerateParticles = false;
 
         this.particles = new THREE.Group();
+        this.lines = new THREE.Group();
         SCENE.add(this.particles);
+        SCENE.add(this.lines);
         
         this.target = {};
     }
@@ -107,6 +104,15 @@ class KRModel {
         
         //this.unassignedVertices.push(targetPoint);
         //part.dispose();
+    }
+
+    insertLine(line){
+        this.lines.add(line);
+        //target needs updating probably
+    }
+
+    removeLine(line){
+        this.lines.remove(line);
     }
 
     //experimental
@@ -146,10 +152,15 @@ class KRModel {
             this.motion(this.particles.children[i]);
 
         }
+        for (var i = 0; i < this.lines.children.length; i++) {
+            //cull, motion etc
+            this.lines.children[i].process();
+
+        }
         this.octree.update();
 
         //generation
-        if (this.particles.children.length <= this.particleNumber) {
+        if (this.canGenerateParticles  && this.particles.children.length <= this.particleNumber) {
             this.generateParticles(this.particleNumber - this.particles.children.length);
         }
         this.octree.rebuild();
@@ -163,9 +174,11 @@ class KRModel {
         particle.userData.life--;
 
         if(particle.getPosition().distanceTo(particle.getTarget()) < POSITION_THRESHOLD && !particle.inPlace){
+            particle.userData.inPlace = true;
             this.activateParticle(particle);
         }
         if(particle.getPosition().distanceTo(particle.getTarget()) >= POSITION_THRESHOLD && particle.inPlace){
+            //particle.userData.inPlace = false;
             this.deactivateParticle(particle);
         }
     }
@@ -177,14 +190,24 @@ class KRModel {
             var faceC;
             if (typeof connectedParticles[i][0] !== 'undefined') {
                 faceB = this.particles.getObjectByProperty("uuid", connectedParticles[i][0]);
-                
             }
             if (typeof connectedParticles[i][1] !== 'undefined') {
                 faceC = this.particles.getObjectById(connectedParticles[i][1]);
 
             }
-            if (typeof faceB !== 'undefined') {
+            if (typeof faceB !== 'undefined' && faceB.userData.inPlace) {
 
+                if(!particle.checkLine(faceB)){
+                    this.insertLine(new Wireframe(particle, faceB));
+                }
+                
+                
+                
+            }
+            if (typeof faceC !== 'undefined' && faceC.userData.inPlace) {
+                if(!particle.checkLine(faceC)){
+                    this.insertLine(new Wireframe(particle, faceC));
+                }
             }
         }
     }
@@ -198,6 +221,9 @@ class KRModel {
 
         if (typeof particle.userData.mass === 'undefined') {
             console.log("KRParticle process: " + particle.userData.name + " has no mass.");
+            return;
+        }
+        if(particle.userData.inPlace){
             return;
         }
 
@@ -329,9 +355,11 @@ class KRModel {
         input.visible = false;
 
         this.target = new KRTarget(input);
+
+        this.canGenerateParticles = true;
     }
 
-    generateParticles(number) {
+    generateParticles(number) { // important: assumes target has been initialized
         for (var i = 0; i < number; i++) {
             if(this.target.targetsLeftToAssign() == 0){
                 break;
