@@ -46,9 +46,6 @@ class KRTarget {
         
 
         }
-        //console.log(this.targetGeometry.vertices.length);
-        //console.log(this.vertexConnections);
-        //console.log("KRTarget/");
     }
 
     targetsLeftToAssign(){
@@ -62,7 +59,7 @@ class KRTarget {
         
         particle.setTarget(this.getCoordsFromIndex(vertexAssignment));
         
-        //this.particleAssignments MORE STUFF TO DO HERE
+        this.particleAssignments[particle.uuid] = vertexAssignment;
     }
 
     removeParticle(particle){
@@ -74,7 +71,13 @@ class KRTarget {
     }
    
     getConnectedParticles(particle){ // returns only assigned particles
-
+        var vertex = this.particleAssignments[particle.uuid];
+        var connected = this.vertexConnections[vertex];
+        var connectedParticles = [];
+        for (var i = 0; i < connected.length; i++){
+            pointB = 
+            pointC = 
+        }
     }
 
 }
