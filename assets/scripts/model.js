@@ -6,7 +6,7 @@ const REPULSION = 0;
 const INITVELOCITY = 50; //4;
 const FORCE_LIMIT = 30;
 const PARTICLE_LIFE = 20000;
-const PARTICLESIZE = 0.75;
+const PARTICLESIZE = 1;
 
 const PARTICLENUMBER = 2000;
 const GENERATIONODDS = 0.0005; // 0 - 1
@@ -185,10 +185,12 @@ class KRModel {
         particle.userData.life--;
 
         if(particle.getPosition().distanceTo(particle.getTarget()) < POSITION_THRESHOLD){
+            particle.size = 7.0;
             particle.material.color.r = 0;
             particle.material.color.g = 255;
             particle.material.color.b = 0;
         }else{
+            particle.size = 8;
             particle.material.color.r = 255;
             particle.material.color.g = 0;
             particle.material.color.b = 0;

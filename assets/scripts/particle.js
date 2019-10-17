@@ -2,7 +2,7 @@ const pointMaterial =
     new THREE.PointsMaterial({
         color: 0xFFFFFF,
         opacity: 1.0,
-        transparent: true
+        transparent: true,
     });
 
 
@@ -12,7 +12,7 @@ class PointParticle extends THREE.Mesh{
         if(param.hasOwnProperty('geometry')){
             geometry = pointSettings.geometry.clone();
         }else{
-            geometry = new THREE.TetrahedronBufferGeometry(PARTICLESIZE);
+            geometry = new THREE.TetrahedronBufferGeometry(param['size']);
         }
 
         var material;
