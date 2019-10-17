@@ -1,15 +1,15 @@
-const JITTER = 0.00005;
+const JITTER = 0.0005;
 const DRAG = 0.025;
-const ATTRACTION = 0.0025;
+const ATTRACTION = 0.000025;
 const REPULSION = 0;
 
-const INITVELOCITY = 500; //4;
-const FORCE_LIMIT = 20;
+const INITVELOCITY = 50; //4;
+const FORCE_LIMIT = 30;
 const PARTICLE_LIFE = 20000;
-const PARTICLESIZE = 2;
+const PARTICLESIZE = 0.75;
 
-const PARTICLENUMBER = 6200;
-const GENERATIONODDS = 0.005; // 0 - 1
+const PARTICLENUMBER = 2000;
+const GENERATIONODDS = 0.0005; // 0 - 1
 const POSITION_THRESHOLD = 3;
 
 const SIMUWIDTH = 300;
@@ -17,7 +17,7 @@ const SIMUHEIGHT = 200;
 const SIMUDEPTH = 300;
 
 
-const LINE_PROXIMITY = 5;
+const LINE_PROXIMITY = 3;
 
 
 
