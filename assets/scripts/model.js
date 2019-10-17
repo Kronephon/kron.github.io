@@ -84,12 +84,13 @@ class KRModel {
 
         this.particleNumber = PARTICLENUMBER;
         this.ignoreForce = false;
+        this.loadedTarget = false;
+
         this.particles = new THREE.Group();
         SCENE.add(this.particles);
         
-
+        this.target = {};
         this.unassignedVertices = [];
-        this.loadedTarget = false;
         
         STL_LOADER.load(TARGET,     function ( geometry ) {
             //var targetMesh = new THREE.Mesh( geometry, mainMaterial );
@@ -110,7 +111,7 @@ class KRModel {
 
         this.loadedTarget = true;
         
-        part.setTargetPoint(point);
+        this.target.assignParticle(part);// this could maybe be migrated to contructor? 
         
         //console.log(point);
 
@@ -324,11 +325,20 @@ class KRModel {
 
         return new THREE.Vector3((Math.random() - 0.5) * SIMUWIDTH, (Math.random() - 0.5) * SIMUHEIGHT, (Math.random() - 0.5) * SIMUDEPTH);
     }
-    setTargets(input){
-        var PROXIMITY_BUFFER = 0;
+    setTargets(input){ //TODO rename to initTarget
+        //idea is to implement a quasy pointer system where we store indexes of connections. converting to geometry for easier access
+        
+        //var PROXIMITY_BUFFER = 0; //something to consider maybe for performance gains
         input.position.set( 0, - 100, - 400 );
         //input.rotation.set( Math.PI / 2, 0, Math.PI);
         input.scale.set( 45, 45, 45 );
+
+        this.target = new KRTarget(input);
+        console.log(this.target.getCoordsFromIndex(0));
+        
+        
+        
+        
         input.castShadow = false;
         input.receiveShadow = true;
         input.visible = false;
@@ -346,10 +356,13 @@ class KRModel {
             var found = false;
             //console.log(input.matrix);
             point = point.applyMatrix4(input.matrix);
+            if(i > 0){
+                
+            }
             for (var j = 0; j < this.unassignedVertices.length; j++) {
-                if (Math.abs(this.unassignedVertices[j].x - point.x) <= PROXIMITY_BUFFER && 
-                    Math.abs(this.unassignedVertices[j].y - point.y) <= PROXIMITY_BUFFER && 
-                    Math.abs(this.unassignedVertices[j].z - point.z) <= PROXIMITY_BUFFER) {
+                if (Math.abs(this.unassignedVertices[j].x == point.x) && 
+                    Math.abs(this.unassignedVertices[j].y == point.y) && 
+                    Math.abs(this.unassignedVertices[j].z == point.z)  ) {
                     found = true;
                     break;
                 }

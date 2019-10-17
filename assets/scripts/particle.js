@@ -14,7 +14,6 @@ class PointParticle extends THREE.Mesh{
         }else{
             geometry = new THREE.TetrahedronBufferGeometry(param['size']);
         }
-
         var material;
         if(param.hasOwnProperty('material')){
             material = param['material'].clone();
@@ -25,7 +24,6 @@ class PointParticle extends THREE.Mesh{
             });
         }
         super(geometry, material);
-
         if(param.hasOwnProperty('position')){
             this.position.copy(param['position']);
         }
@@ -38,6 +36,8 @@ class PointParticle extends THREE.Mesh{
                 continue;
             }
         }
+
+        this.connections = [];
     }
 
     setVelocity(newVel){ //TODO refactor this into vector3
@@ -55,7 +55,7 @@ class PointParticle extends THREE.Mesh{
         this.position.y,
         this.position.z);
     }
-    setTargetPoint(newTarget){
+    setTarget(newTarget){
         this.userData.tx = newTarget.x;
         this.userData.ty = newTarget.y;
         this.userData.tz = newTarget.z;
