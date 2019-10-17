@@ -1,15 +1,16 @@
 const JITTER = 0.00005;
 const DRAG = 0.025;
-const ATTRACTION = 0.000025;
+const ATTRACTION = 0.0025;
 const REPULSION = 0;
 
-const INITVELOCITY = 0; //4;
+const INITVELOCITY = 500; //4;
 const FORCE_LIMIT = 20;
 const PARTICLE_LIFE = 20000;
 const PARTICLESIZE = 2;
 
 const PARTICLENUMBER = 6200;
 const GENERATIONODDS = 0.005; // 0 - 1
+const POSITION_THRESHOLD = 3;
 
 const SIMUWIDTH = 300;
 const SIMUHEIGHT = 200;
@@ -60,7 +61,8 @@ const pointSettings = {
     castShadow: true,
     life: PARTICLE_LIFE,
     mass: 1,
-    size: PARTICLESIZE
+    size: PARTICLESIZE,
+    inPlace: false,
 };
 
 
@@ -167,6 +169,7 @@ class KRModel {
         this.octree.update();
 
 
+
         //generation
         if (this.particles.children.length <= this.particleNumber) {
             this.generateParticles(this.particleNumber - this.particles.children.length);
@@ -178,8 +181,19 @@ class KRModel {
         //check for color and type differences
         var dead = particle.userData.life / PARTICLE_LIFE;
 
-        particle.material.opacity = Math.floor(dead * 10)/10; 
+        particle.material.opacity = Math.floor(dead * 10)/10;  // TODO: migrate this
         particle.userData.life--;
+
+        if(particle.getPosition().distanceTo(particle.getTarget()) < POSITION_THRESHOLD){
+            particle.material.color.r = 0;
+            particle.material.color.g = 255;
+            particle.material.color.b = 0;
+        }else{
+            particle.material.color.r = 255;
+            particle.material.color.g = 0;
+            particle.material.color.b = 0;
+        }
+
     }
 
     motion(particle) {
