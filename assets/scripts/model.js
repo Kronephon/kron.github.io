@@ -10,7 +10,7 @@ const PARTICLESIZE = 1;
 
 const PARTICLENUMBER = 2000;
 const GENERATIONODDS = 0.0005; // 0 - 1
-const POSITION_THRESHOLD = 3;
+const POSITION_THRESHOLD = 5;
 
 const SIMUWIDTH = 300;
 const SIMUHEIGHT = 200;
@@ -63,6 +63,7 @@ const pointSettings = {
     mass: 1,
     size: PARTICLESIZE,
     inPlace: false,
+    lines: []
 };
 
 
@@ -161,19 +162,37 @@ class KRModel {
         particle.material.opacity = Math.floor(dead * 10)/10;  // TODO: migrate this
         particle.userData.life--;
 
-        if(particle.getPosition().distanceTo(particle.getTarget()) < POSITION_THRESHOLD){
-            particle.size = 7.0;
-            particle.material.color.r = 0;
-            particle.material.color.g = 255;
-            particle.material.color.b = 0;
-        }else{
-            particle.size = 8;
-            particle.material.color.r = 255;
-            particle.material.color.g = 0;
-            particle.material.color.b = 0;
+        if(particle.getPosition().distanceTo(particle.getTarget()) < POSITION_THRESHOLD && !particle.inPlace){
+            this.activateParticle(particle);
         }
+        if(particle.getPosition().distanceTo(particle.getTarget()) >= POSITION_THRESHOLD && particle.inPlace){
+            this.deactivateParticle(particle);
+        }
+    }
+
+    activateParticle(particle) {
+        var connectedParticles = this.target.getConnectedParticles(particle);
+        for (var i = 0; i < connectedParticles.length; i++) {
+            var faceB;
+            var faceC;
+            if (typeof connectedParticles[i][0] !== 'undefined') {
+                faceB = this.particles.getObjectByProperty("uuid", connectedParticles[i][0]);
+                
+            }
+            if (typeof connectedParticles[i][1] !== 'undefined') {
+                faceC = this.particles.getObjectById(connectedParticles[i][1]);
+
+            }
+            if (typeof faceB !== 'undefined') {
+
+            }
+        }
+    }
+
+    deactivateParticle(particle){
 
     }
+
 
     motion(particle) {
 

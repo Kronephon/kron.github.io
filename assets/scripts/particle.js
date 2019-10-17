@@ -36,8 +36,6 @@ class PointParticle extends THREE.Mesh{
                 continue;
             }
         }
-
-        this.connections = [];
     }
 
     setVelocity(newVel){ //TODO refactor this into vector3

@@ -7,12 +7,12 @@
 
 class KRTarget {
     constructor(parentMesh){
-        console.log("KRTarget");
         this.parent = parentMesh;
         this.targetGeometry = (new THREE.Geometry()).fromBufferGeometry(parentMesh.geometry);
         this.targetGeometry.mergeVertices ();
         
-        this.particleAssignments = {}; //map particle index. particleAssignments[particleID] = index
+        this.particleToIndex = {}; //map particle index. particleAssignments[particleID] = index
+        this.indexToParticle = {}; //map particle index. particleAssignments[index] = particleID
 
         this.vertexConnections = []; //index is vertex ID, content is array of connected indexes [[[a b][c f]]  [[f c][c d]] ], in which a b c f are all point indices
         
@@ -59,7 +59,8 @@ class KRTarget {
         
         particle.setTarget(this.getCoordsFromIndex(vertexAssignment));
         
-        this.particleAssignments[particle.uuid] = vertexAssignment;
+        this.particleToIndex[particle.uuid] = vertexAssignment;
+        this.indexToParticle[vertexAssignment] = particle.uuid;
     }
 
     removeParticle(particle){
@@ -71,13 +72,15 @@ class KRTarget {
     }
    
     getConnectedParticles(particle){ // returns only assigned particles
-        var vertex = this.particleAssignments[particle.uuid];
+        var vertex = this.particleToIndex[particle.uuid];
         var connected = this.vertexConnections[vertex];
         var connectedParticles = [];
         for (var i = 0; i < connected.length; i++){
-            pointB = 
-            pointC = 
+            var pointB = connected[i][0];
+            var pointC = connected[i][1];
+            connectedParticles.push([this.indexToParticle[pointB], this.indexToParticle[pointC]]);
         }
+        return connectedParticles;
     }
 
 }
