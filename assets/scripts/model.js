@@ -8,7 +8,7 @@ const FORCE_LIMIT = 20;
 const PARTICLE_LIFE = 20000;
 const PARTICLESIZE = 2;
 
-const PARTICLENUMBER = 9000;
+const PARTICLENUMBER = 6200;
 const GENERATIONODDS = 0.005; // 0 - 1
 
 const SIMUWIDTH = 300;
@@ -309,6 +309,7 @@ class KRModel {
         return new THREE.Vector3((Math.random() - 0.5) * SIMUWIDTH, (Math.random() - 0.5) * SIMUHEIGHT, (Math.random() - 0.5) * SIMUDEPTH);
     }
     setTargets(input){
+        var PROXIMITY_BUFFER = 0;
         input.position.set( 0, - 100, - 400 );
         //input.rotation.set( Math.PI / 2, 0, Math.PI);
         input.scale.set( 45, 45, 45 );
@@ -321,21 +322,29 @@ class KRModel {
         console.log(buffer);
         
         input.updateMatrix();
-        for(var i = 0; i < input.geometry.attributes.position.count  ; i = i + 3 ){
-            var point = buffer[i];
+        for(var i = 0; i < input.geometry.attributes.position.count *3 ; i = i + 3 ){
+
+            var point = new THREE.Vector3(buffer.array[i],buffer.array[i+1],buffer.array[i+2]);
+            //console.log(point);
+            //var point = new THREE.Vector3(0,0,0);
+            var found = false;
             //console.log(input.matrix);
             point = point.applyMatrix4(input.matrix);
-
-            if(this.unassignedVertices.indexOf(point) > -1){
-                continue;
-            }else{
-
-                this.unassignedVertices.push(point);
+            for (var j = 0; j < this.unassignedVertices.length; j++) {
+                if (Math.abs(this.unassignedVertices[j].x - point.x) <= PROXIMITY_BUFFER && 
+                    Math.abs(this.unassignedVertices[j].y - point.y) <= PROXIMITY_BUFFER && 
+                    Math.abs(this.unassignedVertices[j].z - point.z) <= PROXIMITY_BUFFER) {
+                    found = true;
+                    break;
+                }
                 
             }
-            
+            if(!found){
+                this.unassignedVertices.push(point);
+                continue;
+            }
         }
-        console.log(buffer.length);
+        console.log(this.unassignedVertices.length);
     }
 
     generateParticles(number) {
