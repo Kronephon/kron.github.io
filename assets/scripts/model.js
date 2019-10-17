@@ -84,18 +84,11 @@ class KRModel {
 
         this.particleNumber = PARTICLENUMBER;
         this.ignoreForce = false;
-        this.loadedTarget = false;
 
         this.particles = new THREE.Group();
         SCENE.add(this.particles);
         
         this.target = {};
-        
-        STL_LOADER.load(TARGET,     function ( geometry ) {
-            //var targetMesh = new THREE.Mesh( geometry, mainMaterial );
-            //targetMesh.name = "target";
-            //SCENE.add( targetMesh );
-          } );
     }
 
     insertParticle(part) {
@@ -130,13 +123,11 @@ class KRModel {
     }
 
     update() {
-        if(!this.loadedTarget){
+        if((Object.entries(this.target).length === 0 && this.target.constructor === Object)){
             var object = SCENE.getObjectByName( "target", true );
             if(typeof object === 'undefined'){
                 return; //wait for all loading to happen
             }
-
-            this.loadedTarget = true;
             this.initTarget(object);
         }
 
@@ -155,8 +146,6 @@ class KRModel {
 
         }
         this.octree.update();
-
-
 
         //generation
         if (this.particles.children.length <= this.particleNumber) {
@@ -321,39 +310,6 @@ class KRModel {
         input.visible = false;
 
         this.target = new KRTarget(input);
-        
-        /*console.log(this.target.getCoordsFromIndex(0));
-        console.log(input);
-        var buffer = input.geometry.getAttribute("position");//.position.array;
-        console.log(buffer);
-        
-        input.updateMatrix();
-        for(var i = 0; i < input.geometry.attributes.position.count *3 ; i = i + 3 ){
-
-            var point = new THREE.Vector3(buffer.array[i],buffer.array[i+1],buffer.array[i+2]);
-            //console.log(point);
-            //var point = new THREE.Vector3(0,0,0);
-            var found = false;
-            //console.log(input.matrix);
-            point = point.applyMatrix4(input.matrix);
-            if(i > 0){
-                
-            }
-            for (var j = 0; j < this.unassignedVertices.length; j++) {
-                if (Math.abs(this.unassignedVertices[j].x == point.x) && 
-                    Math.abs(this.unassignedVertices[j].y == point.y) && 
-                    Math.abs(this.unassignedVertices[j].z == point.z)  ) {
-                    found = true;
-                    break;
-                }
-                
-            }
-            if(!found){
-                this.unassignedVertices.push(point);
-                continue;
-            }
-        }
-        console.log(this.unassignedVertices.length);*/
     }
 
     generateParticles(number) {
