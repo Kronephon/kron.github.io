@@ -90,7 +90,6 @@ class KRModel {
         SCENE.add(this.particles);
         
         this.target = {};
-        this.unassignedVertices = [];
         
         STL_LOADER.load(TARGET,     function ( geometry ) {
             //var targetMesh = new THREE.Mesh( geometry, mainMaterial );
@@ -100,22 +99,8 @@ class KRModel {
     }
 
     insertParticle(part) {
-        var point = this.unassignedVertices.shift();
-
-        //console.log();
-        //console.log();
-        if(typeof point === 'undefined'){
-            point = new THREE.Vector3(0,0,0);
-            return;
-        }
-
-        this.loadedTarget = true;
         
-        this.target.assignParticle(part);// this could maybe be migrated to contructor? 
-        
-        //console.log(point);
-
-
+        this.target.assignParticle(part);
         this.octree.add(part);
         this.particles.add(part);
     }
@@ -123,8 +108,10 @@ class KRModel {
     removeParticle(part) {
         this.octree.remove(part);
         this.particles.remove(part);
-        var targetPoint = new THREE.Vector3(part.userData.tx, part.userData.ty, part.userData.tz);
-        this.unassignedVertices.push(targetPoint);
+        //TODO: remove
+        //var targetPoint = new THREE.Vector3(part.userData.tx, part.userData.ty, part.userData.tz);
+        
+        //this.unassignedVertices.push(targetPoint);
         //part.dispose();
     }
 
@@ -146,11 +133,11 @@ class KRModel {
         if(!this.loadedTarget){
             var object = SCENE.getObjectByName( "target", true );
             if(typeof object === 'undefined'){
-                return;
+                return; //wait for all loading to happen
             }
 
             this.loadedTarget = true;
-            this.setTargets(object);
+            this.initTarget(object);
         }
 
 
@@ -325,24 +312,17 @@ class KRModel {
 
         return new THREE.Vector3((Math.random() - 0.5) * SIMUWIDTH, (Math.random() - 0.5) * SIMUHEIGHT, (Math.random() - 0.5) * SIMUDEPTH);
     }
-    setTargets(input){ //TODO rename to initTarget
-        //idea is to implement a quasy pointer system where we store indexes of connections. converting to geometry for easier access
-        
-        //var PROXIMITY_BUFFER = 0; //something to consider maybe for performance gains
+    initTarget(input){
         input.position.set( 0, - 100, - 400 );
         //input.rotation.set( Math.PI / 2, 0, Math.PI);
         input.scale.set( 45, 45, 45 );
-
-        this.target = new KRTarget(input);
-        console.log(this.target.getCoordsFromIndex(0));
-        
-        
-        
-        
         input.castShadow = false;
         input.receiveShadow = true;
         input.visible = false;
 
+        this.target = new KRTarget(input);
+        
+        /*console.log(this.target.getCoordsFromIndex(0));
         console.log(input);
         var buffer = input.geometry.getAttribute("position");//.position.array;
         console.log(buffer);
@@ -373,14 +353,17 @@ class KRModel {
                 continue;
             }
         }
-        console.log(this.unassignedVertices.length);
+        console.log(this.unassignedVertices.length);*/
     }
 
     generateParticles(number) {
         for (var i = 0; i < number; i++) {
+            if(this.target.targetsLeftToAssign() == 0){
+                break;
+            }
             if (Math.random() <= GENERATIONODDS) {
-                var particle = new PointParticle(pointSettings);
 
+                var particle = new PointParticle(pointSettings);
                 const startPos = this.generateSpawnPosition();
                 particle.setPosition(startPos);
                 particle.setVelocity(new THREE.Vector3((Math.random() - 0.5) * INITVELOCITY, (Math.random() - 0.5) * INITVELOCITY, (Math.random() - 0.5) * INITVELOCITY));

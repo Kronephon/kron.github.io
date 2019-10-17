@@ -62,7 +62,7 @@ class KRTarget {
         
         particle.setTarget(this.getCoordsFromIndex(vertexAssignment));
         
-        //this.particleAssignments
+        //this.particleAssignments MORE STUFF TO DO HERE
     }
 
     removeParticle(particle){
