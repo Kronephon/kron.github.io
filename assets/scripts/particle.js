@@ -1,34 +1,3 @@
-const particleTemplate = new THREE.TetrahedronBufferGeometry(PARTICLESIZE);
-const pointSettings = {
-    name: "point",
-    geometry: particleTemplate,
-    material: pointMaterial,
-    position: new THREE.Vector3(0, 0, 0),
-    tx: 0,
-    ty: 0,
-    tz: 0,
-    vx: 0,
-    vy: 0,
-    vz: 0,
-    fx: 0,
-    fy: 0,
-    fz: 0,
-    receiveShadow: true,
-    castShadow: true,
-    life: PARTICLE_LIFE,
-    mass: 1,
-    size: PARTICLESIZE,
-    inPlace: false,
-    lines: []
-};
-
-
-
-
-
-
-
-
 const pointGeometry = new THREE.TetrahedronBufferGeometry(PARTICLESIZE);
 
 const pointMaterial =
@@ -36,7 +5,69 @@ const pointMaterial =
         color: 0xFFFFFF,
         opacity: 1.0,
         transparent: true,
-    });
+});
+
+class KrPoint extends THREE.Points{
+    constructor(position, target, velocity, force, life, charge){
+        
+        var geometry = new THREE.BufferGeometry();
+        geometry.vertices.push(particle1.getPosition()); //probably in error
+        super(geometry, pointMaterial);
+        this.receiveShadow = true;
+        this.castShadow = true;
+        this.name("KrPoint");
+
+        this.userData.life = life;
+        this.userData.charge = charge;
+        this.userData.target = new Vector3().copy(target);
+        this.userData.velocity = new Vector3().copy(velocity);
+        this.userData.force = new Vector3().copy(force);
+
+        this.userData.inPlace = false;
+        this.userData.connectedLines = [];
+        this.userData.connectedPolygons = [];
+
+    }
+    process(){
+            //.onBeforeRender 
+
+            //.onAfterRender
+    }
+
+    setVelocity(vx, vy, vz){ //TODO refactor this into vector3
+        this.userData.velocity.setX(vx);
+        this.userData.velocity.setY(vy);
+        this.userData.velocity.setZ(vz);
+    }
+    setPosition(x,y,z){
+        this.position.setX(x);
+        this.position.setX(y);
+        this.position.setX(z);
+    }
+
+    getPosition(){
+        return this.position; //read-only which is what we want;
+    }
+    setTarget(newTarget){
+        this.userData.target.copy(newTarget);
+    }
+    getTarget(){
+        return this.userData.target;
+    }
+    setTarget(newTarget){
+        this.userData.target.copy(newTarget);
+    }
+    getTarget(){
+        return this.userData.target;
+    }
+    setTarget(newTarget){
+        this.userData.target.copy(newTarget);
+    }
+    getTarget(){
+        return this.userData.target;
+    }
+}
+
 
 
 class PointParticle extends THREE.Mesh{
