@@ -71,14 +71,16 @@ class KrTarget {
         return new THREE.Vector3().copy(this.targetGeometry.vertices[index].applyMatrix4(this.parent.matrix));
     }
    
+    // ok no. BAD IDEA. The idea should be every particle knows it's connections from assignment and just sees if it's assigned.
     getConnectedParticles(particle){ // returns only assigned particles
-        var vertex = this.particleToIndex[particle];
-        var connected = this.vertexConnections[vertex];
+        const vertex = this.particleToIndex[particle];
+        const connected = this.vertexConnections[vertex];
         var connectedParticles = [];
         for (var i = 0; i < connected.length; i++){
             var pointB = connected[i][0];
             var pointC = connected[i][1];
-            connectedParticles.push([this.indexToParticle[pointB], this.indexToParticle[pointC]]);
+            connectedParticles.push(this.indexToParticle[pointB]);
+            connectedParticles.push(this.indexToParticle[pointC]);
         }
         return connectedParticles;
     }

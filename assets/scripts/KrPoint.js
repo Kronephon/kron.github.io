@@ -1,9 +1,9 @@
 const pointMaterial =
     new THREE.PointsMaterial({
         color: 0xFFFFFF,
-        opacity: 1.0,
+        opacity: 0.0,
         transparent: true,
-        size: DEFAULT_POINT_SIZE
+        size: PARTICLE_SIZE
 });
 
 //mesh.geometry.__dirtyVertices for changing vertices in buffer

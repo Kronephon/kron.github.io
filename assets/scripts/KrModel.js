@@ -64,9 +64,24 @@ class KrModel {
         
         //generate new lines?
 
+        
+
         //generate new polygons?
     }
 
+    activateParticle(particle){
+        //make all connected lines (with matching particles) visible
+
+        //const connectedParticles = getConnectedParticles(particle);
+
+        //generate lines
+    }
+
+    deactivateParticle(particle){
+
+        //make all connected lines invisible;
+
+    }
     //generates a random number of particles, maxed on number
     generateParticles(number) { 
         for (var i = 0; i < number; i++) {
@@ -143,7 +158,14 @@ function beforeRenderParticle( renderer, scene, camera, geometry, material, grou
                                                         ATTRACTION,
                                                         -1, 1, true));
     }
-    this.addForce(MODEL.physics.calculateJitter(JITTER));
+    if(this.userData.activated){
+        this.material.size = Math.min(this.material.size + 0.25, PARTICLE_ACTIVATED_SIZE);
+        this.material.opacity = Math.min(this.material.size + 0.05, PARTICLE_OPACITY_ACTIVATED);
+    }else {
+        this.material.size = Math.max(this.material.size - 0.25, PARTICLE_SIZE);
+        this.material.opacity = Math.max(this.material.size - 0.05, PARTICLE_OPACITY);
+    }
+    
     
 
 };
@@ -157,10 +179,12 @@ function afterRenderParticle ( renderer, scene, camera, geometry, material, grou
     // check connections
     if(!this.userData.activated && this.amIonTarget(ACTIVATION_DISTANCE)){
         this.userData.activated = true;
-        this.material.size = 10;
+        //this.material.size = PARTICLE_ACTIVATED_SIZE;
+        MODEL.activateParticle(this);
     }else if (this.userData.activated && !this.amIonTarget(ACTIVATION_DISTANCE)){
         this.userData.activated = false;
-        this.material.size = DEFAULT_POINT_SIZE;
+        //this.material.size = PARTICLE_SIZE;
+        MODEL.deactivateParticle(this);
     }
     
 };
