@@ -53,37 +53,18 @@ class KrTarget {
     targetsLeftToAssign(){
         return this.unAssignedVertices.length;
     }
-/*
-    assignWireframe(line, particle1, particle2){
-        this.indexesToWireframe[particle1.uuid + particle2.uuid] = wireframe.uuid;
-        this.indexesToWireframe[particle2.uuid + particle1.uuid] = wireframe.uuid;
-    }
-
-    getWireframe(particle1, particle2){
-        var line = this.indexesToWireframe[particle1.uuid + particle2.uuid];
-        if(typeof line === 'undefined'){
-            line = this.indexesToWireframe[particle2.uuid + particle1.uuid];
-        }
-        return line;
-    }
-*/
-    removeWireFrame(line){
-
-    }
 
     assignParticle(particle){
         var pick = Math.floor(Math.random()*(this.unAssignedVertices.length)); //let's do random for now
         var vertexAssignment = this.unAssignedVertices[pick];
         this.unAssignedVertices.splice(pick, 1); // slow!
-        
-        particle.setTarget(this.getCoordsFromIndex(vertexAssignment));
-        
-        this.particleToIndex[particle.uuid] = vertexAssignment;
-        this.indexToParticle[vertexAssignment] = particle.uuid;
-    }
 
-    removeParticle(particle){
-
+        const newTarget = this.getCoordsFromIndex(vertexAssignment);
+        
+        particle.setTarget(newTarget.x, newTarget.y, newTarget.z);
+        
+        this.particleToIndex[particle] = vertexAssignment;
+        this.indexToParticle[vertexAssignment] = particle;
     }
 
     getCoordsFromIndex(index){
@@ -91,7 +72,7 @@ class KrTarget {
     }
    
     getConnectedParticles(particle){ // returns only assigned particles
-        var vertex = this.particleToIndex[particle.uuid];
+        var vertex = this.particleToIndex[particle];
         var connected = this.vertexConnections[vertex];
         var connectedParticles = [];
         for (var i = 0; i < connected.length; i++){

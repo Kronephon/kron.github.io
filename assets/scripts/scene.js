@@ -81,7 +81,7 @@ SCENE.add(ambientLight);
 var MODEL = new KrModel();
 
 var rotation = 0;
-var center = new THREE.Vector3( 0, - 300, - 400 );
+var center = new THREE.Vector3( 0, 0, 0 );
 
 const onLoad = (gltf) => {
   const targetmodel = gltf.scene.children[0]; //check model for it
@@ -100,10 +100,10 @@ gltf => onLoad( gltf, )
 
 function update() {
   rotation += 0.005;
-  CAMERA.position.x = Math.sin(rotation) * 700 + center.x;
-  CAMERA.position.y = 500 + center.y;
-  CAMERA.position.z = Math.cos(rotation) * 700 + center.y;
-  CAMERA.lookAt( new THREE.Vector3( 0, 0, - 400 )); // the origin
+  CAMERA.position.x = Math.sin(rotation)* 500 + center.x;
+  CAMERA.position.y = 300 + center.y;
+  CAMERA.position.z = Math.cos(rotation)* 500  + center.y;
+  CAMERA.lookAt( new THREE.Vector3( 0,200, 0 )); // the origin
 
   //logic
   MODEL.update();

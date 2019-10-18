@@ -21,7 +21,6 @@ class KrModel {
     insertParticle(part) {
         part.onBeforeRender = beforeRenderParticle;
         part.onAfterRender = afterRenderParticle;
-        //this.target.assignParticle(part);
         this.particles.add(part);
     }
 
@@ -59,12 +58,14 @@ class KrModel {
         }
         //generate new particles
         const limit = Math.min(this.target.targetsLeftToAssign(), PARTICLE_MAX_NUMBER);
+
         const particleNum = this.particles.children.length;
-        this.generateParticles(Math.max(0, limit - particleNum));
+        this.generateParticles(Math.max(0,limit));
         
         //generate new lines?
 
         //generate new polygons?
+        console.log(this.target.targetsLeftToAssign());
     }
 
     //generates a random number of particles, maxed on number
@@ -83,7 +84,7 @@ class KrModel {
                                              new THREE.Vector3(0,0,0),
                                              PARTICLE_LIFE,
                                              PARTICLE_CHARGE);
-
+                this.target.assignParticle(particle);
                 this.insertParticle(particle);
             }
         }
@@ -94,7 +95,7 @@ class KrModel {
     }
 
     generateTargetPosition(){
-        return new THREE.Vector3(0,50,0);
+        return new THREE.Vector3(0,50,0); // pointless, gets overwritten by this.target.assignParticle(part);
     }
 
     generateInitialVelocity(){
@@ -115,6 +116,12 @@ class KrModel {
         var target = SCENE.getObjectByName("target");
         if(typeof target === 'undefined')
             throw "target model not found";
+        //target.position.set( 0, - 100, - 400 );
+        //input.rotation.set( Math.PI / 2, 0, Math.PI);
+        target.scale.set( 45, 45, 45 );
+        target.castShadow = false;
+        target.receiveShadow = true;
+        //target.visible = false;
         this.target = new KrTarget(target);
         this.resourcesLoaded = true;
     }

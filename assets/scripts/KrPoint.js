@@ -3,7 +3,7 @@ const pointMaterial =
         color: 0xFFFFFF,
         opacity: 1.0,
         transparent: true,
-        size: 10
+        size: 0.75
 });
 
 //mesh.geometry.__dirtyVertices for changing vertices in buffer
