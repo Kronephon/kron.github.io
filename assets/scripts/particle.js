@@ -1,3 +1,36 @@
+const particleTemplate = new THREE.TetrahedronBufferGeometry(PARTICLESIZE);
+const pointSettings = {
+    name: "point",
+    geometry: particleTemplate,
+    material: pointMaterial,
+    position: new THREE.Vector3(0, 0, 0),
+    tx: 0,
+    ty: 0,
+    tz: 0,
+    vx: 0,
+    vy: 0,
+    vz: 0,
+    fx: 0,
+    fy: 0,
+    fz: 0,
+    receiveShadow: true,
+    castShadow: true,
+    life: PARTICLE_LIFE,
+    mass: 1,
+    size: PARTICLESIZE,
+    inPlace: false,
+    lines: []
+};
+
+
+
+
+
+
+
+
+const pointGeometry = new THREE.TetrahedronBufferGeometry(PARTICLESIZE);
+
 const pointMaterial =
     new THREE.PointsMaterial({
         color: 0xFFFFFF,
