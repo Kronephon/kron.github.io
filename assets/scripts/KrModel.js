@@ -65,7 +65,6 @@ class KrModel {
         //generate new lines?
 
         //generate new polygons?
-        console.log(this.target.targetsLeftToAssign());
     }
 
     //generates a random number of particles, maxed on number
@@ -121,9 +120,9 @@ class KrModel {
         target.scale.set( 45, 45, 45 );
         target.castShadow = false;
         target.receiveShadow = true;
-        //target.visible = false;
+        target.visible = false;
         this.target = new KrTarget(target);
-        this.resourcesLoaded = true;
+        setTimeout(function(){MODEL.resourcesLoaded = true;}, 1000);
     }
 }
 
@@ -151,5 +150,14 @@ function afterRenderParticle ( renderer, scene, camera, geometry, material, grou
     
     // apply forces
     MODEL.physics.motion(this.getForce(), this.getVelocity(), this.getPosition(), this.userData.charge);
+
+    // check connections
+    if(!this.userData.activated && this.amIonTarget(ACTIVATION_DISTANCE)){
+        this.userData.activated = true;
+        this.material.size = 10;
+    }else if (this.userData.activated && !this.amIonTarget(ACTIVATION_DISTANCE)){
+        this.userData.activated = false;
+        this.material.size = DEFAULT_POINT_SIZE;
+    }
     
 };

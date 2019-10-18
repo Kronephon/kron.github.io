@@ -1,13 +1,14 @@
 const PARTICLE_LIFE = 20;
-const PARTICLE_CHARGE = 1;
+const PARTICLE_CHARGE = 50;
+const DEFAULT_POINT_SIZE = 0.75;
+
+const ACTIVATION_DISTANCE = 5;
 
 const PARTICLE_MAX_NUMBER = 2000;
-const GENERATION_ODDS = 0.005; // 0 - 1
+const GENERATION_ODDS = 0.009; // 0 - 1
 
 const JITTER = 0.05;
-const DRAG = 0.3;
-const ATTRACTION = 0.00005;
-const REPULSION = 0;
+const DRAG = 0.8;
+const ATTRACTION = 0.005;
 
-const INIT_VELOCITY = 5;//0.5;
-const FORCE_LIMIT = 3;
+const INIT_VELOCITY = 20;//0.5;

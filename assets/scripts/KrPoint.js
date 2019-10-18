@@ -3,7 +3,7 @@ const pointMaterial =
         color: 0xFFFFFF,
         opacity: 1.0,
         transparent: true,
-        size: 0.75
+        size: DEFAULT_POINT_SIZE
 });
 
 //mesh.geometry.__dirtyVertices for changing vertices in buffer
@@ -18,8 +18,9 @@ class KrPoint extends THREE.Points{ //TODO aparently these still draw outside th
 
         var geometry = new THREE.BufferGeometry();
         geometry.addAttribute( 'position', new THREE.BufferAttribute( positionArray, 3 ) );
+        var material = pointMaterial.clone();
         
-        super(geometry, pointMaterial);
+        super(geometry, material);
         this.receiveShadow = true;
         this.castShadow = true;
         this.name = "KrPoint";
@@ -31,15 +32,10 @@ class KrPoint extends THREE.Points{ //TODO aparently these still draw outside th
         this.userData.velocity = new THREE.Vector3().copy(velocity);
         this.userData.force = new THREE.Vector3().copy(force);
 
-        this.userData.inPlace = false;
+        this.userData.activated = false;
         this.userData.connectedLines = [];
         this.userData.connectedPolygons = [];
 
-    }
-    process(){
-            //.onBeforeRender 
-
-            //.onAfterRender
     }
 
     setPosition(x,y,z){
@@ -84,6 +80,10 @@ class KrPoint extends THREE.Points{ //TODO aparently these still draw outside th
     
     connectedParticleQuery(particle){
         //should return bool
+    }
+
+    amIonTarget(distance){
+        return this.position.distanceTo(this.userData.target) < distance;
     }
 
 }
