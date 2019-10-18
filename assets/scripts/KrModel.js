@@ -135,13 +135,16 @@ function beforeRenderParticle( renderer, scene, camera, geometry, material, grou
     }
     // compute forces
     this.setForce(0,0,0);
+    if(!MODEL.ignoreForce){
+        this.addForce(MODEL.physics.calculateDrag(this.getVelocity(), DRAG));
+        this.addForce(MODEL.physics.calculateJitter(JITTER));
+        this.addForce(MODEL.physics.calculateAttraction(this.getPosition(),
+                                                        this.getTarget(),
+                                                        ATTRACTION,
+                                                        -1, 1, true));
+    }
     this.addForce(MODEL.physics.calculateJitter(JITTER));
-    this.addForce(MODEL.physics.calculateDrag(this.getVelocity(), DRAG));
-    this.addForce(MODEL.physics.calculateJitter(JITTER));
-    this.addForce(MODEL.physics.calculateAttraction(this.getPosition(),
-                                                    this.getTarget(),
-                                                    ATTRACTION,
-                                                    -1, 1, true));
+    
 
 };
 
