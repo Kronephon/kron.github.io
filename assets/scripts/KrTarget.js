@@ -5,7 +5,7 @@
 
 //expects a buffered geometry mesh
 
-class KRTarget {
+class KrTarget {
     constructor(parentMesh){
         this.parent = parentMesh;
         this.targetGeometry = (new THREE.Geometry()).fromBufferGeometry(parentMesh.geometry);

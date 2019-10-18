@@ -1,13 +1,4 @@
-const PARTICLE_LIFE = 20000;
-const PARTICLESIZE = 1;
 
-const PARTICLENUMBER = 2000;
-const GENERATIONODDS = 0.005; // 0 - 1
-const POSITION_THRESHOLD = 5;
-
-const SIMUWIDTH = 300;
-const SIMUHEIGHT = 200;
-const SIMUDEPTH = 300;
 
 
 
@@ -28,7 +19,6 @@ class KRModel {
 
     constructor() {
         this.physics = new KRPhysics();
-        this.particleNumber = PARTICLENUMBER;
         this.ignoreForce = false;
         this.canGenerateParticles = false;
 
@@ -189,9 +179,14 @@ class KRModel {
                 break;
             }
             if (Math.random() <= GENERATIONODDS) {
-
-                var particle = new PointParticle(pointSettings);
+                position, target, velocity, force, life, charge
+                
                 const startPos = this.generateSpawnPosition();
+
+                const particle = new KrPoint(
+
+                );
+                
                 particle.setPosition(startPos);
                 particle.setVelocity(new THREE.Vector3((Math.random() - 0.5) * INITVELOCITY, (Math.random() - 0.5) * INITVELOCITY, (Math.random() - 0.5) * INITVELOCITY));
                 this.insertParticle(particle);

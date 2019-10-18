@@ -77,64 +77,36 @@ SCENE.add(pointLight);
 var ambientLight = new THREE.AmbientLight(0x1D171C, 1);
 SCENE.add(ambientLight);
 
-var STL_LOADER = new THREE.STLLoader();
-const GLTF_LOADER = new THREE.GLTFLoader();
-
-GLTF_LOADER.load(
-
-  // parameter 1: The URL
-  'assets/models/venus.gltf',
-
-  // parameter 2:The onLoad callback
-  gltf => onLoad( gltf, )
-
-);
-
-const onLoad = ( gltf) => {
-
-  const model = gltf.scene.children[0]; //check model for it
-  //const animation = gltf.animations[ 0 ];
-
-  //const mixer = new THREE.AnimationMixer( model );
-  //mixers.push( mixer );
-
-  //const action = mixer.clipAction( animation );
-  //action.play();
-  model.name = "target";
-  SCENE.add( model );
-
-};
-
-
 ///////////////////////////////////////////////////////////////////
-var model = new KRModel();
-var performanceMetrics;
-
-var lastLoop = Date.now();
+var MODEL = new KrModel();
 
 var rotation = 0;
 var center = new THREE.Vector3( 0, - 300, - 400 );
 
+const onLoad = (gltf) => {
+  const targetmodel = gltf.scene.children[0]; //check model for it
+  targetmodel.name = "target";
+  SCENE.add( targetmodel );
+  MODEL.loadComplete();
+};
+targetLoader = new THREE.GLTFLoader();
+
+targetLoader.load(
+// parameter 1: The URL
+'assets/models/venus.gltf',
+// parameter 2:The onLoad callback
+gltf => onLoad( gltf, )
+);
+
 function update() {
-  //performance
-  var thisLoop = Date.now();
-  var fps = 1000 / (thisLoop - lastLoop);
-  lastLoop = thisLoop;
-  if(fps < 40){
-    model.decreasePerformance();
-  }else{
-    model.increasePerformance();
-  }
-
-
-  rotation += 0.02;
+  rotation += 0.005;
   CAMERA.position.x = Math.sin(rotation) * 700 + center.x;
   CAMERA.position.y = 500 + center.y;
   CAMERA.position.z = Math.cos(rotation) * 700 + center.y;
   CAMERA.lookAt( new THREE.Vector3( 0, 0, - 400 )); // the origin
 
   //logic
-  model.update();
+  MODEL.update();
 
   // Draw!
   //renderer.setClearColor(0xffffff, 0);
@@ -154,7 +126,7 @@ document.onmousedown = function (event) {
   if (event === undefined) event = window.event;
   var target = 'target' in event ? event.target : event.srcElement;
 
-  model.click();
+  MODEL.click();
 };
 
 document.onmouseup = function (event) {
@@ -163,7 +135,7 @@ document.onmouseup = function (event) {
   if (event === undefined) event = window.event;
   var target = 'target' in event ? event.target : event.srcElement;
 
-  model.declick();
+  MODEL.declick();
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -1,0 +1,13 @@
+const PARTICLE_LIFE = 20;
+const PARTICLE_CHARGE = 1;
+
+const PARTICLE_MAX_NUMBER = 2000;
+const GENERATION_ODDS = 0.005; // 0 - 1
+
+const JITTER = 1;
+const DRAG = 0.3;
+const ATTRACTION = 0.00005;
+const REPULSION = 0;
+
+const INIT_VELOCITY = 5;//0.5;
+const FORCE_LIMIT = 3;
