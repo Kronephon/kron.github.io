@@ -119,7 +119,7 @@ function update() {
 
 //IO
 
-document.onmousedown = function (event) {
+document.onmousedown = document.ontouchstart = function (event) {
   // Compensate for IE<9's non-standard event model
   //
   if (event === undefined) event = window.event;
@@ -128,7 +128,7 @@ document.onmousedown = function (event) {
   MODEL.click();
 };
 
-document.onmouseup = function (event) {
+document.onmouseup = document.ontouchend = function (event) {
   // Compensate for IE<9's non-standard event model
   //
   if (event === undefined) event = window.event;
@@ -136,6 +136,8 @@ document.onmouseup = function (event) {
 
   MODEL.declick();
 };
+
+document.
 
 ///////////////////////////////////////////////////////////////////
 
