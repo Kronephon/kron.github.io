@@ -48,10 +48,8 @@ class KrPoint extends THREE.Points{ //TODO aparently these still draw outside th
         return this.position; //read-only which is what we want;
     }
 
-    setTarget(x, y, z){
-        this.userData.target.setX(x);
-        this.userData.target.setY(y);
-        this.userData.target.setZ(z);
+    setTarget(vector){
+        this.userData.target.copy(vector);
     }
     getTarget(){
         return this.userData.target;
@@ -79,7 +77,16 @@ class KrPoint extends THREE.Points{ //TODO aparently these still draw outside th
     }
     
     connectedParticleQuery(particle){
-        //should return bool
+        //returns line or -1
+        for(var i = 0 ; i < this.userData.connectedLines.length; i++) {
+            if((this.userData.connectedLines[i].userData.particleA == particle && 
+                this.userData.connectedLines[i].userData.particleB == this) ||
+               (this.userData.connectedLines[i].userData.particleB == particle && 
+                this.userData.connectedLines[i].userData.particleA == this)){
+                    return this.userData.connectedLines[i];
+                }
+        }
+        return -1;
     }
 
     amIonTarget(distance){

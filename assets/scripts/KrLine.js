@@ -3,6 +3,7 @@ const lineMaterial =
         color: 0xFFFFFF,
         opacity: 0.05,
         transparent: true,
+        visible: false
     });
 
 class KrLine extends THREE.Line{
@@ -12,9 +13,9 @@ class KrLine extends THREE.Line{
         positionArray[ 1 ] = 0;
         positionArray[ 2 ] = 0;
 
-        positionArray[ 3 ] = 0;
-        positionArray[ 4 ] = 0;
-        positionArray[ 5 ] = 1;
+        positionArray[ 3 ] = Math.random()* 50;
+        positionArray[ 4 ] = Math.random()* 50;
+        positionArray[ 5 ] = Math.random()* 50;
 
         var geometry = new THREE.BufferGeometry();
         geometry.addAttribute( 'position', new THREE.BufferAttribute( positionArray, 3 ) ); //maybe?
@@ -30,13 +31,23 @@ class KrLine extends THREE.Line{
 
     }
     turnON(){
-        this.visible = true;
+        if(this.userData.particleA.userData.activated && this.userData.particleB.userData.activated) {
+            this.updatePosition();
+            this.material.visible = true;
+        }
     }
     turnOFF(){
-        this.visible = false;
+        this.material.visible = false;
     }
     updatePosition(){
-        this.userData.particleA
-        this.userData.particleB
+        this.geometry.attributes.position.array[ 0 ] = this.userData.particleA.position.x;
+        this.geometry.attributes.position.array[ 1 ] = this.userData.particleA.position.y;
+        this.geometry.attributes.position.array[ 2 ] = this.userData.particleA.position.z;
+
+        this.geometry.attributes.position.array[ 3 ] = this.userData.particleB.position.x;
+        this.geometry.attributes.position.array[ 4 ] = this.userData.particleB.position.y;
+        this.geometry.attributes.position.array[ 5 ] = this.userData.particleB.position.z;
+
+        this.geometry.attributes.position.needsUpdate = true;
     }
 }

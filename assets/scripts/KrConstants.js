@@ -9,11 +9,11 @@ const PARTICLE_OPACITY_ACTIVATED = 1;
 
 const ACTIVATION_DISTANCE = 5;
 
-const PARTICLE_MAX_NUMBER = 2000;
+const PARTICLE_MAX_NUMBER = 200;
 const GENERATION_ODDS = 0.009; // 0 - 1
 
 const JITTER = 0.05;
-const DRAG = 0.8;
+const DRAG = 1.5;
 const ATTRACTION = 0.005;
 
 const INIT_VELOCITY = 20;//0.5;

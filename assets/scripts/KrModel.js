@@ -21,6 +21,28 @@ class KrModel {
     insertParticle(part) {
         part.onBeforeRender = beforeRenderParticle;
         part.onAfterRender = afterRenderParticle;
+
+        part.setTarget(this.target.assignParticle(part));
+        //console.log(part.getTarget());
+        //line stuff
+        
+        const conn = this.target.getConnectedParticles(part);
+        if(conn.length > 0){
+            for(var i = 0; i < conn.length; i++){
+                //check that it doesn't exist already
+                let connectedLine = part.connectedParticleQuery(conn[i]);
+                if(connectedLine == -1){
+                    //add new line!
+                    var line = new KrLine(part, conn[i]);
+                    this.insertLine(line);
+                }else{
+                    
+                    
+                }
+            }
+        }
+
+
         this.particles.add(part);
     }
 
@@ -31,6 +53,8 @@ class KrModel {
     }
 
     insertLine(line){
+        line.onBeforeRender = beforeRenderLine;
+        line.onAfterRender = afterRenderLine;
         this.lines.add(line);
         //target needs updating probably
     }
@@ -71,15 +95,17 @@ class KrModel {
 
     activateParticle(particle){
         //make all connected lines (with matching particles) visible
-
-        //const connectedParticles = getConnectedParticles(particle);
-
-        //generate lines
+        for(var i=0;i< particle.userData.connectedLines.length;i++){
+            particle.userData.connectedLines[i].turnON();
+        }
     }
 
     deactivateParticle(particle){
 
         //make all connected lines invisible;
+        for(var i=0;i< particle.userData.connectedLines.length;i++){
+            particle.userData.connectedLines[i].turnOFF();
+        }
 
     }
     //generates a random number of particles, maxed on number
@@ -98,7 +124,6 @@ class KrModel {
                                              new THREE.Vector3(0,0,0),
                                              PARTICLE_LIFE,
                                              PARTICLE_CHARGE);
-                this.target.assignParticle(particle);
                 this.insertParticle(particle);
             }
         }
@@ -188,3 +213,14 @@ function afterRenderParticle ( renderer, scene, camera, geometry, material, grou
     }
     
 };
+
+function beforeRenderLine( renderer, scene, camera, geometry, material, group ) {
+    if(this.material.visible){
+        this.updatePosition();
+    }
+    
+}
+
+
+function afterRenderLine( renderer, scene, camera, geometry, material, group ) {
+}

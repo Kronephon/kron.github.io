@@ -54,6 +54,7 @@ class KrTarget {
         return this.unAssignedVertices.length;
     }
 
+    //todo: probably needs to migrate some functionality to KrModel
     assignParticle(particle){
         var pick = Math.floor(Math.random()*(this.unAssignedVertices.length)); //let's do random for now
         var vertexAssignment = this.unAssignedVertices[pick];
@@ -61,17 +62,20 @@ class KrTarget {
 
         const newTarget = this.getCoordsFromIndex(vertexAssignment);
         
-        particle.setTarget(newTarget.x, newTarget.y, newTarget.z);
+        
         
         this.particleToIndex[particle] = vertexAssignment;
         this.indexToParticle[vertexAssignment] = particle;
+
+
+        return newTarget;
+        
     }
 
     getCoordsFromIndex(index){
         return new THREE.Vector3().copy(this.targetGeometry.vertices[index].applyMatrix4(this.parent.matrix));
     }
    
-    // ok no. BAD IDEA. The idea should be every particle knows it's connections from assignment and just sees if it's assigned.
     getConnectedParticles(particle){ // returns only assigned particles
         const vertex = this.particleToIndex[particle];
         const connected = this.vertexConnections[vertex];
@@ -79,8 +83,12 @@ class KrTarget {
         for (var i = 0; i < connected.length; i++){
             var pointB = connected[i][0];
             var pointC = connected[i][1];
-            connectedParticles.push(this.indexToParticle[pointB]);
-            connectedParticles.push(this.indexToParticle[pointC]);
+            if(typeof this.indexToParticle[pointB] !== 'undefined'){
+                connectedParticles.push(this.indexToParticle[pointB]);
+            }
+            if(typeof this.indexToParticle[pointC] !== 'undefined'){
+                connectedParticles.push(this.indexToParticle[pointC]);
+            }
         }
         return connectedParticles;
     }
