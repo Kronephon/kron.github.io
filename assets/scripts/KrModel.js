@@ -175,6 +175,8 @@ function beforeRenderParticle( renderer, scene, camera, geometry, material, grou
                                                         this.getTarget(),
                                                         ATTRACTION,
                                                         -1, 1, true));
+    }else{
+        this.addForce(MODEL.physics.calculateJitter(JITTER_CLICK));
     }
     if(this.userData.activated){
         this.material.size = Math.min(this.material.size + 0.25, PARTICLE_ACTIVATED_SIZE);
@@ -208,7 +210,7 @@ function afterRenderParticle ( renderer, scene, camera, geometry, material, grou
 };
 
 function beforeRenderLine( renderer, scene, camera, geometry, material, group ) {
-    if(this.material.visible){
+    if(this.visible){
         this.updatePosition();
         this.material.opacity  = Math.min(this.material.opacity + 0.01, LINE_OPACITY_ACTIVATED);
     }else{

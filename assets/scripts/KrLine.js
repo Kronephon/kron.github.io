@@ -2,8 +2,7 @@ const lineMaterial =
     new THREE.LineBasicMaterial({
         color: 0xFFFFFF,
         opacity: 0.0,
-        transparent: true,
-        visible: false
+        transparent: true
     });
 
 class KrLine extends THREE.Line{
@@ -21,7 +20,9 @@ class KrLine extends THREE.Line{
         geometry.addAttribute( 'position', new THREE.BufferAttribute( positionArray, 3 ) ); //maybe?
         
         var material = lineMaterial.clone();
+        
         super(geometry, material);
+        this.visible = false;
 
         this.userData.particleA = particle1;
         this.userData.particleB = particle2;
@@ -33,11 +34,11 @@ class KrLine extends THREE.Line{
     turnON(){
         if(this.userData.particleA.userData.activated && this.userData.particleB.userData.activated) {
             this.updatePosition();
-            this.material.visible = true;
+            this.visible = true;
         }
     }
     turnOFF(){
-        this.material.visible = false;
+        this.visible = false;
     }
     updatePosition(){
         this.geometry.attributes.position.array[ 0 ] = this.userData.particleA.position.x;
