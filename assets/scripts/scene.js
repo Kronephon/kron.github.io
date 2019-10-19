@@ -84,7 +84,8 @@ var rotation = 0;
 var center = new THREE.Vector3( 0, 0, 0 );
 
 const onLoad = (gltf) => {
-  const targetmodel = gltf.scene.children[0]; //check model for it
+  console.log(gltf)
+  const targetmodel = gltf.scene.children[1]; //check model for it
   targetmodel.name = "target";
   SCENE.add( targetmodel );
   MODEL.loadComplete();
@@ -93,7 +94,7 @@ targetLoader = new THREE.GLTFLoader();
 
 targetLoader.load(
 // parameter 1: The URL
-'assets/models/venus.gltf',
+'assets/models/achilles.gltf',
 // parameter 2:The onLoad callback
 gltf => onLoad( gltf, )
 );

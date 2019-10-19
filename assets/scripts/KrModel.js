@@ -150,7 +150,7 @@ class KrModel {
             throw "target model not found";
         //target.position.set( 0, - 100, - 400 );
         //input.rotation.set( Math.PI / 2, 0, Math.PI);
-        target.scale.set( 45, 45, 45 );
+        target.scale.set( 7, 7, 7 );
         target.castShadow = false;
         target.receiveShadow = true;
         target.visible = false;
@@ -210,9 +210,9 @@ function afterRenderParticle ( renderer, scene, camera, geometry, material, grou
 function beforeRenderLine( renderer, scene, camera, geometry, material, group ) {
     if(this.material.visible){
         this.updatePosition();
-        this.material.opacity  = Math.min(this.material.opacity + 0.05, LINE_OPACITY_ACTIVATED);
+        this.material.opacity  = Math.min(this.material.opacity + 0.01, LINE_OPACITY_ACTIVATED);
     }else{
-        this.material.opacity  = Math.max(this.material.opacity - 0.05, LINE_OPACITY);
+        this.material.opacity  = Math.max(this.material.opacity - 0.01, LINE_OPACITY);
     }
     
 }
