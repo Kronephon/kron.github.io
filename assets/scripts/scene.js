@@ -118,8 +118,26 @@ function update() {
 ///////////////////////////////////////////////////////////////////
 
 //IO
+document.ontouchstart = function (event) {
+  // Compensate for IE<9's non-standard event model
+  //
+  if (event === undefined) event = window.event;
+  var target = 'target' in event ? event.target : event.srcElement;
 
-document.onmousedown = document.ontouchstart = function (event) {
+  MODEL.click();
+};
+
+document.ontouchend = function (event) {
+  // Compensate for IE<9's non-standard event model
+  //
+  if (event === undefined) event = window.event;
+  var target = 'target' in event ? event.target : event.srcElement;
+
+  MODEL.click();
+};
+
+
+document.onmousedown = function (event) {
   // Compensate for IE<9's non-standard event model
   //
   if (event === undefined) event = window.event;
@@ -137,7 +155,6 @@ document.onmouseup = document.ontouchend = function (event) {
   MODEL.declick();
 };
 
-document.
 
 ///////////////////////////////////////////////////////////////////
 
