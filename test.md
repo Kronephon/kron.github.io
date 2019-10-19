@@ -1,5 +1,5 @@
 ---
-layout: home
+layout: homeJustBackground
 title:  "Test"
 ---
 
