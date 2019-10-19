@@ -148,9 +148,9 @@ class KrModel {
         var target = SCENE.getObjectByName("target");
         if(typeof target === 'undefined')
             throw "target model not found";
-        //target.position.set( 0, - 100, - 400 );
+        target.position.set( 0, 100, 0 );
         //input.rotation.set( Math.PI / 2, 0, Math.PI);
-        target.scale.set( 7, 7, 7 );
+        target.scale.set( 5, 5, 5 );
         target.castShadow = false;
         target.receiveShadow = true;
         target.visible = false;
