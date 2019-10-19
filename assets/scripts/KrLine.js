@@ -2,7 +2,8 @@ const lineMaterial =
     new THREE.LineBasicMaterial({
         color: 0xFFFFFF,
         opacity: 0.0,
-        transparent: true
+        transparent: true,
+        antialiasing: true
     });
 
 class KrLine extends THREE.Line{

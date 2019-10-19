@@ -45,8 +45,7 @@ const SCENE = new THREE.Scene();
 renderer.setSize(WIDTH, HEIGHT, true);
 renderer.alpha = true;
 renderer.antialias = true;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setPixelRatio(2);
 
 const CAMERA =
   new THREE.PerspectiveCamera(
@@ -70,7 +69,7 @@ pointLight.position.x = 0;
 pointLight.position.y = 0;
 pointLight.position.z = 0;
 
-pointLight.castShadow = true;
+//pointLight.castShadow = true;
 // add to the scene
 SCENE.add(pointLight);
 
@@ -110,7 +109,6 @@ function update() {
   MODEL.update();
 
   // Draw!
-  //renderer.setClearColor(0xffffff, 0);
   renderer.render(SCENE, CAMERA);
 
   // Schedule the next frame.

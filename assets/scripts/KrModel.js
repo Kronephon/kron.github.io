@@ -151,8 +151,8 @@ class KrModel {
         target.position.set( 0, 100, 0 );
         //input.rotation.set( Math.PI / 2, 0, Math.PI);
         target.scale.set( 5, 5, 5 );
-        target.castShadow = false;
-        target.receiveShadow = true;
+        //target.castShadow = false;
+        //target.receiveShadow = true;
         target.visible = false;
         this.target = new KrTarget(target);
         setTimeout(function(){MODEL.resourcesLoaded = true;}, 1000);

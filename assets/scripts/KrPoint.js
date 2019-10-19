@@ -21,8 +21,8 @@ class KrPoint extends THREE.Points{ //TODO aparently these still draw outside th
         var material = pointMaterial.clone();
         
         super(geometry, material);
-        this.receiveShadow = true;
-        this.castShadow = true;
+        //this.receiveShadow = true;
+        //this.castShadow = true;
         this.name = "KrPoint";
 
         this.userData.life = life;
