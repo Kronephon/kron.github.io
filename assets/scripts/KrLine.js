@@ -1,7 +1,7 @@
 const lineMaterial =
     new THREE.LineBasicMaterial({
         color: 0xFFFFFF,
-        opacity: 0.05,
+        opacity: 0.0,
         transparent: true,
         visible: false
     });

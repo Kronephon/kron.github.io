@@ -217,6 +217,9 @@ function afterRenderParticle ( renderer, scene, camera, geometry, material, grou
 function beforeRenderLine( renderer, scene, camera, geometry, material, group ) {
     if(this.material.visible){
         this.updatePosition();
+        this.material.opacity  = Math.min(this.material.opacity + 0.05, LINE_OPACITY_ACTIVATED);
+    }else{
+        this.material.opacity  = Math.max(this.material.opacity - 0.05, LINE_OPACITY);
     }
     
 }
