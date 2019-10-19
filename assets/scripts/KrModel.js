@@ -23,7 +23,6 @@ class KrModel {
         part.onAfterRender = afterRenderParticle;
 
         part.setTarget(this.target.assignParticle(part));
-        //console.log(part.getTarget());
         //line stuff
         
         const conn = this.target.getConnectedParticles(part);
@@ -85,12 +84,6 @@ class KrModel {
 
         const particleNum = this.particles.children.length;
         this.generateParticles(Math.max(0,limit));
-        
-        //generate new lines?
-
-        
-
-        //generate new polygons?
     }
 
     activateParticle(particle){
