@@ -13,11 +13,11 @@ const LINE_OPACITY_ACTIVATED = 0.3;
 const ACTIVATION_DISTANCE = 10;
 
 const PARTICLE_MAX_NUMBER = 5000;
-const GENERATION_ODDS = 0.05; // 0 - 1
+const GENERATION_ODDS = 0.02; // 0 - 1
 
-const JITTER = 0.05;
+const JITTER = 0.04;
 const JITTER_CLICK = 5;
-const DRAG = 1.5;
-const ATTRACTION = 0.008;
+const DRAG = 1.6;
+const ATTRACTION = 0.015;
 
 const INIT_VELOCITY = 30;//0.5;
