@@ -1,4 +1,4 @@
-const footerheight = 50;
+const footerheight = 0;
 
 // Set the scene size
 var WIDTH = window.innerWidth;
