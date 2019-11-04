@@ -39,16 +39,30 @@ $BackgroundColor :$cDarkGrey;
 }
 
 .centerContainer h1 {
-    cursor: pointer;
+    //cursor: pointer;
     font-size: 24px;
-    color: $cGrey;
+    color: $cPaleYellow;
+    font-weight: normal;
 }
 
 .centerContainer h2 {
-    cursor: pointer;
-    text-align: left;
+    //cursor: pointer;
+    text-align: center;
+    color: $cGrey;
     margin-left: 10px;
     font-size: 10px;
+    font-weight: normal;
+}
+
+.centerContainer ul{
+    text-align: left;
+    font-size: 10px;
+}
+
+
+.iconButton{
+    background-color: rgb(255,255,255);
+    opacity: 0.4;
 }
 
 .backgroundCanvas {
@@ -58,12 +72,13 @@ $BackgroundColor :$cDarkGrey;
 
 footer {
     position: fixed;
+    display: box;
     right: 0px;
-    bottom: 0px;
-    
+    bottom: -10px;
+    height: auto;
+
     text-transform: uppercase;
     font-family: myTechFont;
     font-size: 12px;
     text-align: right;
-    //height: {{site.footerSize}}px;
 }

@@ -1,6 +1,6 @@
 ---
 mainTitle: Pedro Pimentel
-tagline: tag
+tagline: Computer Engineer
 description: Hmm...
 instagram: null
 email: null
@@ -20,7 +20,22 @@ github: null
 
   <body>
     <canvas id="backgroundCanvas"></canvas>
-    <div class="centerContainer"><h1>{{layout.mainTitle}}</h1><h2>{{layout.tagline}}</h2></div>
+    <div class="centerContainer">
+      <h1>{{layout.mainTitle}}</h1>
+      <h2>{{layout.tagline}}</h2>
+      <ul>
+        <li>
+          <object iconButton="email.svg" type="image/svg+xml">
+            <class = "iconButton"/>
+            <img src="assets/img/email.svg" />
+          </object> : {{site.email}}</li>
+        <li>Github:</li>
+        <li>Linkedin:</li>
+        <li>Instagram:</li>
+      </ul> 
+    
+    
+    </div>
 
     {% include footer.html %}
     {% include scripts.html %}
