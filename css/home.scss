@@ -41,7 +41,7 @@ $BackgroundColor :$cDarkGrey;
 .centerContainer h1 {
     cursor: pointer;
     font-size: 24px;
-    color: red;
+    color: $cGrey;
 }
 
 .centerContainer h2 {
@@ -54,4 +54,16 @@ $BackgroundColor :$cDarkGrey;
 .backgroundCanvas {
     z-index: -1;
     background-color: linear-gradient(red, yellow);
+}
+
+footer {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    
+    text-transform: uppercase;
+    font-family: myTechFont;
+    font-size: 12px;
+    text-align: right;
+    //height: {{site.footerSize}}px;
 }
