@@ -20,6 +20,7 @@ $BackgroundColor :$cDarkGrey;
     height: auto;
     left: 35vw;
     right: 35vw;
+    max-width: 400px;
     bottom: 15vh;
     top: 55vh;
 
@@ -56,14 +57,24 @@ $BackgroundColor :$cDarkGrey;
 
 .centerContainer ul{
     text-align: left;
-    font-size: 10px;
+    font-size: 15px;
+    line-height: 2.0;
+    list-style-type: none;
 }
 
+.centerContainer li{
+    background-color::rgba(56,255,255,0.1);
+    border-radius: 5px;
+    margin: 0 0 3px 0;
+    border: white;
+
+}
 
 iconButton img {
-    height: 20px;
+    height: 30px;
     width: 30px;
     filter: invert(0.7);
+    vertical-align: middle;
     //max-width:20px;
     //viewBox: "0 0 10 10";  animate with hue rotate!
 }

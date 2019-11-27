@@ -1,1 +1,46 @@
-<?xml version="1.0" ?><svg height="331.46899" id="svg2439" version="1.0" width="439.371" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs2441"><marker id="ArrowEnd" markerHeight="3" markerUnits="strokeWidth" markerWidth="4" orient="auto" refX="0" refY="5" viewBox="0 0 10 10"><path d="M 0,0 L 10,5 L 0,10 L 0,0 z" id="path2444"/></marker><marker id="ArrowStart" markerHeight="3" markerUnits="strokeWidth" markerWidth="4" orient="auto" refX="10" refY="5" viewBox="0 0 10 10"><path d="M 10,0 L 0,5 L 10,10 L 10,0 z" id="path2447"/></marker></defs><g id="g2449" transform="translate(-145.3305,-145.3305)"><path d="M 569.374,461.472 L 569.374,160.658 L 160.658,160.658 L 160.658,461.472 L 569.374,461.472 z" id="path2451" style="fill:none;stroke:#000000;stroke-width:30.65500069"/><path id="path2453" style="fill:none;stroke:#000000;stroke-width:30.65500069"/><path d="M 164.46,164.49 L 340.78,343.158 C 353.849,356.328 377.63,356.172 390.423,343.278 L 566.622,165.928" id="path2455" style="fill:none;stroke:#000000;stroke-width:30.65500069"/><path d="M 170.515,451.566 L 305.61,313.46" id="path2457" style="fill:none;stroke:#000000;stroke-width:30.65500069"/><path d="M 557.968,449.974 L 426.515,315.375" id="path2459" style="fill:none;stroke:#000000;stroke-width:30.65500069"/></g></svg>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 392.619 392.619" style="enable-background:new 0 0 392.619 392.619;" xml:space="preserve">
+<g>
+	<path d="M312.213,133.567V117.45c0-8.284-6.716-15-15-15H95.406c-8.284,0-15,6.716-15,15v157.719c0,8.284,6.716,15,15,15h201.807
+		c8.284,0,15-6.716,15-15V133.603C312.213,133.591,312.213,133.579,312.213,133.567z M269.064,132.45l-72.674,40.907l-71.115-40.907
+		H269.064z M110.406,260.169V158.506l78.424,45.112c2.314,1.332,4.896,1.998,7.479,1.998c2.536,0,5.073-0.643,7.357-1.929
+		l78.546-44.213v100.694H110.406z"/>
+	<path d="M310.724,0.929H81.896C36.738,0.929,0,37.667,0,82.825v226.97c0,45.157,36.738,81.896,81.896,81.896h228.828
+		c45.157,0,81.896-36.738,81.896-81.896V82.825C392.619,37.667,355.881,0.929,310.724,0.929z M362.619,309.795
+		c0,28.615-23.28,51.896-51.896,51.896H81.896C53.28,361.69,30,338.41,30,309.795V82.825c0-28.616,23.28-51.896,51.896-51.896
+		h228.828c28.615,0,51.896,23.28,51.896,51.896V309.795z"/>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+<g>
+</g>
+</svg>
