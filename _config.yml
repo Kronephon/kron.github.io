@@ -25,10 +25,10 @@ description: >- # this means to ignore newlines until "baseurl:"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://krone.dev" # the base hostname & protocol for your site, e.g. http://example.com
 
-instagram: krone.ig
-email: pedro.f.pim@gmail.com
-linkedin: getmylinkedinhandle
-github: kronephon
+instagramhandle: krone.ig
+emailhandle: pedro.f.pim@gmail.com
+linkedinhandle: getmylinkedinhandle
+githubhandle: kronephon
 
 
 headerSubSections:
