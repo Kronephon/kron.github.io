@@ -33,8 +33,8 @@ $BackgroundColor :$cDarkGrey;
 
     border-radius: 55px;
 
-    background-color: rgba($cDarkGrey, 1.0); 
-    box-shadow: 0px 0px 30px 30px rgba($cDarkGrey, 0.9);
+    background-color: rgba($cDarkGrey, 0.8); 
+    box-shadow: 0px 0px 30px 30px rgba($cDarkGrey, 0.8);
 
     text-align: center;
     color: $cWhite;
@@ -47,6 +47,7 @@ $BackgroundColor :$cDarkGrey;
     font-size: 24px;
     color: $cPaleYellow;
     font-weight: normal;
+    line-height: 0.3;
 }
 
 .centerContainer h2 {
@@ -69,7 +70,7 @@ $BackgroundColor :$cDarkGrey;
 
 .centerContainer li{
     text-align: left;
-    background-color: rgba(56,255,255,0.1);
+    background-color: rgba($cGrey,0.1);
     border-radius: 5px;
     margin: 0 0 3px 0;
     transition: 0.2s filter;
@@ -88,6 +89,42 @@ iconButton img {
 .backgroundCanvas {
     z-index: -1;
     background-color: linear-gradient(red, yellow);
+}
+
+@keyframes shadow-pulse
+{
+  0% {
+    box-shadow: 0 0 0 0px rgba($cGrey, 0.2);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba($cGrey, 0);
+  }
+}
+
+.indexButton{
+    display: block;
+    text-align: center;
+    font-size: 15px;
+    line-height: 2.0;
+    list-style-type: none;
+    padding: 0;
+    margin: auto;
+    border-radius: 5px;
+    width: 50px;
+    
+    font-family: myTechFont;
+    color: $cGrey;
+    background-color: rgba($cGrey,0.1);
+    
+    text-transform: uppercase;
+    text-align: center;
+    
+    animation: shadow-pulse 3s infinite;
+    
+    transition: 0.2s filter;
+    &:hover {
+        filter: sepia();
+    }
 }
 
 footer {
