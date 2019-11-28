@@ -17,9 +17,12 @@ $BackgroundColor :$cDarkGrey;
     position: fixed;
 
     width: auto;
+    min-width: 300px;
     height: auto;
-    left: 35vw;
-    right: 35vw;
+    
+    left: 50%;
+    margin-left: -150px;
+
     max-width: 400px;
     bottom: 15vh;
     top: 55vh;
@@ -30,7 +33,7 @@ $BackgroundColor :$cDarkGrey;
 
     border-radius: 55px;
 
-    background-color: rgba($cDarkGrey, 0.9);
+    background-color: rgba($cDarkGrey, 1.0); 
     box-shadow: 0px 0px 30px 30px rgba($cDarkGrey, 0.9);
 
     text-align: center;
@@ -56,18 +59,23 @@ $BackgroundColor :$cDarkGrey;
 }
 
 .centerContainer ul{
+    display: block;
     text-align: left;
     font-size: 15px;
     line-height: 2.0;
     list-style-type: none;
+    padding: 0;
 }
 
 .centerContainer li{
+    text-align: left;
     background-color: rgba(56,255,255,0.1);
     border-radius: 5px;
     margin: 0 0 3px 0;
-    border: white;
-
+    transition: 0.3s filter;
+    &:hover {
+        filter: sepia();
+    }
 }
 
 iconButton img {
@@ -75,8 +83,6 @@ iconButton img {
     width: 30px;
     filter: invert(0.7);
     vertical-align: middle;
-    //max-width:20px;
-    //viewBox: "0 0 10 10";  animate with hue rotate!
 }
 
 .backgroundCanvas {
