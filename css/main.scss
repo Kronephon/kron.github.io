@@ -29,16 +29,12 @@ html,
 body {
     height: 100%;
     margin: 0;
-
+    padding: 0;
     background: $BackgroundColor;
 }
 
 header {
     height: 50px;
-}
-
-footer {
-    height: {{site.footerSize}}px;
 }
 
 body {
@@ -68,9 +64,13 @@ a {
 }
 
 footer {
+    //position: fixed;
+    //display: box;
+    right: 0px;
+    bottom: 0px;
+
     text-transform: uppercase;
     font-family: myTechFont;
     font-size: 12px;
     text-align: right;
-    //height: {{site.footerSize}}px;
 }

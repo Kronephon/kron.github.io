@@ -1,5 +1,5 @@
 ---
-layout: homeJustBackground
+layout: default
 title:  "Test"
 ---
 
