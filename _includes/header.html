@@ -1,12 +1,10 @@
+<link rel="stylesheet" href="css/header.css">
+
 <header class="header">
-  <h1 class="logo">
-    <a href="{{site.baseurl}}/" class="logo-link">Home</a>
-  </h1>
+  <a class="home-button" href="/feed">Home</a>
   <nav class="main-menu">
-    <ul>
       {% for post in site.headerSubSections %}
-      <li><a href="{{site.baseurl}}/{{post.url}}">{{post.name}}</a></li>
+      <a class="menu-item" href="{{site.baseurl}}/{{post.url}}">{{post.name}}</a>
       {% endfor %}
-    </ul>
   </nav>
 </header>

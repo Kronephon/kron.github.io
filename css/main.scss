@@ -33,10 +33,6 @@ body {
     background: $BackgroundColor;
 }
 
-header {
-    height: 50px;
-}
-
 body {
     display: flex;
     flex-direction: column;
@@ -48,20 +44,6 @@ footer {
 
 ////////////////////
 
-header a{
-    text-transform: uppercase;
-    font-family: myTechFont;
-    font-size: 20px;
-}
-
-a {	
-    color: $cGrey;
-	text-decoration: none;
-    transition: 0.4s color;
-	&:hover {
-		color: $cPaleYellow;
-    }
-}
 
 footer {
     //position: fixed;
