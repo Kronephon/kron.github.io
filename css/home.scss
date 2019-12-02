@@ -132,9 +132,14 @@ footer {
     right: 0px;
     bottom: 12px;
     height: 12px;
+    color: red;
 
     text-transform: uppercase;
     font-family: myTechFont;
     font-size: 12px;
     text-align: right;
+    transition: 0.2s filter;
+    &:hover {
+        filter: sepia();
+    }
 }

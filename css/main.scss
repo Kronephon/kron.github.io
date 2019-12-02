@@ -18,7 +18,7 @@ $BackgroundColor :$cDarkGrey;
 
 @font-face {
     font-family: myNormFont;
-    src: url('/assets/fonts/fontawesome-webfont.ttf');
+    src: url('/assets/fonts/AvenirLTStd-Black.otf');
 }
 
 img, embed, object, video {
@@ -30,29 +30,20 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background: $BackgroundColor;
 }
 
 body {
     display: flex;
     flex-direction: column;
+    background: $BackgroundColor;
 }
 
 footer {
     margin-top: auto;
 }
 
-////////////////////
-
-
-footer {
-    //position: fixed;
-    //display: box;
-    right: 0px;
-    bottom: 0px;
-
-    text-transform: uppercase;
-    font-family: myTechFont;
-    font-size: 12px;
-    text-align: right;
+*{
+    color: $cGrey;
+    Text-decoration: none;
 }
+
