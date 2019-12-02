@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="css/header.css">
 
 <header class="header">
-  <a class="home-button" href="/feed">Home</a>
   <nav class="main-menu">
+      <a class="home-button" href="/feed">Home</a>
       {% for post in site.headerSubSections %}
       <a class="menu-item" href="{{site.baseurl}}/{{post.url}}">{{post.name}}</a>
       {% endfor %}
