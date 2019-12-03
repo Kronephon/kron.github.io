@@ -18,10 +18,42 @@
 
     article {
         color: var(--cGrey);
-        
+
+        .Title a {
+            font-weight: bold;
+            font-size: 20px;
+            line-height: 30px;
+            color: var(--cPaleYellow);
+            transition: 0.2s filter;
+            &:hover {
+                filter: sepia();
+            }
+        }
+
+        .Date{
+            font-size: 10px;
+            line-height: 30px;;
+        }
+
+        .Excerpt{
+            font-size: 15px;
+        }
+
+
+        .Tag {
+            display: inline;
+            font-family: myTechFont;
+            font-weight: normal;
+            font-size: 10px;
+            color: var(--cPaleRed);
+            transition: 0.2s color;
+            &:hover {
+                color: var(--cWhite);
+            }
+        }
     }
     .TopBanner{
-        height: 200px;
+        height: 100px;
     }
     @media (orientation:portrait) {
         .TopBanner{
