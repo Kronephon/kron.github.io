@@ -1,0 +1,74 @@
+--- 
+
+
+--- 
+
+@font-face {
+    font-family: myTechFont;
+    src: url('/assets/fonts/myFont.ttf');
+}
+
+@font-face {
+    font-family: myNormFont;
+    src: url('/assets/fonts/AvenirLTStd-Black.otf');
+}
+
+img,
+embed,
+object,
+video {
+    max-width: 100%;
+}
+
+.DefaultBody {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.Header,
+.Footer {
+    flex: none;
+}
+
+.Footer{
+    background-color: violet;
+}
+.DefaultMain {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    padding: var(--space);
+}
+
+.DefaultContent {
+    margin-top: var(--space);
+}
+
+.DefaultLeft {
+    order: -1;
+}
+
+.DefaultLeft,
+.DefaultRight {
+    padding: 1em;
+    border-radius: 3px;
+    background: rgba(147, 128, 108, 0.1);
+}
+
+@media (--break-lg) {
+    .DefaultMainBody {
+        flex-direction: row;
+    }
+
+    .DefaultContent {
+        flex: 1;
+        padding: 0 var(--space-lg);
+        margin: 0;
+    }
+
+    .DefaultLeft,
+    .DefaultRight {
+        flex: 0 0 12em;
+    }
+}
