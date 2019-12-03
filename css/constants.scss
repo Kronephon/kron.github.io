@@ -1,0 +1,26 @@
+--- 
+
+
+--- 
+:root{
+    --cWhite: #{{site.cWhite}};
+    --cPaleYellow: #{{site.cPaleYellow}};
+    --cGrey: #{{site.cGrey}};
+    --cPaleRed: #{{site.cPaleRed}};
+    --cDarkGrey: #{{site.cDarkGrey}};
+}
+
+@font-face {
+    font-family: myTechFont;
+    src: url('/assets/fonts/myFont.ttf');
+}
+
+@font-face {
+    font-family: myBoldFont;
+    src: url('/assets/fonts/AvenirLTStd-Black.otf');
+}
+
+@font-face {
+    font-family: myNormFont;
+    src: url('/assets/fonts/AvenirLTStd-Book.otf');
+}

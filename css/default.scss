@@ -2,16 +2,20 @@
 
 
 --- 
+@import 'constants.css';
 
-@font-face {
-    font-family: myTechFont;
-    src: url('/assets/fonts/myFont.ttf');
+///style
+a {
+    text-decoration: none; 
+    color: var(--cWhite);
 }
 
-@font-face {
-    font-family: myNormFont;
-    src: url('/assets/fonts/AvenirLTStd-Black.otf');
+.DefaultBody{
+    padding: 0;
+    margin: 0;
 }
+
+///structure
 
 img,
 embed,
@@ -49,13 +53,7 @@ video {
     order: -1;
 }
 
-.DefaultLeft,
-.DefaultRight {
-    border-radius: 3px;
-    background: blue;
-}
-
-@media (min-width: 768px) {
+@media (orientation:landscape) {
     .DefaultMain {
         flex-direction: row;
         flex: 1;
@@ -69,6 +67,6 @@ video {
 
     .DefaultLeft,
     .DefaultRight {
-        flex: 0 0 7em;
+        flex: 0 0 14em;
     }
 }
