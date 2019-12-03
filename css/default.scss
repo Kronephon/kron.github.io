@@ -31,9 +31,6 @@ video {
     flex: none;
 }
 
-.Footer{
-    background-color: violet;
-}
 .DefaultMain {
     display: flex;
     flex: 1 0 auto;
@@ -43,6 +40,9 @@ video {
 
 .DefaultContent {
     margin-top: var(--space);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .DefaultLeft {
@@ -51,24 +51,24 @@ video {
 
 .DefaultLeft,
 .DefaultRight {
-    padding: 1em;
     border-radius: 3px;
-    background: rgba(147, 128, 108, 0.1);
+    background: blue;
 }
 
-@media (--break-lg) {
-    .DefaultMainBody {
+@media (min-width: 768px) {
+    .DefaultMain {
         flex-direction: row;
+        flex: 1;
     }
 
     .DefaultContent {
         flex: 1;
-        padding: 0 var(--space-lg);
+        padding: 0;
         margin: 0;
     }
 
     .DefaultLeft,
     .DefaultRight {
-        flex: 0 0 12em;
+        flex: 0 0 7em;
     }
 }
