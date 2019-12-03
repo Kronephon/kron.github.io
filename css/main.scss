@@ -30,11 +30,9 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-}
-
-body {
     display: flex;
     flex-direction: column;
+
     background: $BackgroundColor;
 }
 
@@ -46,4 +44,31 @@ footer {
     color: $cGrey;
     Text-decoration: none;
 }
+
+.mainBody {
+    flex-grow: 1;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    background: blueviolet;
+    align-items: flex-start;
+}
+
+.sidebar {
+    flex-grow: 1;
+    min-width: auto;
+    background: green;
+    height: 1px;
+}
+
+.main {
+    align-self: flex-start;
+    flex-grow: 0;
+    max-width: 1000px;
+    height: 10px;
+
+    display: flex;
+    flex-direction: column;
+}
+  
 
