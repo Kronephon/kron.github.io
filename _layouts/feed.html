@@ -12,7 +12,7 @@ permalink : /feed/
             <div class = Title><a href="{{ post.url }}">{{ post.title }}</a></div>
             <div class = "Date">{{ post.date | date_to_string }}</div>
             {% for tag in post.categories %}
-                <div class=Tag>#{{ tag }}</div>
+                <div class=Tag>{{ tag }}</div>
             {% endfor %}
             
             <div class = "Excerpt">{{ post.excerpt }}</div>

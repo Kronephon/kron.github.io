@@ -3,14 +3,14 @@
 
 --- 
 :root{
-    --cWhite: #{{site.cWhite}};
-    --cPaleYellow: #{{site.cPaleYellow}};
-    --cGrey: #{{site.cGrey}};
-    --cPaleRed: #{{site.cPaleRed}};
-    --cDarkGrey: #{{site.cDarkGrey}};
-
-    $cWhite: #{{site.cWhite}};
-    $cPaleYellow: #{{site.cPaleYellow}};
+    --cWhite:       #{{site.cWhite}};
+    --cPaleYellow:  #{{site.cPaleYellow}};
+    --cDarkerYellow:#{{site.cDarkerYellow}};
+    --cLightBrown:  #{{site.cLightBrown}};
+    --cDarkBrown:   #{{site.cDarkBrown}};
+    --cGrey:        #{{site.cGrey}};
+    --cPaleSalmon:  #{{site.cPaleSalmon}};
+    --cDarkGrey:    #{{site.cDarkGrey}};
 }
 
 @font-face {

@@ -1,19 +1,12 @@
 ---
 
 ---
-//@import 'default.css';
-
-$cWhite: #{{site.cWhite}};
-$cPaleYellow: #{{site.cPaleYellow}};
-$cGrey: #{{site.cGrey}};
-$cPaleRed: #{{site.cPaleRed}};
-$cDarkGrey: #{{site.cDarkGrey}};
 
 header {
     background-color: green;
     //height: 100px;
     font-family: myTechFont;
-    color: $cWhite;
+    color: var(--cWhite);
     font-weight: bold;
     //position: relative;
 

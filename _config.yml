@@ -57,15 +57,13 @@ construction: /construction
 
 # //https://coolors.co/d8cfaf-e6b89c-5b4b49-c46d5e-f56960 
 cWhite: F5F7F6
-cPaleYellow: C9B08D
-cGrey: 82718B
-cPaleRed: 9E445B
+cPaleYellow: d8cfaf
+cDarkerYellow: e6b89c
+cDarkBrown: 282322
+cLightBrown: c46d5e
+cPaleSalmon: f56960
+cGrey: ab9fb1
 cDarkGrey: 1D171C
-
-# generics
-
-footerSize: 40
-
 
 # Build settings
 
