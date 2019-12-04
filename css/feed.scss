@@ -41,24 +41,31 @@
 
 
         .Tag {
+            $cPaleYellow: darken(desaturate(#{{site.cPaleYellow}}, 25%), 10%);
+
             display: inline;
             font-family: myTechFont;
             font-weight: normal;
             font-size: 10px;
-            color: var(--cPaleRed);
+            color: $cPaleYellow;
             transition: 0.2s color;
             &:hover {
                 color: var(--cWhite);
             }
+            border-radius: 3px;
+            border: 1px solid $cPaleYellow;
+            background-color: darken($cPaleYellow, 30%);
+            opacity: 0.6;
         }
     }
     .TopBanner{
-        height: 100px;
+        height: 0px;
     }
-    @media (orientation:portrait) {
+    @media (orientation:landscape) and (min-width: 768px)  {
         .TopBanner{
-            height: 0px;
+            height: 100px;
         }
+        
     }
 }
 

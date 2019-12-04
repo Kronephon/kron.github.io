@@ -11,11 +11,11 @@ $cDarkGrey: #{{site.cDarkGrey}};
 
 header {
     background-color: green;
-    height: 100px;
+    //height: 100px;
     font-family: myTechFont;
     color: $cWhite;
     font-weight: bold;
-    position: relative;
+    //position: relative;
 
     a {
         display: inline;
@@ -24,9 +24,9 @@ header {
     }
 
     .main-menu {
-        position: absolute;
+        //position: absolute;
         width: 100%;
-        bottom:0;
+        //bottom:0;
         display: flex;
         justify-content: space-between;
 

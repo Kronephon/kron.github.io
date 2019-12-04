@@ -53,7 +53,7 @@ video {
     order: -1;
 }
 
-@media (orientation:landscape) {
+@media (orientation:landscape) and (min-width: 768px) {
     .DefaultMain {
         flex-direction: row;
         flex: 1;
@@ -67,6 +67,6 @@ video {
 
     .DefaultLeft,
     .DefaultRight {
-        flex: 0 0 14em;
+        flex: 0 0 15vw;
     }
 }
