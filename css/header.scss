@@ -3,7 +3,7 @@
 ---
 
 header {
-    background-color: green;
+    //background-color: green;
     //height: 100px;
     font-family: myTechFont;
     color: var(--cWhite);
@@ -23,12 +23,12 @@ header {
         display: flex;
         justify-content: space-between;
 
-        background-color: blue;
+        //background-color: blue;
         height: 40px;
 
         .home-button {
             color: red;
-            background-color: cyan;
+            //background-color: cyan;
 
             justify-content: start;
             padding-top: 20px;
@@ -40,8 +40,8 @@ header {
             display: inline-flex;
 
             .item {
-                color: red;
-                background-color: cyan;
+                //color: red;
+                //background-color: cyan;
                 justify-content: end;
                 //align-content: flex-end;
                 padding-top: 20px;

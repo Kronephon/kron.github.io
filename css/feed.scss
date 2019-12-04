@@ -7,13 +7,13 @@
     font-weight: normal;
     font-size: 12px;
     color: var(--cWhite);
-    background: var(--cDarkGrey);
-
+    //background: var(--cDarkGrey);
 
     .ArticleFeed{
         padding: 30px;
         border-radius: 10px;    
-        background: var(--cDarkBrown);
+        $cDarkBrown: #{{site.cDarkBrown}};
+        background-color: rgba($cDarkBrown, 0.8); 
     }
 
     article {
@@ -73,7 +73,34 @@
 }
 
 nav, aside {
-    background: var(--cDarkGrey);
     border-radius: 0;
 }
+
+.BackgroundImage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -2;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-image: url('../assets/img/Background.jpg');
+    filter: grayscale(80%) blur(0px) contrast(0.8);
+}
+.BackgroundImage2 {
+    z-index: -1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    $cDarkGrey: #{{site.cDarkGrey}};
+    background: linear-gradient(to bottom, rgba(30,87,153,0) 0%,rgba($cDarkGrey,1) 100%);
+}
+
+.DefaultBody{
+    background:  var(--cDarkGrey);
+}
+
 
