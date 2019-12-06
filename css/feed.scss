@@ -10,6 +10,9 @@
     //background: var(--cDarkGrey);
 
     .ArticleFeed{
+        display: flex;
+        flex-direction: column-reverse;
+
         padding: 30px;
         border-radius: 10px;    
         $cDarkBrown: #{{site.cDarkBrown}};
@@ -23,7 +26,7 @@
         .Title {
             font-weight: bold;
             font-size: 20px;
-            line-height: 20px;
+            line-height: 25px;
             color: var(--cPaleYellow);
             transition: 0.2s filter;
             &:hover {
@@ -34,7 +37,7 @@
         .Date{
             font-size: 10px;
             color: var(--cGrey);
-            height: 30px;
+            height: 20px;
         }
 
         .Excerpt{

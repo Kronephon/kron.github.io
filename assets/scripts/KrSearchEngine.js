@@ -65,7 +65,7 @@ function insertFeed(result) {
 function parseAndBuild(htmlInput, destination_block, ref){ //TODO : requires sanitation
     //title, ref, date, excerpt, tags
 
-    var dateRX = new RegExp(/.*?(<meta name=\"date\" content=\"([0-9]+ \w+ [0-9]+)\">).*?/g);
+    var dateRX = new RegExp(/.*?(<meta name=\"date\" content=\"(.*)\">).*?/g);
     date = dateRX.exec(htmlInput)[2];
 
     var titleRX = new RegExp(/(.*?<title>)(.*)(<\/title>.*?)/g);
@@ -80,8 +80,13 @@ function parseAndBuild(htmlInput, destination_block, ref){ //TODO : requires san
         console.log(tagRX[i]);
     }
 
-    insertArticle(destination_block, createBlock(title, ref, date, excerpt, tags));
+    insertArticle(destination_block, createBlock(title, ref, date, excerpt, tags), date);
 
+}
+
+function insertArticle(destination, block, ordering)
+{
+    destination.appendChild(block);
 }
 
 function clearFeed(block) {
@@ -92,6 +97,11 @@ function clearFeed(block) {
 function createBlock(title, ref, date, excerpt, tags) {
 
     article = document.createElement('article');
+    article.id = title.replace(/\s/g, '')+date.replace(/\s/g, '');
+
+    var sheet = window.document.styleSheets[0];
+    sheet.insertRule('article#'+article.id+' {order: '+parseInt(date.replace(/-/g, ''))+';}', sheet.cssRules.length);
+    console.log(sheet);
 
     divTitle = document.createElement('a');
     divTitle.className = "Title";

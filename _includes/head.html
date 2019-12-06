@@ -3,7 +3,7 @@
     <meta name="description" content="{{ page.description }}">  
     <link rel="icon" type="img/ico" href="assets/img/myico.ico">
     <link rel="stylesheet" type="text/css" href="{{ '/css/default.css' | prepend: site.baseurl }}">
-    {% if page.date %}<meta name="date" content="{{page.date | date_to_string}}">  {% endif %}
+    {% if page.date %}<meta name="date" content="{{page.date | date: "%Y-%m-%d" }}">  {% endif %}
     {% if page.excerpt %}<meta name="excerpt" content="{{page.excerpt | strip_html | truncatewords: 50 }}">  {% endif %}
     {% for tag in page.tags %}<meta name="tag_{{tag}}" content="{{tag}}"> 
     {% endfor %}
