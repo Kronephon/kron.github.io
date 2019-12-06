@@ -30,13 +30,13 @@ index.push({{t}});
 //receives a tag and goes through all the posts needed, if -1 presents all pending limit
 
 function query(input) {
+    console.log(input);
     result = [];
     for (var i = 0; i < index.length; i++) {
         if (index[i][0] == input) {
             result = index[i];
         }
     }
-    console.log(result);
     if (result.length > 1) {
         insertFeed(result);
     }
@@ -76,9 +76,13 @@ function parseAndBuild(htmlInput, destination_block, ref){ //TODO : requires san
 
     var tagRX = new RegExp(/.*?(<meta name=\"tag_.+\" content=\"(.*)\">).*?/g);
     var tags = [];
-    for (var i = 0; i < tagRX.length; i++) {
-        console.log(tagRX[i]);
-    }
+    do {
+        tag = tagRX.exec(htmlInput);
+        if(tag){
+            tags.push(tag[2]);
+        }
+    } while(tag);
+
 
     insertArticle(destination_block, createBlock(title, ref, date, excerpt, tags), date);
 
@@ -91,7 +95,6 @@ function insertArticle(destination, block, ordering)
 
 function clearFeed(block) {
     block.innerHTML = "";
-    console.log("-clear feed-"); //todo remove
 }
 
 function createBlock(title, ref, date, excerpt, tags) {
@@ -120,7 +123,7 @@ function createBlock(title, ref, date, excerpt, tags) {
         divTag.className = "Tag";
         divTag.type = "click";
         divTag.value = tags[i];
-        divTag.onclick = function() {query(divTag.value);};
+        divTag.onclick = function() {query(this.value);};
         divTag.innerHTML = tags[i];
         article.appendChild(divTag);
 
@@ -138,7 +141,6 @@ function initFeed() {
     if (container_block) {
         query("all");
     }
-    console.log('-feed loaded-');
 }
 
 window.onload = initFeed();
