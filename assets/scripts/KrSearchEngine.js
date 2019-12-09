@@ -42,6 +42,8 @@ function query(input) {
     }
 }
 
+var requestsSent = 0;
+
 function insertFeed(result) {
     
     container_block = document.getElementsByClassName('ArticleFeed')[0];
@@ -50,17 +52,34 @@ function insertFeed(result) {
         for (var i = 1; i < result.length && i <= LIMIT_PER_PAGE; i++) {
             //get data
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', result[i], true); //TODO requires performance boost
+            xhr.open('GET', result[i], true);
             xhr.onreadystatechange = function() {
                 if (this.readyState !== 4) return;
                 if (this.status !== 200) return;
                 var ref = this.responseURL.substr(window.location.href.length -5);
                 parseAndBuild(this.responseText, container_block, ref);
+                requestsSent--;
+                if(requestsSent <= 0){
+                    var event = new Event('loaded');
+                    document.dispatchEvent(event);
+                }
             };
+            requestsSent++;
             xhr.send();
         }
     }
 }
+
+document.addEventListener('loaded', function (e) {     
+    var elem = document.getElementById('loadingScreen');
+    elem.parentNode.removeChild(elem); 
+}, false);
+
+setTimeout(
+    function() {
+        var event = new Event('loaded');
+        document.dispatchEvent(event);
+}, 5000);
 
 function parseAndBuild(htmlInput, destination_block, ref){ //TODO : requires sanitation
     //title, ref, date, excerpt, tags
@@ -143,7 +162,7 @@ function initFeed() {
     }
 }
 
-window.onload = initFeed();
+initFeed();
 
 //title
 //date

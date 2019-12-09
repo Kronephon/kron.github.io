@@ -2,6 +2,9 @@
 
 
 --- 
+
+@import 'constants.css';
+
 .Feed{
     font-family: myNormFont;
     font-weight: normal;
@@ -87,9 +90,12 @@ nav, aside {
     bottom: 0;
     right: 0;
     z-index: -2;
-    background-size: 100%;
+    max-width: 100%;
+    height:auto;
+    background-size: cover;
     background-repeat: no-repeat;
-    background-image: url('../assets/img/Background.jpg');
+    $cDarkGrey: #{{site.cDarkGrey}};
+    background-image: linear-gradient(to bottom, rgba(30,87,153,0) 0%,rgba($cDarkGrey,1) 90%), url('../assets/img/Background.jpg');
     
     @keyframes backgroundShift {
         
@@ -101,18 +107,18 @@ nav, aside {
     }
     animation: backgroundShift 40s 1s infinite;
 }
-/*.BackgroundImage2 {
-    position: absolute;
-    z-index: -1;
-    margin: auto
-    background-size: 100%;
-    background-repeat: no-repeat;
-    $cDarkGrey: #{{site.cDarkGrey}};
-    background-color: red;//linear-gradient(to bottom, rgba(30,87,153,0) 0%,rgba($cDarkGrey,1) 70%);
-}*/
 
 .DefaultBody{
     background:  var(--cDarkGrey);
 }
 
+#loadingScreen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    background-color: var(--cDarkGrey);
+}
 

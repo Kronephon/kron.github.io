@@ -3,10 +3,10 @@ layout : default
 permalink : /feed
 ---
 <link rel="stylesheet" type="text/css" href="{{ '/css/feed.css' | prepend: site.baseurl }}">
+<script src="{{ '/assets/scripts/KrLoader.js' | prepend: site.baseurl }}"></script>
 <div class = Feed onLoad="initFeed()">
-    <div class= BackgroundImage>
-    <div class= BackgroundImage2></div>
-    </div>
+    <div id="loadingScreen"></div>
+    <div class= BackgroundImage></div>
     <div class=TopBanner></div>
     <ul class="ArticleFeed"></ul>
     <script src="{{ '/assets/scripts/KrSearchEngine.js' | prepend: site.baseurl }}"></script>
