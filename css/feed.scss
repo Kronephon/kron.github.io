@@ -94,17 +94,18 @@ nav, aside {
     height:auto;
     background-size: cover;
     background-repeat: no-repeat;
+    filter: blur(0.2rem);
     $cDarkGrey: #{{site.cDarkGrey}};
-    background-image: linear-gradient(to bottom, rgba(30,87,153,0) 0%,rgba($cDarkGrey,1) 98%), url('../assets/img/whale.jpg');
+    background-image: linear-gradient(to bottom, rgba(30,87,153,0) 0%, rgba(30,87,153,0) 70%, rgba($cDarkGrey,1) 98%), url('../assets/img/forest.jpg');
     
-    @keyframes backgroundShift {
+    /*@keyframes backgroundShift {
         
         0%   {filter: hue-rotate(0);}
         25%  {filter: hue-rotate(-50deg);}
         50%  {filter: hue-rotate(0deg);}
         75%  {filter: hue-rotate(50deg);}
         100% {filter: hue-rotate(0deg);}
-    }
+    }*/
     //animation: backgroundShift 40s 1s infinite;
 }
 
