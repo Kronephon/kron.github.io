@@ -3,7 +3,7 @@
 ---
 // script is very dependent on structure in feed.html as it generates html code for it
 
-LIMIT_PER_PAGE = 5;
+LIMIT_PER_PAGE = 99;
 
 var index = []
 
@@ -30,7 +30,6 @@ index.push({{t}});
 //receives a tag and goes through all the posts needed, if -1 presents all pending limit
 
 function query(input) {
-    console.log(input);
     result = [];
     for (var i = 0; i < index.length; i++) {
         if (index[i][0] == input) {
@@ -60,6 +59,7 @@ function insertFeed(result) {
                 parseAndBuild(this.responseText, container_block, ref);
                 requestsSent--;
                 if(requestsSent <= 0){
+                    customLoaded = true;
                     var event = new Event('loaded');
                     document.dispatchEvent(event);
                 }
@@ -69,17 +69,6 @@ function insertFeed(result) {
         }
     }
 }
-
-document.addEventListener('loaded', function (e) {     
-    var elem = document.getElementById('loadingScreen');
-    elem.parentNode.removeChild(elem); 
-}, false);
-
-setTimeout(
-    function() {
-        var event = new Event('loaded');
-        document.dispatchEvent(event);
-}, 5000);
 
 function parseAndBuild(htmlInput, destination_block, ref){ //TODO : requires sanitation
     //title, ref, date, excerpt, tags
@@ -102,7 +91,6 @@ function parseAndBuild(htmlInput, destination_block, ref){ //TODO : requires san
         }
     } while(tag);
 
-
     insertArticle(destination_block, createBlock(title, ref, date, excerpt, tags), date);
 
 }
@@ -123,7 +111,6 @@ function createBlock(title, ref, date, excerpt, tags) {
 
     var sheet = window.document.styleSheets[0];
     sheet.insertRule('article#'+article.id+' {order: '+parseInt(date.replace(/-/g, ''))+';}', sheet.cssRules.length);
-    console.log(sheet);
 
     divTitle = document.createElement('a');
     divTitle.className = "Title";
