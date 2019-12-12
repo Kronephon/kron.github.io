@@ -26,8 +26,6 @@ var {{t}} = [];
 index.push({{t}});
 {% endfor %}
 
-console.log(index);
-
 //receives a tag and goes through all the posts needed, if -1 presents all pending limit
 
 function query(input) {
@@ -45,7 +43,6 @@ function query(input) {
 var requestsSent = 0;
 
 function insertFeed(result) {
-    
     container_block = document.getElementsByClassName('ArticleFeed')[0];
     if(container_block){
         clearFeed(container_block);
@@ -87,16 +84,15 @@ function parseAndBuild(htmlInput, destination_block, ref){ //TODO : requires san
     var tags = [];
     do {
         tag = tagRX.exec(htmlInput);
-        console.log(tag);
         if(tag){
             tags.push(tag[2]);
         }
     } while(tag);
-    insertArticle(destination_block, createBlock(title, ref, date, excerpt, tags), date);
+    insertArticle(destination_block, createBlock(title, ref, date, excerpt, tags));
 
 }
 
-function insertArticle(destination, block, ordering)
+function insertArticle(destination, block)
 {
     destination.appendChild(block);
 }
@@ -111,8 +107,8 @@ function createBlock(title, ref, date, excerpt, tags) {
     article.id = title.replace(/\s/g, '')+date.replace(/\s/g, '');
 
     var styles = `
-    'article#'+article.id+' {
-        order: '+parseInt(date.replace(/-/g, ''))+';
+    article#`+article.id+` {
+        order: ` + parseInt(date.replace(/-/g, '')) + `;
     `
     var styleSheet = document.createElement("style");
     styleSheet.type = "text/css";

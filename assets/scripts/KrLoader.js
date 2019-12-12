@@ -12,14 +12,6 @@ document.addEventListener('loaded', function (e) {
 }, false);
 
 
-/*setTimeout(
-    function() {
-        assetsLoaded = true;
-        var event = new Event('loaded');
-        document.dispatchEvent(event);
-}, 5000);*/
-
-
 window.onload = function() {
     assetsLoaded = true;
     var event = new Event('loaded');
