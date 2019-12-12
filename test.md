@@ -1,7 +1,6 @@
 ---
 layout: default
 title:  "Test"
-testVar: testVar
 ---
 
 # h1 Heading 8-)
@@ -22,7 +21,7 @@ ___
 
 ## Typographic replacements
 
-Enable typographer option to see result.
+Enable typographer option to see result. Test commit to try out deployment.
 
 (c) (C) (r) (R) (tm) (TM) (p) (P) +-
 
