@@ -80,6 +80,8 @@
     }
     .TopBanner{
         height: 0px;
+        padding: 0px;
+        margin: 0px;
     }
     @media (orientation:landscape) and (min-width: 768px)  {
         .TopBanner{

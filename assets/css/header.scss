@@ -3,12 +3,9 @@
 ---
 
 header {
-    //background-color: green;
-    //height: 100px;
     font-family: myTechFont;
     color: var(--cDarkGrey);
     font-weight: bold;
-     
 
     a {
         display: inline;
@@ -17,15 +14,12 @@ header {
     }
 
     .main-menu {
-        //position: absolute;
-        padding: 30px;
-        //width: 100% ;
-        //bottom:0;
+        @media (orientation:landscape) and (min-width: 768px) {
+            padding: 30px;
+        }
+
         display: flex;
         justify-content: space-between;
-
-        //background-color: blue;
-        //height: 40px;
 
         .home-button {
             color: var(--cDarkerYellow);
@@ -37,7 +31,6 @@ header {
                 background-color: rgba($cDarkBrown,1);
             }
             justify-content: end;
-            //align-content: flex-end;
             padding-top: 10px;
             padding-left: 20px;
             padding-right: 20px;
