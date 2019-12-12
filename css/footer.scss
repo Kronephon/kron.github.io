@@ -1,8 +1,32 @@
 ---
 
 ---
-//@import 'default.css';
+@import 'constants.css';
 
 footer {
-    background-color: red;
+    display:flex;
+    flex-direction: column-reverse;
+    height: 100px;
+    $cDarkBrown: #{{site.cDarkBrown}};
+    background: linear-gradient(to top,  rgba($cDarkBrown, 100%) 0%,  rgba($cDarkBrown, 0%) 100%);
+    
+    p {
+        text-align: right;
+        
+        a{
+            padding-right: 20px;
+            color: var(--cPaleYellow);
+            
+            text-transform: uppercase;
+            font-family: myTechFont;
+            font-size: 12px;
+            text-align: right;
+            transition: 0.2s filter;
+            &:hover {
+                filter: sepia();
+            }
+        }
+    }
+
+    
 }

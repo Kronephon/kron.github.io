@@ -1,5 +1,4 @@
 var assetsLoaded = false;
-//var customLoaded = false;
 
 document.addEventListener('loaded', function (e) {
     if(assetsLoaded == true){

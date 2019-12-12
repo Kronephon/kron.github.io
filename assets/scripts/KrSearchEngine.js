@@ -142,3 +142,5 @@ function initFeed() {
         query("all");
     }
 }
+
+initFeed();

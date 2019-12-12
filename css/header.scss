@@ -27,7 +27,8 @@ header {
         height: 40px;
 
         .home-button {
-            //background-color: cyan;
+            //$cDarkBrown: #{{site.cDarkBrown}};
+            //background-color: rgba($cDarkBrown, 100%);
 
             justify-content: start;
             padding-top: 20px;
