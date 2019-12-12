@@ -28,8 +28,8 @@ header {
         //height: 40px;
 
         .home-button {
-            //$cDarkBrown: #{{site.cDarkBrown}};
-            //background-color: red;
+            $cDarkBrown: #{{site.cDarkBrown}};
+            background-color: rgba($cDarkBrown,0.8);
 
             justify-content: start;
             padding-top: 10px;
@@ -42,8 +42,14 @@ header {
             display: inline-flex;
 
             .item {
-                //color: red;
-                //background-color: cyan;
+                color: var(--cDarkerYellow);
+                $cDarkBrown: #{{site.cDarkBrown}};
+                background-color: rgba($cDarkBrown,0.8);
+                transition: 0.2s color, 0.2s background-color;
+                &:hover {
+                    color: var(--cWhite);
+                    background-color: rgba($cDarkBrown,1);
+                }
                 justify-content: end;
                 //align-content: flex-end;
                 padding-top: 10px;
