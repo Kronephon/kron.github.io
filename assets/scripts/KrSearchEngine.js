@@ -40,8 +40,6 @@ function query(input) {
     }
 }
 
-var requestsSent = 0;
-
 function insertFeed(result) {
     container_block = document.getElementsByClassName('ArticleFeed')[0];
     if(container_block){
@@ -55,14 +53,7 @@ function insertFeed(result) {
                 if (this.status !== 200) return;
                 var ref = this.responseURL.substr(window.location.href.length -5);
                 parseAndBuild(this.responseText, container_block, ref);
-                requestsSent--;
-                if(requestsSent <= 0){
-                    customLoaded = true;
-                    var event = new Event('loaded');
-                    document.dispatchEvent(event);
-                }
             };
-            requestsSent++;
             xhr.send();
         }
     }
@@ -151,5 +142,3 @@ function initFeed() {
         query("all");
     }
 }
-
-initFeed();
