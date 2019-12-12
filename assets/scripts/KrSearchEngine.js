@@ -26,6 +26,7 @@ var {{t}} = [];
 index.push({{t}});
 {% endfor %}
 
+console.log(index);
 
 //receives a tag and goes through all the posts needed, if -1 presents all pending limit
 
@@ -86,11 +87,11 @@ function parseAndBuild(htmlInput, destination_block, ref){ //TODO : requires san
     var tags = [];
     do {
         tag = tagRX.exec(htmlInput);
+        console.log(tag);
         if(tag){
             tags.push(tag[2]);
         }
     } while(tag);
-
     insertArticle(destination_block, createBlock(title, ref, date, excerpt, tags), date);
 
 }
@@ -109,8 +110,14 @@ function createBlock(title, ref, date, excerpt, tags) {
     article = document.createElement('article');
     article.id = title.replace(/\s/g, '')+date.replace(/\s/g, '');
 
-    var sheet = window.document.styleSheets[0];
-    sheet.insertRule('article#'+article.id+' {order: '+parseInt(date.replace(/-/g, ''))+';}', sheet.cssRules.length);
+    var styles = `
+    'article#'+article.id+' {
+        order: '+parseInt(date.replace(/-/g, ''))+';
+    `
+    var styleSheet = document.createElement("style");
+    styleSheet.type = "text/css";
+    styleSheet.innerText = styles;
+    document.head.appendChild(styleSheet);
 
     divTitle = document.createElement('a');
     divTitle.className = "Title";
@@ -150,20 +157,3 @@ function initFeed() {
 }
 
 initFeed();
-
-//title
-//date
-//tags
-//excert
-//get all
-
-/*
-<article class = "{% for tag in post.tags %}{{ tag }} {% endfor %}">
-<div class = Title><a href="{{ post.url }}">{{ post.title }}</a></div>
-<div class = "Date">{{ post.date | date_to_string }}</div>
-{% for tag in post.tags %}
-    <button class=Tag name="q" type="click" value="{{ tag }}" onClick="q('{{ tag }}')">{{ tag }}</button>
-{% endfor %}
-;
-<div class = "Excerpt">{{ post.excerpt }}</div>
-</article>*/
