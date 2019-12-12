@@ -1,6 +1,7 @@
 ---
 layout: default
 title:  "Test"
+testVar: testVar
 ---
 
 # h1 Heading 8-)
