@@ -6,6 +6,12 @@ header {
     font-family: myTechFont;
     color: var(--cDarkGrey);
     font-weight: bold;
+    $cDarkBrown: #{{site.cDarkBrown}};
+    background-color: rgba($cDarkBrown,0.8);
+    
+    @media (orientation:landscape) and (min-width: 768px) {
+        background-color: rgba(0,0,0,0);
+    }
 
     a {
         display: inline;
@@ -25,9 +31,13 @@ header {
         justify-content: space-between;
 
         .home-button {
-            color: var(--cDarkerYellow);
             $cDarkBrown: #{{site.cDarkBrown}};
-            background-color: rgba($cDarkBrown,0.8);
+            background-color: rgba(0,0,0,0);
+            @media (orientation:landscape) and (min-width: 768px) {
+                background-color: rgba($cDarkBrown,0.8);
+            }
+
+            color: var(--cDarkerYellow);
             transition: 0.2s color, 0.2s background-color;
             &:hover {
                 color: var(--cWhite);
@@ -35,10 +45,10 @@ header {
             }
             justify-content: end;
 
-            padding-top: 40px;
-            padding-left: 80px;
-            padding-right: 80px;
-            padding-bottom: 40px;
+            padding-top: 20px;
+            padding-left: 40px;
+            padding-right: 40px;
+            padding-bottom: 20px;
 
             @media (orientation:landscape) and (min-width: 768px) {
                 padding-top: 10px;
@@ -56,7 +66,10 @@ header {
             .item {
                 color: var(--cDarkerYellow);
                 $cDarkBrown: #{{site.cDarkBrown}};
-                background-color: rgba($cDarkBrown,0.8);
+                background-color: rgba(0,0,0,0);
+                @media (orientation:landscape) and (min-width: 768px) {
+                    background-color: rgba($cDarkBrown,0.8);
+                }
                 transition: 0.2s color, 0.2s background-color;
                 &:hover {
                     color: var(--cWhite);
@@ -64,10 +77,10 @@ header {
                 }
                 justify-content: end;
 
-                padding-top: 40px;
-                padding-left: 80px;
-                padding-right: 80px;
-                padding-bottom: 40px;
+                padding-top: 20px;
+                padding-left: 40px;
+                padding-right: 40px;
+                padding-bottom: 20px;
     
                 @media (orientation:landscape) and (min-width: 768px) {
                     padding-top: 10px;

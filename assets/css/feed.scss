@@ -12,15 +12,22 @@
     font-family: myNormFont;
     font-weight: normal;
     font-size: 12px;
+    margin-top: -12px;
+    @media (orientation:landscape) and (min-width: 768px) {
+        margin-top: 0px;
+    }
     color: var(--cWhite);
-    //background: var(--cDarkGrey);
 
     .ArticleFeed{
         display: flex;
         flex-direction: column-reverse;
 
         padding: 30px;
-        border-radius: 2px;    
+        border-radius: 0px;
+        @media (orientation:landscape) and (min-width: 768px) {
+            border-radius: 2px;
+        }
+        
         $cDarkBrown: #{{site.cDarkBrown}};
         background-color: rgba($cDarkBrown, 0.8); 
     }
