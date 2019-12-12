@@ -8,7 +8,7 @@ header {
     font-family: myTechFont;
     color: var(--cDarkGrey);
     font-weight: bold;
-    //position: relative;
+     
 
     a {
         display: inline;
@@ -28,14 +28,22 @@ header {
         //height: 40px;
 
         .home-button {
+            color: var(--cDarkerYellow);
             $cDarkBrown: #{{site.cDarkBrown}};
             background-color: rgba($cDarkBrown,0.8);
-
-            justify-content: start;
+            transition: 0.2s color, 0.2s background-color;
+            &:hover {
+                color: var(--cWhite);
+                background-color: rgba($cDarkBrown,1);
+            }
+            justify-content: end;
+            //align-content: flex-end;
             padding-top: 10px;
-            padding-bottom: 10px;
             padding-left: 20px;
             padding-right: 20px;
+            padding-bottom: 10px;
+
+            flex-shrink: 0;
         }
 
         .sub-menu{

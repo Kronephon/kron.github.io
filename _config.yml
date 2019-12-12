@@ -35,18 +35,6 @@ gitlink:   https://github.com/kronephon
 linkdlink: https://www.linkedin.com/in/pedropim
 instalink: https://www.instagram.com/krone.ig
 
-
-headerSubSections:
-  - music: 
-    name: music
-    url: construction
-  - machlearning:
-    name: machine learning
-    url: construction
-  - compVision:
-    name: computer vision
-    url: construction
-
 construction: /construction
 
 cWhite: F5F7F6

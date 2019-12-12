@@ -3,13 +3,6 @@
   <nav class="main-menu">
     <a class="home-button" href="/feed">Home</a>
     <nav class="sub-menu">
-      {% for post in site.headerSubSections %}
-      <a class="item" href="{{site.baseurl}}/{{post.url}}">{{post.name}}</a>
-      {% endfor %}
-      <form class="search">
-          <input type="text" placeholder="Search..." required>
-          <input type="button" value="Search">
-      </form>
       <a class="item" href="{{site.baseurl}}/">about</a>
     </nav>
   </nav>
