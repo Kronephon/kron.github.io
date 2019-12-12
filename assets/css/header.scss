@@ -7,8 +7,6 @@ header {
     color: var(--cDarkGrey);
     font-weight: bold;
     $cDarkBrown: #{{site.cDarkBrown}};
-    background-color: rgba($cDarkBrown,0.8);
-    
     @media (orientation:landscape) and (min-width: 768px) {
         background-color: rgba(0,0,0,0);
     }
