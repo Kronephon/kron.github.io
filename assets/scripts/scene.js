@@ -99,7 +99,7 @@ gltf => onLoad( gltf, )
 );
 
 function update() {
-  rotation = 0.05;
+  rotation += 0.005;
   CAMERA.position.x = Math.sin(rotation)* 500 + center.x;
   CAMERA.position.y = 300 + center.y;
   CAMERA.position.z = Math.cos(rotation)* 500  + center.y;

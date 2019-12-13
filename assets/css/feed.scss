@@ -24,11 +24,8 @@
         @media (orientation:landscape) and (min-width: 768px) {
             border-radius: 2px;
             $cDarkBrown: #{{site.cDarkBrown}};
-            background-color: rgba($cDarkBrown, 0.8); 
+            background-color: rgba($cDarkBrown, 0.9); 
         }
-        
-        
-        
     }
 
     .ArticleFeed:last-child {
@@ -40,6 +37,7 @@
         padding-bottom: 20px;
 
         .Title {
+            text-transform: capitalize;
             font-weight: bold;
             font-size: 20px;
             line-height: 25px;
@@ -58,10 +56,16 @@
         }
 
         .Excerpt{
+            color:var(--cWhite);
             margin-top: 10px;
             font-size: 15px;
             line-height: 1.2;
             text-indent: 0px;
+
+            @media only screen and (max-device-width : 640px) {
+                font-size: 30px;
+            }
+                
         }
 
 
