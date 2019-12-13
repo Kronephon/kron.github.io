@@ -1,0 +1,28 @@
+--- 
+
+--- 
+body{
+    background-color: green;
+}
+
+.LoadingScreen{
+    background-color:palegoldenrod;
+}
+.Header{
+    background-color:khaki;
+}
+.Main{
+    background-color:rebeccapurple;
+}
+.Content{
+    background-color:red;
+}
+.SideLeft{
+    background-color:indigo;
+}
+.SideRight{
+    background-color: bisque;
+}
+.Footer{
+    background-color: turquoise;
+}

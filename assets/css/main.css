@@ -1,0 +1,49 @@
+--- 
+
+--- 
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+body,
+.Main {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+}
+
+.Content {
+	flex: 1 1 auto;
+}
+
+.SideLeft {
+	order: -1;
+}
+
+/**
+ * Smaller screens
+ */
+
+@media (min-width: 768px) {
+	/**
+	 * Body items are now side by side
+	 */
+	.Main {
+		flex-direction: row;
+	}
+
+	/**
+	 * Sidebars have a basic 260 width
+	 * and are not really flexible anymore
+	 */
+	.SideLeft, .SideRight  {
+		flex: 0 0 160px;
+	}
+}
+
+/* Definitly mobile only */
+@media only screen and (max-device-width : 640px) {
+}
