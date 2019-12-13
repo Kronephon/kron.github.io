@@ -18,61 +18,22 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Krone.dev
-email: kronephon@gmail.com
+title: Your awesome title
+email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Made this website so that you, dear user, would know a bit more about me.
+  Write an awesome description for your new site here. You can edit this
+  line in _config.yml. It will appear in your document head meta (for
+  Google search results) and in your feed.xml site description.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://krone.dev" # the base hostname & protocol for your site, e.g. http://example.com
-
-emailhandle: pedro.f.pim@gmail.com
-githubhandle: kronephon
-linkedinhandle: pedropim
-instagramhandle: krone.ig
-
-emaillink: mailto:pedro.f.pim@gmail.com
-gitlink:   https://github.com/kronephon
-linkdlink: https://www.linkedin.com/in/pedropim
-instalink: https://www.instagram.com/krone.ig
-
-construction: /construction
-
-cWhite: F5F7F6
-cPaleYellow: d8cfaf
-cDarkerYellow: e6b89c
-cDarkBrown: 282322
-cLightBrown: c46d5e
-cPaleSalmon: f56960
-cGrey: ab9fb1
-cDarkGrey: 1D171C
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: jekyllrb
+github_username:  jekyll
 
 # Build settings
-
+theme: minima
 plugins:
   - jekyll-feed
 
-assets:
-  sources:
-    - assets/fonts
-    - assets/img
-    - assets/scripts
-    - assets/stylesheets
-
-exclude:
-  - Gemfile
-  - Gemfile.lock
-  - README.md
-
-gems:
-  - jekyll-feed
-  - jekyll-assets
-exclude:
-  - Gemfile
-  - Gemfile.lock
-
-
-
-  
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
