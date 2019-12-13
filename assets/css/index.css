@@ -1,28 +1,32 @@
 --- 
 
 --- 
-body{
-    background-color: green;
+#Body{
+    
 }
 
-.LoadingScreen{
-    background-color:palegoldenrod;
-}
-.Header{
+#Header{
     background-color:khaki;
+    min-height: 300px;
 }
-.Main{
+#Main{
     background-color:rebeccapurple;
 }
-.Content{
+#Content{
     background-color:red;
 }
-.SideLeft{
+#Left{
     background-color:indigo;
 }
-.SideRight{
+#Right{
     background-color: bisque;
 }
-.Footer{
+#Footer{
     background-color: turquoise;
+}
+
+@media only screen and (max-device-width : 640px) {
+    #Header{
+        background-color:khaki;
+        min-height: 150px;
 }

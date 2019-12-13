@@ -1,0 +1,21 @@
+--- 
+
+--- 
+
+:root{
+    --black:        hsl(0, 0%, 10%);
+    --grey1:        hsl(0, 0%, 30%);
+    --grey2:        hsl(0, 0%, 50%);
+    --grey3:        hsl(0, 0%, 70%);
+    --white:        hsl(0, 0%, 90%);
+
+    --primary1:     hsl(15, 72%, 40%);
+    --primary2:     hsl(15, 72%, 50%);
+    --primary3:     hsl(15, 72%, 60%);
+    --primary4:     hsl(15, 72%, 70%);
+    --primary5:     hsl(15, 72%, 80%);
+
+    --accentRed:    rgb(255, 111, 97);
+    --accentYellow: rgb(235, 206, 149);
+    --accentGreen:  rgb(102, 0, 255);
+}

@@ -1,11 +1,13 @@
 ---
 layout: basic
 ---
-<div class='LoadingScreen'>{% include loader.html %}</div>
-<div class='Header'>{% include header.html %}</div>
-<div class='Main'>
-    <div class='Content'>{{content}}</div>
-    <div class='SideLeft'></div>
-    <div class='SideRight'></div>
+<div id='Loading'>{% include loader.html %}</div>
+<div id = 'Body'>
+    <div id='Header'>{% include header.html %}</div>
+    <div id='Main'>
+        <div id='Content'>{{content}}</div>
+        <div id='Left'></div>
+        <div id='Right'></div>
+    </div>
+    <div id='Footer'>{% include footer.html %}</div>
 </div>
-<div class='Footer'>{% include footer.html %}</div>

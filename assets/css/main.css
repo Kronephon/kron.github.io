@@ -1,49 +1,60 @@
 --- 
 
 --- 
-
-body {
+body{
     min-height: 100vh;
-    margin: 0;
     padding: 0;
+    margin: 0;
 }
-
-body,
-.Main {
+#Loading{
+    visibility: hidden;
+}
+#Body{
+    height: 100vh;
+}
+#Body,
+#Main {
 	display: flex;
 	flex: 1 1 auto;
-	flex-direction: column;
+    flex-direction: column;
 }
 
-.Content {
-	flex: 1 1 auto;
+#Content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
-.SideLeft {
+#Left {
 	order: -1;
 }
 
 /**
- * Smaller screens
+ * Smaller screens/windows
  */
 
 @media (min-width: 768px) {
 	/**
 	 * Body items are now side by side
 	 */
-	.Main {
+	#Main {
 		flex-direction: row;
-	}
+    }
+    
+    #Content{
+        width: 500px;
+    }
 
 	/**
-	 * Sidebars have a basic 260 width
+	 * Sidebars have a basic 150 width
 	 * and are not really flexible anymore
 	 */
-	.SideLeft, .SideRight  {
-		flex: 0 0 160px;
+	#Left, #Right  {
+        flex: 0.5 0 auto;
 	}
 }
 
-/* Definitly mobile only */
+/* Probably mobile only */
 @media only screen and (max-device-width : 640px) {
 }
