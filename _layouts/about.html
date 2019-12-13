@@ -10,7 +10,7 @@ description:
   <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
   <meta name="description" content="{{ page.description }}">
   <link rel="icon" type="img/ico" href="assets/img/myico.ico">
-  <link rel="stylesheet" href="css/about.css">
+  <link rel="stylesheet" href="assets/css/about.css">
 </head>
 
 <body>
@@ -43,15 +43,15 @@ description:
   </div>
 
   {% include footer.html %}
-  <script src="{{ '/assets/scripts/three.min.js' | prepend: site.baseurl }}"></script>
-  <script src="{{ '/assets/scripts/GLTFLoader.js' | prepend: site.baseurl }}"></script>
-  <script src="{{ '/assets/scripts/KrConstants.js' | prepend: site.baseurl }}"></script>
-  <script src="{{ '/assets/scripts/KrPhysics.js' | prepend: site.baseurl }}"></script>
-  <script src="{{ '/assets/scripts/KrTarget.js' | prepend: site.baseurl }}"></script>
-  <script src="{{ '/assets/scripts/KrPoint.js' | prepend: site.baseurl }}"></script>
-  <script src="{{ '/assets/scripts/KrLine.js' | prepend: site.baseurl }}"></script>
-  <script src="{{ '/assets/scripts/KrModel.js' | prepend: site.baseurl }}"></script>
-  <script src="{{ '/assets/scripts/scene.js' | prepend: site.baseurl }}"></script>
+  <script defer src="{{ '/assets/scripts/three.min.js' | prepend: site.baseurl }}"></script>
+  <script defer src="{{ '/assets/scripts/GLTFLoader.js' | prepend: site.baseurl }}"></script>
+  <script defer src="{{ '/assets/scripts/KrConstants.js' | prepend: site.baseurl }}"></script>
+  <script defer src="{{ '/assets/scripts/KrPhysics.js' | prepend: site.baseurl }}"></script>
+  <script defer src="{{ '/assets/scripts/KrTarget.js' | prepend: site.baseurl }}"></script>
+  <script defer src="{{ '/assets/scripts/KrPoint.js' | prepend: site.baseurl }}"></script>
+  <script defer src="{{ '/assets/scripts/KrLine.js' | prepend: site.baseurl }}"></script>
+  <script defer src="{{ '/assets/scripts/KrModel.js' | prepend: site.baseurl }}"></script>
+  <script defer src="{{ '/assets/scripts/scene.js' | prepend: site.baseurl }}"></script>
 </body>
 
 </html>

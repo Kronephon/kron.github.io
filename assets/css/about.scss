@@ -3,14 +3,14 @@
 
 --- 
 
-//@import 'default.css';
+@import 'constants.css';
 
-$cWhite: #{{site.cWhite}};
-$cPaleYellow: #{{site.cPaleYellow}};
-$cGrey: #{{site.cGrey}};
-$cDarkGrey: #{{site.cDarkGrey}};
-
-$BackgroundColor :$cDarkGrey;
+a {
+    text-decoration: none; 
+}
+:root{
+    background-color: var(--cWhite);
+}
 
 .centerContainer {
     position: fixed;
@@ -30,29 +30,24 @@ $BackgroundColor :$cDarkGrey;
     margin-right: auto;
     margin-top: auto;
 
-    border-radius: 55px;
 
-    background-color: rgba($cDarkGrey, 0.8); 
-    box-shadow: 0px 0px 30px 30px rgba($cDarkGrey, 0.8);
+    background-color: var(--cWhite);
+    box-shadow: 0px 0px 30px 30px  var(--cWhite);
 
     text-align: center;
-    color: $cWhite;
+    color: var(--cDarkGrey);
     font-family: myTechFont;
     font-size: 8px;
 }
 
 .centerContainer h1 {
-    //cursor: pointer;
     font-size: 24px;
-    color: $cPaleYellow;
     font-weight: normal;
     line-height: 0.3;
 }
 
 .centerContainer h2 {
-    //cursor: pointer;
     text-align: center;
-    color: $cGrey;
     margin-left: 10px;
     font-size: 10px;
     font-weight: normal;
@@ -69,7 +64,7 @@ $BackgroundColor :$cDarkGrey;
 
 .centerContainer li{
     text-align: left;
-    background-color: rgba($cGrey,0.1);
+    background-color: var(--cWhiteS);
     border-radius: 5px;
     margin: 0 0 3px 0;
     transition: 0.2s filter;
@@ -81,22 +76,22 @@ $BackgroundColor :$cDarkGrey;
 iconButton img {
     height: 30px;
     width: 30px;
-    filter: invert(0.7);
+    filter: invert(0.3);
     vertical-align: middle;
 }
 
-.backgroundCanvas {
+#backgroundCanvas {
     z-index: -1;
-    background-color: linear-gradient(red, yellow);
+    filter: invert(1);
 }
 
 @keyframes shadow-pulse
 {
   0% {
-    box-shadow: 0 0 0 0px rgba($cGrey, 0.2);
+    box-shadow: 0 0 0 0px var(--cGreyS);
   }
-  70% {
-    box-shadow: 0 0 0 15px rgba($cGrey, 0);
+  80% {
+    box-shadow: 0 0 0 2px  var(--cDarkGreyS);
   }
 }
 
@@ -112,8 +107,8 @@ iconButton img {
     width: 50px;
     
     font-family: myTechFont;
-    color: $cGrey;
-    background-color: rgba($cGrey,0.1);
+    color: var(--cDarkYellow);
+    background-color: var(--cDarkYellowS);
     
     text-transform: uppercase;
     text-align: center;
