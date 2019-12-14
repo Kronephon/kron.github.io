@@ -1,0 +1,7 @@
+---
+
+---
+title,date,excerpt,url
+{% for post in site.posts %}
+"{{post.title}}","{{post.date}}","{{post.excerpt| strip_html}}","{{post.url}}"
+{% endfor %}

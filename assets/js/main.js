@@ -7,6 +7,9 @@ function createLink(parent, icon, link){
         const linker = document.createElement('a');
         linker.href = link;
 
+        linker.rel = "external";
+        linker.target = "_blank";
+
         const image = document.createElement('img');
         image.src = icon;
 
@@ -26,4 +29,18 @@ function addLinks(input){
     }
 }
 
+function parsePostsAndBuild(e, parent){
+    console.log(e);
+}
+
 addLinks('HeaderLinks');
+
+if(queryContent){
+
+    const content = document.getElementById("Content");
+    if(content){
+        content.addEventListener('queryResult', function(e){parsePostsAndBuild(e, content)}, false);
+        queryContent("",content);
+    }
+}
+
