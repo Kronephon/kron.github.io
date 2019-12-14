@@ -1,9 +1,10 @@
 <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
 <meta name="description" content="{% if page.title %}{{ page.description }}{% else %}{{ site.title}}{% endif %}">  
 <link rel="icon" type="img/ico" href="assets/img/myico.ico">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 {% for tag in page.tags %}<meta name="tag_{{tag}}" content="{{tag}}"> 
 {% endfor %}
 {% if page.date %}<meta name="date" content="{{page.date | date: "%Y-%m-%d" }}">  {% endif %}
 {% if page.excerpt %}<meta name="excerpt" content="{{page.excerpt | strip_html | truncatewords: 100 }}">  {% endif %}
-{% for script in page.scripts %}<script src="{{script | prepend: site.baseurl}}" defer></script>{% endfor %}
-{% for css in page.css %}<link rel="stylesheet" type="text/css" href="assets/css/{{css | prepend: site.baseurl }}.css">{% endfor %}
+{% for script in page.scripts %}<script src="assets/js/{{script}}.js" defer=true></script>{% endfor %}
+{% for css in page.css %}<link rel="stylesheet" type="text/css" href="assets/css/{{css}}.css">{% endfor %}

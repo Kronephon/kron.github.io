@@ -19,3 +19,8 @@
     --accentYellow: rgb(235, 206, 149);
     --accentGreen:  rgb(102, 0, 255);
 }
+
+@font-face {
+    font-family: myTechFont;
+    src: url('/assets/fonts/eveSans.ttf');
+}
