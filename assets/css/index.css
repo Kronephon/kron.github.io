@@ -55,20 +55,11 @@
     width: 30px !important;
     height: 30px !important;
     filter: brightness(0) invert(1);
-    animation: flip-horizontal-fwd 0.4s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
-    animation-play-state: paused;
+    
+    transition: transform 0.4s;
 }
 #HeaderLinks img:hover { 
-    animation-play-state: running;
-}
-
-@keyframes flip-horizontal-fwd {
-    0% {
-        transform: translateZ(0) rotateX(0);
-    }
-    100% {
-        transform: translateZ(160px) rotateX(-180deg);
-    }
+    transform: translateZ(160px) rotateX(-180deg);
 }
 
 /* MAIN */
