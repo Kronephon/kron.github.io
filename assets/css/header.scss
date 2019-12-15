@@ -1,0 +1,59 @@
+--- 
+
+--- 
+#Header{
+    font-family: myTechFont;
+    background-color: var(--primary1);
+    max-height: 300px;
+    min-height: 300px;
+    color: var(--white);
+
+	display: flex;
+	flex: 1 1 auto;
+    flex-direction: row;
+}
+#HeaderLeft{
+    flex: 0.40 0 auto;
+    max-width: 250px;
+}
+#HeaderRight{
+    flex: 1 0 auto;
+}
+
+#HeaderMain{
+    padding-left: 10px;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 500px;
+    justify-content: flex-end;
+    padding-bottom: 70px;
+}
+
+#HeaderTitle {
+    font-size: 45px;
+} 
+#HeaderSubtitle {
+    font-size: 25px;
+}
+
+#HeaderLinks {
+    font-size: 0px;
+
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 200px;
+    padding-top: 10px;
+}
+#HeaderLinks img { 
+    width: 30px !important;
+    height: 30px !important;
+    filter: brightness(0) invert(1);
+    
+    transition: transform 0.4s;
+}
+#HeaderLinks img:hover { 
+    transform: translateZ(160px) rotateX(-180deg);
+}

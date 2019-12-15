@@ -29,27 +29,31 @@ function addLinks(input){
     }
 }
 
+function parseDate(dateString){
+
+}
+
 function insertPost(post, htmldiv){
     var article = document.createElement('div');
-    article.class = "article";
+    article.className = "article";
+    article.style.order = parseInt("" + post.year + post.month + post.day);
 
     var title = document.createElement('a');
-    title.class = "articleTitle"
+    title.className = "articleTitle"
     title.href = post.url;
     title.innerHTML = post.title;
 
     var date = document.createElement('div');
-    date.class = "articleDate"
-    date.innerHTML = post.date;
+    date.className = "articleDate"
+    date.innerHTML = post.year.toString() +"-"+ post.month.toString() + "-" + post.day.toString();
 
     var text = document.createElement('div');
-    text.class = "articleText"
+    text.className = "articleText"
     text.innerHTML = post.excerpt;
 
     article.appendChild(title);
     article.appendChild(date);
     article.appendChild(text);
-
 
     htmldiv.appendChild(article);
 }

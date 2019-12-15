@@ -1,0 +1,59 @@
+--- 
+
+--- 
+#Body{
+}
+
+#Main{
+    background-color: var(--white);
+}
+#Content{
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column-reverse;
+    padding:20px;
+}
+
+.article{
+    margin: 5px;
+}
+
+.articleTitle{
+    font-size: 20px;
+    color: var(--primary2);
+    font-weight: bold;
+    &:visited {
+        color: var(--primary4);
+    }
+}
+.articleDate{
+    color: var(--grey3);
+    font-size: 15px;
+    font-style: oblique;
+}
+.articleText{
+    padding-top: 10px;
+}
+
+#Left{
+
+}
+#Right{
+
+}
+#Footer{
+
+}
+
+/* portrait sorta */
+@media (max-width: 768px) {
+    #Content {
+        
+    }
+  }
+
+/* cellphone */
+@media only screen and (max-device-width : 640px) {
+
+
+}
