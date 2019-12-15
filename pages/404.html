@@ -8,7 +8,8 @@ css: [constants]
 scripts: []
 ---
 <style type="text/css" media="screen">
-  height, body {
+  height,
+  body {
     height: 100%;
   }
 
@@ -23,7 +24,7 @@ scripts: []
     flex-grow: 1;
   }
 
-  body{
+  body {
     padding: 0;
     margin: 0;
     font-family: 'Open Sans', sans-serif;
@@ -33,32 +34,68 @@ scripts: []
     background-color: var(--primary1);
     color: var(--white);
     text-align: center;
-}
+  }
+
   a {
     text-decoration: none;
     color: var(--white);
   }
+
   h1 {
     margin: 30px 0;
     font-size: 4em;
     line-height: 1;
     letter-spacing: -1px;
   }
-  #FooterMain{
+
+  #FooterMain {
     flex-grow: 0;
+    color: red;
   }
-  img { 
+
+  img {
     width: 30px !important;
     height: 30px !important;
     filter: brightness(0) invert(0.94);
   }
+  canvas{
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+  }
 </style>
 
 <div class="container">
+  <canvas></canvas>
   <h1>404</h1>
-
   <p><strong>Page not found :(</strong></p>
   <p>The requested page could not be found.</p>
   <a href="{{site.email.link}}"><img src="{{site.email.icon}}"></a>
 </div>
 {% include footer.html %}
+
+<script>
+  var canvas = document.querySelector('canvas');
+  var context = canvas.getContext('2d');
+
+  var size = window.innerWidth;
+  var step = 20;
+  var dpr = window.devicePixelRatio;
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  context.scale(dpr, dpr);
+
+  context.lineCap = 'square';
+  context.lineWidth = 20;
+  const boddy = document.getElementById('FooterMain');
+  context.strokeStyle = boddy.style.color;
+
+
+
+  context.moveTo(0, 0);
+  context.lineTo(200, 100);
+  context.stroke(); 
+
+</script>
