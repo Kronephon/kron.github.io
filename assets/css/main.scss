@@ -33,6 +33,10 @@
 }
 .articleText{
     padding-top: 10px;
+
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.4;
+    font-size: 18px;
 }
 
 #Left{
@@ -47,13 +51,18 @@
 
 /* portrait sorta */
 @media (max-width: 768px) {
-    #Content {
-        
-    }
+
   }
 
 /* cellphone */
 @media only screen and (max-device-width : 640px) {
-
-
+    .articleTitle{
+        font-size: 40px;
+    }
+    .articleDate{
+        font-size: 30px;
+    }
+    .articleText{
+        font-size: 36px;
+    }
 }

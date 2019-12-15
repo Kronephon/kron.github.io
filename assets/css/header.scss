@@ -57,3 +57,13 @@
 #HeaderLinks img:hover { 
     transform: translateZ(160px) rotateX(-180deg);
 }
+
+/* cellphone */
+@media only screen and (max-device-width : 640px) {
+    #HeaderLeft{
+        max-width: 0px;
+    }
+    #HeaderRight{
+        max-width: 0px;
+    }
+}
