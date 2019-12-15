@@ -78,3 +78,8 @@ if(queryContent){
     }
 }
 
+if(loader){
+    var event = new CustomEvent('loadingEnded');
+    loader.dispatchEvent(event);
+}
+

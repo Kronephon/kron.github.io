@@ -1,0 +1,25 @@
+<div id="loader"></div>
+<style type="text/css" media="screen">
+    #loader{
+        background: hsl(15, 72%, 40%);  /*special case*/
+        z-index: 999;
+        position: absolute;
+        top: 0;
+        bottom:0;
+        left:0;
+        right:0;
+        padding:0;
+        margin:0;
+        transition: visibility 0.8s, opacity 0.8s;
+
+    }
+</style>
+<script>
+    function ceaseLoading(e){
+        loader.style.visibility = "hidden";
+        loader.style.opacity = 0;
+    }
+
+    const loader = document.getElementById("loader");
+    loader.addEventListener('loadingEnded', function(e){ceaseLoading(loader)}, false);
+</script>
