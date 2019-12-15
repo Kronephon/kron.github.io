@@ -63,15 +63,19 @@
     #Header{
         max-height: 200px;
         min-height: 200px;
+        text-align: center;
     }
     #HeaderLeft{
-        max-width: 0px;
+        flex: 1 1 auto;
+        width: auto;
     }
     #HeaderRight{
-        max-width: 0px;
+        flex: 1 1 auto;
+        width: auto;
     }
     #HeaderMain{
         justify-content: flex-end;
         padding-bottom: 30px;
+        align-items: center;
     }
 }
