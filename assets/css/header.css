@@ -1,12 +1,3 @@
---- 
-
---- 
-#Body{
-    background-color: var(--white);
-}
-
-/* HEADER */
-
 #Header{
     font-family: myTechFont;
     background-color: var(--primary1);
@@ -60,35 +51,4 @@
 }
 #HeaderLinks img:hover { 
     transform: translateZ(160px) rotateX(-180deg);
-}
-
-/* MAIN */
-
-#Main{
-}
-#Content{
-    max-width: 1090px;
-}
-#Left{
-    flex: 0.25 0 auto;
-    max-width: 200px;
-}
-#Right{
-    flex: 1 0 auto;
-}
-#Footer{
-}
-@media (min-width: 768px) {
-
-}
-
-@media only screen and (max-device-width : 640px) {
-    #Header{
-        min-height: 150px;
-
-    }
-    #HeaderMain{
-        padding-bottom: 10px;
-    }
-
 }

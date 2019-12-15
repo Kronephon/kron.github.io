@@ -1,72 +1,25 @@
---- 
-
---- 
-
-body{
-    min-height: 100vh;
-    padding: 0;
-    margin: 0;
-    font-family: 'Open Sans', sans-serif;
-    line-height: 1.4;
-    font-size: 18px;
-}
-a {
-    text-decoration: none; 
-}
-
-#Loading{
-    visibility: hidden;
-}
 #Body{
-    height: 100vh;
-}
-#Body,
-#Main {
-	display: flex;
-	flex: 1 1 auto;
-    flex-direction: column;
+    background-color: var(--white);
 }
 
-#Content {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    align-items: flex-start;
+#Main{
 }
-
-#Left {
-	order: -1;
+#Content{
 }
-
-#Header{
+#Left{
 
 }
+#Right{
 
-/**
- * Smaller screens/windows
- */
+}
+#Footer{
 
+}
 @media (min-width: 768px) {
-	/**
-	 * Body items are now side by side
-	 */
-	#Main {
-		flex-direction: row;
-    }
-    
-    #Content{
-        width: 500px;
-    }
 
-	/**
-	 * Sidebars have a basic 150 width
-	 * and are not really flexible anymore
-	 */
-	#Left, #Right  {
-        flex: 0.5 0 auto;
-	}
 }
 
-/* Probably mobile only */
 @media only screen and (max-device-width : 640px) {
+
+
 }
