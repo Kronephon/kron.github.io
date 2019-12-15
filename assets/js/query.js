@@ -24,6 +24,6 @@ function queryContent(input, returnElem){ //TODO: add optional here
             };
         xhr.send();
     }else{
-
+        //TODO add specific searches here
     }
 }

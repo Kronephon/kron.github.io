@@ -50,7 +50,7 @@
 #HeaderLinks img { 
     width: 30px !important;
     height: 30px !important;
-    filter: brightness(0) invert(1);
+    filter: brightness(0) invert(0.9);
     
     transition: transform 0.4s ease;
 }
