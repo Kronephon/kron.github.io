@@ -26,6 +26,7 @@ function addLinks(input){
         createLink(links, "{{site.twitter.icon}}", "{{site.twitter.link}}");
         createLink(links, "{{site.github.icon}}", "{{site.github.link}}");
         createLink(links, "{{site.linkedin.icon}}", "{{site.linkedin.link}}");
+        createLink(links, "{{site.email.icon}}", "{{site.email.link}}");
     }
 }
 

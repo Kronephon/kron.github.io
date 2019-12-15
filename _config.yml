@@ -17,24 +17,28 @@ url: "https://krone.dev" # the base hostname & protocol for your site, e.g. http
 
 twitter: 
   name: kronetwit
-  icon: assets/img/twitter.png
+  icon: assets/img/twitterLg.png
   link: https://twitter.com/kronetwit
 github: 
   name: kronephon
-  icon: assets/img/github-sign.png
+  icon: assets/img/githubLg.png
   link: https://github.com/kronephon
 linkedin: 
   name: pedropim
-  icon: assets/img/linkedin.png
+  icon: assets/img/linkedinLg.png
   link: https://linkedin.com/pedropim
 instagram: 
   name: krone.ig
-  icon: assets/img/instagram-logo.png
+  icon: assets/img/instagramLg.png
   link: https://www.instagram.com/krone.ig/
 email: 
   name: pedro.f.pim@gmail.com
-  icon: assets/img/message-closed-envelope.png
-  link: mailto:pedro.fpimentel@gmail.com
+  icon: assets/img/emailLg.png
+  link: mailto:pedro.f.pim@gmail.com
+bitcoin: 
+  name: bitcoinaddress
+  icon: assets/img/bitcoinLg.png
+  link: bitcoinurlsomething
 
 searchIndex: /pages/searchIndex.csv
 
