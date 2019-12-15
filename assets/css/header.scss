@@ -60,10 +60,18 @@
 
 /* cellphone */
 @media only screen and (max-device-width : 640px) {
+    #Header{
+        max-height: 200px;
+        min-height: 200px;
+    }
     #HeaderLeft{
         max-width: 0px;
     }
     #HeaderRight{
         max-width: 0px;
+    }
+    #HeaderMain{
+        justify-content: flex-end;
+        padding-bottom: 30px;
     }
 }
