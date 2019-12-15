@@ -1,19 +1,56 @@
 ---
 permalink: /404.html
-layout: main
----
+layout: basic
 
+title: 404
+permalink: /404
+css: [constants]
+scripts: []
+---
 <style type="text/css" media="screen">
+  height, body {
+    height: 100%;
+  }
+
+  body {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
   .container {
-    margin: 10px auto;
-    max-width: 600px;
+    flex-grow: 1;
+  }
+
+  body{
+    padding: 0;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.4;
+    font-size: 18px;
+    font-family: myTechFont;
+    background-color: var(--primary1);
+    color: var(--white);
     text-align: center;
+}
+  a {
+    text-decoration: none;
+    color: var(--white);
   }
   h1 {
     margin: 30px 0;
     font-size: 4em;
     line-height: 1;
     letter-spacing: -1px;
+  }
+  #FooterMain{
+    flex-grow: 0;
+  }
+  img { 
+    width: 30px !important;
+    height: 30px !important;
+    filter: brightness(0) invert(0.94);
   }
 </style>
 
@@ -22,4 +59,6 @@ layout: main
 
   <p><strong>Page not found :(</strong></p>
   <p>The requested page could not be found.</p>
+  <a href="{{site.email.link}}"><img src="{{site.email.icon}}"></a>
 </div>
+{% include footer.html %}
