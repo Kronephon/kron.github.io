@@ -48,8 +48,8 @@
     padding-top: 10px;
 }
 #HeaderLinks img { 
-    width: 30px;
-    height: 30px;
+    width: 30px !important;
+    height: 30px !important;
     filter: brightness(0) invert(0.9);
     
     transition: transform 0.4s ease;
@@ -87,12 +87,10 @@
     }
     
     #HeaderLinks {
+        width: 300px;
     }
     #HeaderLinks img { 
-        width: 60px;
-        height: 60px;
-        filter: brightness(0) invert(0.9);
-        
-        transition: transform 0.4s ease;
+        width: 60px !important;
+        height: 60px !important;
     }
 }
