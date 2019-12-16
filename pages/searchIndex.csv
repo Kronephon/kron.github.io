@@ -3,5 +3,5 @@
 ---
 title,year,month,day,excerpt,url
 {% for post in site.posts %}
-"{{post.title}}","{{post.date | date: "%Y"}}","{{post.date | date: "%m"}}","{{post.date | date: "%d"}}","{{post.excerpt| strip_html | escape}}","{{post.url}}"
+"{{post.title}}","{{post.date | date: "%Y"}}","{{post.date | date: "%m"}}","{{post.date | date: "%d"}}","{{post.description| strip_html | escape}}","{{post.url}}"
 {% endfor %}

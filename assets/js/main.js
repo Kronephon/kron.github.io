@@ -30,9 +30,9 @@ function addLinks(input){
     }
 }
 
-function parseDate(dateString){
+addLinks('HeaderLinks');
 
-}
+//search query
 
 function insertPost(post, htmldiv){
     var article = document.createElement('div');
@@ -67,10 +67,7 @@ function parsePostsAndBuild(e, parent){
     }
 }
 
-addLinks('HeaderLinks');
-
 if(queryContent){
-
     const content = document.getElementById("Content");
     if(content){
         content.addEventListener('queryResult', function(e){parsePostsAndBuild(e, content)}, false);
@@ -78,8 +75,31 @@ if(queryContent){
     }
 }
 
+
+
+//dynamic background
+
+const header = document.getElementById("Header");
+if(header){
+    var canvas = document.createElement('canvas');
+    canvas.style.position = "absolute";
+    canvas.width = header.offsetWidth;
+    canvas.height = header.offsetHeight;
+    canvas.style.backgroundColor = 'var(--primary1)'; //todo: make this dynamic
+    canvas.style.zIndex = -1;
+    header.appendChild(canvas);
+
+    window.onresize = function(event) { //todo: doesn't go out of scope?
+        canvas.width = header.offsetWidth;
+        canvas.height = header.offsetHeight;
+    };
+
+    header.style.backgroundColor = '#00000000'; //make the div we wish to replace transparent, ideally a mask over
+    dynamicBackgroundInit(canvas);
+}
+
+//loader
 if(loader){
     var event = new CustomEvent('loadingEnded');
     loader.dispatchEvent(event);
 }
-

@@ -1,29 +1,21 @@
 ---
 layout: post
-title:  "Welcome to Jekyll!"
-date:   2018-11-3 17:52:13 +0100
-tags: [machine learning, dogs]
+title:  "Welcome / Roadmap"
+date:   2019-8-3
+tags: []
+description: Just wanted to welcome you to my website, which I intend to make into a platform through which I share most of my personal projects as well as helpful tips/tutorials on areas that I love. It will mostly be computer engineering/software development but it will end up reflecting most of the areas which I love to work on, be it C++ or music scale theory. Regardless, in this post I will talk a little bit about the content I intend to add from either past, present or future projects.
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 
-Jekyll requires blog post files to be named according to the following format:
+Just wanted to welcome you to my website, which I intend to be a platform through which I share most of my personal projects as well as helpful tips/tutorials. It will mostly be computer engineering stuff but it will end up reflecting most of the areas which I love to work on.
 
-`YEAR-MONTH-DAY-title.MARKUP`
+A lot of it still needs to be added but for now I'd like to just list the projects I intend to add here:
 
-Where `YEAR` is a four-digit number, `MONTH` and `DAY` are both two-digit numbers, and `MARKUP` is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+  * three.js/webgl interesting projects
+  * some convolutional neural network fun things applied to computer vision
+  * big data visualization and organization - challenges of parsing obscene amounts of data
+  * a home assistant I'm designing from scratch
+  * unreal engine goodies, modo modelling, and a game I'm working on
+  * music composing is a hobby of mine too and I'm actively trying to compose my first album
+  * this website (of course!) was a project of its own.
 
-Jekyll also offers powerful support for code snippets:
-
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
-
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+For now I'm focusing on the last of the items as without the platform I cannot really talk about the rest. So if you think these areas interest you... wait until I have rss or a mailing list set up and subscribe :) 
