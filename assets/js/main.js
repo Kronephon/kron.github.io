@@ -85,7 +85,7 @@ if(header){
     canvas.style.position = "absolute";
     canvas.width = header.offsetWidth;
     canvas.height = header.offsetHeight;
-    canvas.style.backgroundColor = 'var(--primary1)'; //todo: make this dynamic
+    canvas.style.backgroundColor = 'rgb( 175, 65, 29)'; //todo: make this dynamic
     canvas.style.zIndex = -1;
     header.appendChild(canvas);
 
@@ -95,7 +95,7 @@ if(header){
     };
 
     header.style.backgroundColor = '#00000000'; //make the div we wish to replace transparent, ideally a mask over
-    dynamicBackgroundInit(canvas);
+    physicsWallpaperInit(canvas, 'rgb(230, 230, 230)', 'rgb( 175, 65, 29)'); //todo change color here, they are not exactly the same
 }
 
 //loader

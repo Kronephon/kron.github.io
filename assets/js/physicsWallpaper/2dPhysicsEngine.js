@@ -1,14 +1,5 @@
-// simple 2d html5 interface
 "use strict";
-class Shape {
-    constructor(position, rotation, scale, drawFunction){
-        this.position = position;
-        this.rotation = rotation;
-        this.scale = scale;
-        this.draw = drawFunction;
-    }
-}
-
+//assumes external initialization of context and canvas
 class Point{
     constructor(x,y){
         this.x = x;
@@ -20,13 +11,66 @@ class Point{
     }
 }
 
-class TransMatrix{
+function drawCircle(point, radius, color){
+    ctx_pW.beginPath();
+    ctx_pW.moveTo(point.x, point.y);
+    
+    ctx_pW.arc(point.x, point.y, radius, 0, 2 * Math.PI, false);
+    ctx_pW.fillStyle = color;
+    ctx_pW.fill();
+}
+
+function drawBezier(point1, point2, intensity1, intensity2, color){
+    ctx.beginPath();
+    ctx.moveTo(188, 130);
+    ctx.bezierCurveTo(140, 10, 388, 10, 388, 170);
+    ctx.lineWidth = 10;
+
+    // line color
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+}
+
+/*
+function drawHexagon(canvas, matrix, strokeColor, fillColor) {
+    if (!canvas) {
+        return;
+    }
+    
+    var points = [new Point(0.5 ,  1),
+                  new Point(1   ,  0),
+                  new Point(0.5 , -1),
+                  new Point(-0.5, -1),
+                  new Point(-1  ,  0),
+                  new Point(-0.5,  1)
+    ];
+
+    points.forEach(point => {
+        matrix.applyMatrix(point);
+    });
+
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.lineTo(p3.x, p3.y);
+    ctx.lineTo(p4.x, p4.y);
+    ctx.lineTo(p5.x, p5.y);
+    ctx.lineTo(p6.x, p6.y);
+    ctx.lineTo(p1.x, p1.y);
+    ctx.strokeStyle = strokeColor;
+    ctx.fillStyle = fillColor;
+    ctx.stroke();
+    ctx.fill();
+    ctx.closePath(); 
+}*/
+
+/*class TransMatrix{
     /*    see https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/geometry/geo-tran.html
      *    for more info.
      *    c1 c2 c3
      *    c4 c5 c6
      *    c7 c8 c9 
-     */
+     *//*
     constructor(){
         this.c1 = 1;
         this.c2 = 0;
@@ -109,67 +153,5 @@ class TransMatrix{
     }
 }
 
-function drawHexagon(canvas, matrix, strokeColor, fillColor) {
-    if (!canvas) {
-        return;
-    }
-    
-    var points = [new Point(0.5 ,  1),
-                  new Point(1   ,  0),
-                  new Point(0.5 , -1),
-                  new Point(-0.5, -1),
-                  new Point(-1  ,  0),
-                  new Point(-0.5,  1)
-    ];
 
-    points.forEach(point => {
-        matrix.applyMatrix(point);
-    });
-
-    drawHexagonLit(canvas,points[0],points[1],points[2],points[3],points[4],points[5], "red", "green");
-}
-
-function drawHexagonLit(canvas, p1, p2, p3 ,p4 ,p5, p6, strokeColor, fillColor){ // add border cases here
-    if(!canvas){
-        return;
-    }
-    var ctx = canvas.getContext("2d");
-    if(!ctx){
-        return;
-    }
-    ctx.beginPath();
-    ctx.moveTo(p1.x, p1.y);
-    ctx.lineTo(p2.x, p2.y);
-    ctx.lineTo(p3.x, p3.y);
-    ctx.lineTo(p4.x, p4.y);
-    ctx.lineTo(p5.x, p5.y);
-    ctx.lineTo(p6.x, p6.y);
-    ctx.lineTo(p1.x, p1.y);
-    ctx.strokeStyle = strokeColor;
-    ctx.fillColor = fillColor;
-    ctx.stroke();
-    ctx.fill();
-    ctx.closePath();
-}
-
-
-function dynamicBackgroundInit(canvas){
-    if(!canvas){
-        return;
-    }
-    var worldMatrix = new TransMatrix();
-    
-    var rotate = 0;
-
-    function step(){
-        canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-        rotate += 0.3;
-        var transform = worldMatrix.copy();
-        transform = worldMatrix.translation(200,200).scale(20).rotation(rotate); // TODO this is better reflected by a matrix inside an object
-        drawHexagon(canvas, transform, "red", "green");
-        window.requestAnimationFrame(step);
-    }
-
-    window.requestAnimationFrame(step);
-}
-
+}*/
