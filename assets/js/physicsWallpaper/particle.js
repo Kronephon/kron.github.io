@@ -1,14 +1,14 @@
 "use strict";
 
 const INTENSITY_SHIFT_PW = 1;
-var PARTICLE_STEP = 5;
-var MAX_PARTICLES = 5;
-var SPAWNCHANGE_PW = 0.2;
+var PARTICLE_STEP = 10;
+var MAX_PARTICLES = 8;
+var SPAWNCHANGE_PW = 0.7;
 const ATTRACTION_PW = 0.001;
 const ATTRICTION_PW = 0.97;
-const JITTER_PW = 0.35;
+const JITTER_PW = 0.15;
 
-const INITSPEED_PW = 20;
+const INITSPEED_PW = 5;
 
 class Model_pW {
     constructor() {
@@ -32,15 +32,15 @@ class Model_pW {
             this.particles.push(new Particle_pW(
                 randomx,
                 randomy,
-                Math.random() * INITSPEED_PW,
-                Math.random() * INITSPEED_PW,
+                (Math.random() - 0.5) * INITSPEED_PW,
+                (Math.random() - 0.5) * INITSPEED_PW,
                 Math.random() * JITTER_PW,
                 Math.random() * JITTER_PW,
-                Math.random() * canvas.width,
-                Math.random() * canvas.height,
-                0.75,
+                 canvas.width/2,
+                 canvas.height/2,
+                1,
                 'white',
-                Math.random() * 50));
+                Math.random() * 50 + 10));
         }
         for (var i = 0; i < this.particles.length; ++i) {
             if (this.particles[i].life <= 0) {

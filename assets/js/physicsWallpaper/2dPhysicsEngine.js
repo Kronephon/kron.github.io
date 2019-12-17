@@ -35,11 +35,16 @@ function drawBezier(point1, point2, intensity1, intensity2, color, width){
                          
                          point2.x, 
                          point2.y);
+
+    ctx_pW.shadowBlur = 5;
+    ctx_pW.shadowColor = "white";
     ctx_pW.lineWidth = width;
 
     // line color
     ctx_pW.strokeStyle = color;
     ctx_pW.stroke();
+    ctx_pW.shadowBlur = 0;
+    ctx_pW.shadowColor = "white";
 }
 
 /*
