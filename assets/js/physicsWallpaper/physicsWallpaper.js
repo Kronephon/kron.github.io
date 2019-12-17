@@ -73,18 +73,15 @@ function physicsWallpaperInit(canvasIn, colorForeground, colorBackground){
     foreground_pW = new Color_pW(colorForeground);
     background_pW = new Color_pW(colorBackground);
 
-    //var worldMatrix = new TransMatrix();
+    var model = new Model_pW();
 
     function step(){
         //canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-        var randomx = Math.random()*canvas.width;
-        var randomy = Math.random()*canvas.height;
         var randomFade = Math.random()*0.1;
         fade_pW(randomFade, colorBackground);  
-        
 
+        model.update();
 
-        drawCircle(new Point(randomx, randomy), 1, colorForeground);
         window.requestAnimationFrame(step);
     }
 

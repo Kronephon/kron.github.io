@@ -9,6 +9,9 @@ class Point{
         this.x *= c;
         this.y *= c;
     }
+    eq(point){
+        return (this.x == point.x && this.y == point.y);
+    }
 }
 
 function drawCircle(point, radius, color){
