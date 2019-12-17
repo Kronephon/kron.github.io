@@ -1,63 +1,112 @@
 "use strict";
 
 const INTENSITY_SHIFT_PW = 1;
+var PARTICLE_STEP = 5;
+var MAX_PARTICLES = 5;
+var SPAWNCHANGE_PW = 0.2;
+const ATTRACTION_PW = 0.001;
+const ATTRICTION_PW = 0.97;
+const JITTER_PW = 0.35;
 
-class Model_pW{
-    constructor(){
+const INITSPEED_PW = 20;
+
+class Model_pW {
+    constructor() {
         this.t = 0;
         this.particles = [];
     }
-    update(){
+    update() {
         this.t++;
-        var limit = this.getNewParticles();
-        for(var i = 0;i < limit;i++){
-            var randomx = Math.random()*canvas.width;
-            var randomy = Math.random()*canvas.height;
+        var newP = this.getNewParticles();
+
+        if (newP + this.particles.length > MAX_PARTICLES) {
+            newP = this.particles.length - MAX_PARTICLES;
+        }
+
+        for (var i = 0; i < newP; i++) {
+            if (Math.random() >= SPAWNCHANGE_PW) {
+                continue;
+            }
+            var randomx = Math.random() * canvas.width;
+            var randomy = Math.random() * canvas.height;
             this.particles.push(new Particle_pW(
                 randomx,
                 randomy,
-                Math.random(),
-                Math.random(),
-                Math.random(),
-                Math.random(),
-                0,
-                0,
-                1,
-                'white'));
+                Math.random() * INITSPEED_PW,
+                Math.random() * INITSPEED_PW,
+                Math.random() * JITTER_PW,
+                Math.random() * JITTER_PW,
+                Math.random() * canvas.width,
+                Math.random() * canvas.height,
+                0.75,
+                'white',
+                Math.random() * 50));
         }
-        this.particles.forEach(particle => {
-            particle.draw();
-            
-        })
+        for (var i = 0; i < this.particles.length; ++i) {
+            if (this.particles[i].life <= 0) {
+                this.particles.splice(i, 1);
+                break;
+            }
+            this.particles[i].life--;
+            for (var j = 0; j < PARTICLE_STEP; ++j) {
+                this.particles[i].update();
+            }
+
+        }
+
     }
-    getNewParticles(){
-        //abs(cos(x) * sin(x + Pi* 0.3) * 3 *sin(x + 0.2) * tan(x + 0.4))
-        return     Math.random()*20 + 20 * Math.max(Math.sin(this.t * 0.1),0) + 
-                   20 * Math.max(Math.cos(this.t * 0.2 + 50),0) + 
-                   50 * (Math.sin(this.t * Math.random() * 0.01));
+    getNewParticles() {
+        return Math.random() * 1;
     }
 }
-class Particle_pW{
-    constructor(x, y, vx, vy, fx, fy, tx, ty, r, c){
-        this.position = new Point(x,y);
-        this.previous = new Point(x,y);
-        this.velocity = new Point(vx,vy);
-        this.force = new Point(fx,fy);
-        this.target = new Point(tx, ty);
+class Particle_pW {
+    constructor(x, y, vx, vy, fx, fy, tx, ty, r, c, l) {
+        this.position = new Point_pW(x, y);
+        this.previous = new Point_pW(x, y);
+        this.velocity = new Point_pW(vx, vy);
+        this.vprevious = new Point_pW(vx, vy);
+        this.force = new Point_pW(fx, fy);
+        this.target = new Point_pW(tx, ty);
         this.size = r;
         this.color = c;
+        this.life = l;
     }
     //draws current and previous position
-    draw(){
-        //if(this.position.eq(this.previous)){
-            console.log(this.position);
-            drawCircle(this.position, this.r, this.c);
+    draw() {
+        drawBezier(this.previous, this.position, this.vprevious, this.velocity, this.color, this.size);
+
         //}else{
 
         //}
-        
+
     }
-    update(){
+    applyForce() {
+        var fx = (this.target.x - this.position.x) * ATTRACTION_PW;
+        var fy = (this.target.y - this.position.y) * ATTRACTION_PW;
+
+        fx += (Math.random() - 0.5) * JITTER_PW;
+        fy += (Math.random() - 0.5) * JITTER_PW;
+
+        this.force.x = fx;
+        this.force.y = fy;
+
+        this.velocity.x *= ATTRICTION_PW;
+        this.velocity.y *= ATTRICTION_PW;
+
+        this.velocity.x += this.force.x;
+        this.velocity.y += this.force.y;
+
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
+    }
+    update() {
+        this.previous.x = this.position.x;
+        this.previous.y = this.position.y;
+        this.vprevious.x = this.velocity.x;
+        this.vprevious.y = this.velocity.y;
+        this.applyForce();
+        this.draw();
 
     }
 }
+

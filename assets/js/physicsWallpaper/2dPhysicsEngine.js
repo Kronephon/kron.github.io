@@ -1,6 +1,6 @@
 "use strict";
 //assumes external initialization of context and canvas
-class Point{
+class Point_pW{
     constructor(x,y){
         this.x = x;
         this.y = y;
@@ -15,6 +15,7 @@ class Point{
 }
 
 function drawCircle(point, radius, color){
+    
     ctx_pW.beginPath();
     ctx_pW.moveTo(point.x, point.y);
     
@@ -23,15 +24,22 @@ function drawCircle(point, radius, color){
     ctx_pW.fill();
 }
 
-function drawBezier(point1, point2, intensity1, intensity2, color){
-    ctx.beginPath();
-    ctx.moveTo(188, 130);
-    ctx.bezierCurveTo(140, 10, 388, 10, 388, 170);
-    ctx.lineWidth = 10;
+function drawBezier(point1, point2, intensity1, intensity2, color, width){
+    ctx_pW.beginPath();
+    ctx_pW.moveTo(point1.x, point1.y);
+    ctx_pW.bezierCurveTo(point1.x + intensity2.x, 
+                         point1.y + intensity2.y, 
+                         
+                         point2.x, 
+                         point2.y, 
+                         
+                         point2.x, 
+                         point2.y);
+    ctx_pW.lineWidth = width;
 
     // line color
-    ctx.strokeStyle = 'black';
-    ctx.stroke();
+    ctx_pW.strokeStyle = color;
+    ctx_pW.stroke();
 }
 
 /*
