@@ -1,15 +1,13 @@
 var canvas_sp, scene_sp, camera_sp, renderer_sp;
 
+window.onresize = function (event) {
+    renderer_sp.setSize(window.innerWidth, window.innerHeight);
 
-
-window.onresize = function(event) {
-    renderer_sp.setSize(window.innerWidth, window.innerHeight); 
-    
     var width = window.innerWidth;
     var height = window.innerHeight;
     camera_sp.aspect = width / height;
     camera_sp.updateProjectionMatrix();
-    renderer_sp.setSize( width, height );
+    renderer_sp.setSize(width, height);
 };
 
 
@@ -35,8 +33,9 @@ function aboutSceneInit(canvas) {
     function animate() {
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
-        requestAnimationFrame(animate);
+        backgroundStars.update();
         renderer_sp.render(scene_sp, camera_sp);
+        requestAnimationFrame(animate);
     }
     animate();
 }

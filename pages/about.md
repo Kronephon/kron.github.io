@@ -5,7 +5,7 @@ description: Contact page for Krone.dev
 permalink: /
 
 css: [constants]
-scripts: [three/three.min, three/shapeStars, three/shapeScene, about]
+scripts: [libs/three.min, shape/shapeStars, shape/shapeScene, about]
 ---
 <style>
     html, body{
