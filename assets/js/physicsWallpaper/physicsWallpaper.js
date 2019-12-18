@@ -77,7 +77,7 @@ function physicsWallpaperInit(canvasIn, colorForeground, colorBackground){
 
     function step(){
         //canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-        var randomFade = Math.random()*1;
+        var randomFade = Math.random()*2;
         fade_pW(randomFade, colorBackground);  
 
         model.update();
