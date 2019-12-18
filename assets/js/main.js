@@ -75,8 +75,6 @@ if(queryContent){
     }
 }
 
-
-
 //dynamic background
 
 const header = document.getElementById("Header");
