@@ -30,12 +30,13 @@ function aboutSceneInit(canvas) {
     camera_sp.position.z = 5;
 
     var backgroundStars = new Stars_sp();
+
+    addExperimentalCube();
     function animate() {
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
         backgroundStars.update();
         renderer_sp.render(scene_sp, camera_sp);
-
         requestAnimationFrame(animate);
     }
     animate();

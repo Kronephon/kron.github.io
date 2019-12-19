@@ -25,10 +25,11 @@ class Stars_sp{
         var shine = new Float32Array(NUMBER_OF_STARS_SP);
         var x = 3000;
         var y = 3000;
+        var z = 40;
         for(var i= 0; i<NUMBER_OF_STARS_SP*3; i = i + 3){
             vertices[i] = (Math.random() - 0.5)*x;
             vertices[i+1] = (Math.random() - 0.5)*y;
-            vertices[i+2] = ZBACK_SP;
+            vertices[i+2] = (Math.random() - 0.5)*z + ZBACK_SP;
 
             //color
             
@@ -88,12 +89,13 @@ class Stars_sp{
             uniform float time;
             attribute float shine;
             varying float vShine;
-            
+
             ` + shader.vertexShader;
             
             shader.vertexShader = shader.vertexShader.replace(
                 `gl_PointSize = size;`,
-                `float shineCalc = cos((time + shine * 5000.0)/8.0)/0.5 + 0.5;
+                `
+                float shineCalc = cos((time + shine * 5000.0)/8.0)/0.5 + 0.5;
                 gl_PointSize = size * shine * 5.0 ;
                 vShine = shineCalc;
                 `
@@ -122,6 +124,6 @@ class Stars_sp{
     }
     update(){
         this.pointsUniforms.time.value = this.clock.getElapsedTime();
-        this.starmap.rotation.z += 0.00001;
+        this.starmap.rotation.z += 0.000001;
     }
 }
