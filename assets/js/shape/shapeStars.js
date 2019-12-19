@@ -11,18 +11,18 @@ const STAR_YELLOW = new THREE.Color("rgb(255, 231, 196)");
 const STAR_ORANGE = new THREE.Color("rgb(255, 210, 142)");
 const STAR_RED = new THREE.Color("rgb(255, 198, 108)");
 
-const STAR_B = 0.05
-const STAR_W = 0.10;
-const STAR_Y = 0.25;
-const STAR_O = 0.30;
-const STAR_R = 0.30;
+const STAR_B = 0.30
+const STAR_W = 0.40;
+const STAR_Y = 0.15;
+const STAR_O = 0.10;
+const STAR_R = 0.10;
 
 class Stars_sp{
     constructor(){
         this.clock = new THREE.Clock();
         var vertices = new Float32Array(NUMBER_OF_STARS_SP * 3);
-        var starclass = new Int8Array(NUMBER_OF_STARS_SP * 3);
-        var shine = new Int8Array(NUMBER_OF_STARS_SP);
+        var starclass = new Float32Array(NUMBER_OF_STARS_SP * 3);
+        var shine = new Float32Array(NUMBER_OF_STARS_SP);
         var x = 3000;
         var y = 1000;
         for(var i= 0; i<NUMBER_OF_STARS_SP*3; i = i + 3){
@@ -57,7 +57,10 @@ class Stars_sp{
                 starclass[i+2] = STAR_BLUE.b;
             }
             //shine
-            shine[i/3] = Math.random()*100;
+            shine[i/3] = Math.random() * 0.3;
+            starclass[i] *= shine[i/3];
+            starclass[i+1] *= shine[i/3];
+            starclass[i+2] *= shine[i/3];
 
         }
         var geometry = new THREE.BufferGeometry();
@@ -84,9 +87,9 @@ class Stars_sp{
             
             shader.vertexShader = shader.vertexShader.replace(
                 `gl_PointSize = size;`,
-                `float shine = tan(time * 3.0 * PI + shine) * 0.1 + 0.5;
+                `float shineCalc = sin((time + shine * 5000.0)/5.0)/0.5 + 0.5;
                 gl_PointSize = size;
-                vShine = shine;
+                vShine = shineCalc;
                 `
             );
             shader.fragmentShader = `
@@ -95,7 +98,15 @@ class Stars_sp{
             shader.fragmentShader = shader.fragmentShader.replace(
                 `outgoingLight = diffuseColor.rgb;`,
             `
-            outgoingLight = mix(vec3(0), diffuseColor.rgb, vShine);`
+            /*if(vShine < diffuseColor.rgb[0] &&
+                vShine < diffuseColor.rgb[1] &&
+                vShine < diffuseColor.rgb[2]){*/
+                    outgoingLight = mix(vec3(0), diffuseColor.rgb, vShine);
+            /*}else{
+                outgoingLight = diffuseColor.rgb;
+            }*/
+            
+            `
             ) 
         }                                            
                                             
