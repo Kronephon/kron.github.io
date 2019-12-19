@@ -1,5 +1,5 @@
 // class responsible for background stars
-const NUMBER_OF_STARS_SP = 60000;
+const NUMBER_OF_STARS_SP = 6000000;
 const ZBACK_SP = -500;
 
 
@@ -52,12 +52,17 @@ class Stars_sp{
                 starclass[i+1] = STAR_WHITE.g;
                 starclass[i+2] = STAR_WHITE.b;
             }else {
-                starclass[i] = STAR_BLUE.r;
+                starclass[i]   = STAR_BLUE.r;
                 starclass[i+1] = STAR_BLUE.g;
                 starclass[i+2] = STAR_BLUE.b;
             }
             //shine
-            shine[i/3] = Math.random() * 0.3;
+            if(Math.random() <= 0.01){
+                shine[i/3] = Math.random() * 0.8;
+            }else{
+                shine[i/3] = Math.random() * 0.4;
+            }
+            
             starclass[i] *= shine[i/3];
             starclass[i+1] *= shine[i/3];
             starclass[i+2] *= shine[i/3];
@@ -74,7 +79,8 @@ class Stars_sp{
 
         var mat = new THREE.PointsMaterial({vertexColors: THREE.VertexColors,
                                             blending: THREE.AdditiveBlending, 
-                                            depthTest: true, transparent: true});
+                                            depthTest: true, transparent: true,
+                                            map: new THREE.TextureLoader().load("assets/js/shape/star.png")});
 
         mat.onBeforeCompile = shader => {
             shader.uniforms.time = this.pointsUniforms.time;
@@ -87,8 +93,8 @@ class Stars_sp{
             
             shader.vertexShader = shader.vertexShader.replace(
                 `gl_PointSize = size;`,
-                `float shineCalc = sin((time + shine * 5000.0)/5.0)/0.5 + 0.5;
-                gl_PointSize = size;
+                `float shineCalc = sin((time + shine * 5000.0)/1.0)/0.5 + 0.5;
+                gl_PointSize = size * shine * 5.0 ;
                 vShine = shineCalc;
                 `
             );
