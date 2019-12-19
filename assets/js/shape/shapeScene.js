@@ -35,6 +35,7 @@ function aboutSceneInit(canvas) {
         cube.rotation.y += 0.01;
         backgroundStars.update();
         renderer_sp.render(scene_sp, camera_sp);
+
         requestAnimationFrame(animate);
     }
     animate();

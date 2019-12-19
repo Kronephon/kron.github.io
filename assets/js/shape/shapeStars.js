@@ -1,5 +1,5 @@
 // class responsible for background stars
-const NUMBER_OF_STARS_SP = 600000;
+const NUMBER_OF_STARS_SP = 2200000;
 const ZBACK_SP = -500;
 
 
@@ -24,7 +24,7 @@ class Stars_sp{
         var starclass = new Float32Array(NUMBER_OF_STARS_SP * 3);
         var shine = new Float32Array(NUMBER_OF_STARS_SP);
         var x = 3000;
-        var y = 1000;
+        var y = 3000;
         for(var i= 0; i<NUMBER_OF_STARS_SP*3; i = i + 3){
             vertices[i] = (Math.random() - 0.5)*x;
             vertices[i+1] = (Math.random() - 0.5)*y;
@@ -93,7 +93,7 @@ class Stars_sp{
             
             shader.vertexShader = shader.vertexShader.replace(
                 `gl_PointSize = size;`,
-                `float shineCalc = sin((time + shine * 5000.0)/1.0)/0.5 + 0.5;
+                `float shineCalc = cos((time + shine * 5000.0)/8.0)/0.5 + 0.5;
                 gl_PointSize = size * shine * 5.0 ;
                 vShine = shineCalc;
                 `
@@ -122,5 +122,6 @@ class Stars_sp{
     }
     update(){
         this.pointsUniforms.time.value = this.clock.getElapsedTime();
+        this.starmap.rotation.z += 0.00001;
     }
 }
