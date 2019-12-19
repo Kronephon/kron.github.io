@@ -1,5 +1,5 @@
 // class responsible for background stars
-const NUMBER_OF_STARS_SP = 6000000;
+const NUMBER_OF_STARS_SP = 600000;
 const ZBACK_SP = -500;
 
 
@@ -57,10 +57,10 @@ class Stars_sp{
                 starclass[i+2] = STAR_BLUE.b;
             }
             //shine
-            if(Math.random() <= 0.01){
-                shine[i/3] = Math.random() * 0.8;
+            if(Math.random() <= 0.005){
+                shine[i/3] = Math.random() * 0.7;
             }else{
-                shine[i/3] = Math.random() * 0.4;
+                shine[i/3] = Math.random() * 0.3;
             }
             
             starclass[i] *= shine[i/3];
