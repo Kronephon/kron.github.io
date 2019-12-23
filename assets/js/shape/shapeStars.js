@@ -26,7 +26,7 @@ class Stars_sp{
         var x = 3000;
         var y = 3000;
         var z = 40;
-        for(var i= 0; i<NUMBER_OF_STARS_SP*3; i = i + 3){
+        for(var i= 0; i < NUMBER_OF_STARS_SP*3; i = i + 3){
             vertices[i] = (Math.random() - 0.5)*x;
             vertices[i+1] = (Math.random() - 0.5)*y;
             vertices[i+2] = (Math.random() - 0.5)*z + ZBACK_SP;
