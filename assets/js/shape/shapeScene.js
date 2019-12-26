@@ -4,8 +4,8 @@ function paralaxInit(){
     camera_sp.userData.target = new THREE.Vector3(0,0,0);
     camera_sp.userData.cameraLook = new THREE.Vector3(0,0,0);
     camera_sp.userData.velocity = new THREE.Vector3(0,0,0);
-    camera_sp.userData.attraction = 0.003;
-    camera_sp.userData.attriction = 0.1;
+    camera_sp.userData.attraction = 0.1; //0.001;
+    camera_sp.userData.attriction = 0.01;
     document.addEventListener('mousemove', onDocumentMouseMove, false );
 }
 function paralax(){
@@ -42,7 +42,7 @@ window.onresize = function (event) {
 function aboutSceneInit(canvas) {
 
     scene_sp = new THREE.Scene();
-    camera_sp = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera_sp.position.z = 5;
     paralaxInit();
 
@@ -63,7 +63,9 @@ function aboutSceneInit(canvas) {
     function animate() {
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
-        
+
+        camera_sp.position.y += 0.003;
+
         backgroundStars.update();
         nebula.update();
 
