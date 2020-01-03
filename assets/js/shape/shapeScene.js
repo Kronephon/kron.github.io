@@ -4,7 +4,7 @@ function paralaxInit(){
     camera_sp.userData.target = new THREE.Vector3(0,0,0);
     camera_sp.userData.cameraLook = new THREE.Vector3(0,0,0);
     camera_sp.userData.velocity = new THREE.Vector3(0,0,0);
-    camera_sp.userData.attraction = 0.1; //0.001;
+    camera_sp.userData.attraction = 0.001;
     camera_sp.userData.attriction = 0.01;
     document.addEventListener('mousemove', onDocumentMouseMove, false );
 }
@@ -50,25 +50,22 @@ function aboutSceneInit(canvas) {
     renderer_sp.setSize(window.innerWidth, window.innerHeight); // change this for smaller resolutions (setSize(window.innerWidth/2, window.innerHeight/2, false) )    
     document.body.appendChild(renderer_sp.domElement);
 
-    var geometry = new THREE.BoxGeometry(1, 1, 1);
-    var material = new THREE.MeshBasicMaterial({
-        color: 0x00ff00
-    });
-    var cube = new THREE.Mesh(geometry, material);
-    scene_sp.add(cube);
-
     var backgroundStars = new Stars_sp();
     var nebula = new Nebula_sp();
 
+    geometry = new THREE.IcosahedronBufferGeometry(1.5, 5);
+    material =  new THREE.MeshNormalMaterial({
+      transparent: true
+    })
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    scene_sp.add(this.mesh);
+    mesh.position.z = -1.0;
+    mesh.position.x = 1.0;
+    mesh.material.opacity =0.5;
+
     function animate() {
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-
-        camera_sp.position.y += 0.003;
-
         backgroundStars.update();
         nebula.update();
-
         paralax();
 
         renderer_sp.render(scene_sp, camera_sp);

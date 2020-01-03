@@ -125,6 +125,6 @@ class Stars_sp{
     }
     update(){
         this.pointsUniforms.time.value = this.clock.getElapsedTime();
-        this.starmap.rotation.z += 0.000001;
+        this.starmap.rotation.z += 0.000003;
     }
 }
