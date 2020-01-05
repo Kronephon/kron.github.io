@@ -1,5 +1,5 @@
-class Nebula_sp{
-  constructor(){
+class MainStar_sp{
+  constructor(starVertexShader, starFragmentShader){
     this.clock = new THREE.Clock();
 
     this.uniforms = {
@@ -13,8 +13,8 @@ class Nebula_sp{
     this.geometry = new THREE.IcosahedronBufferGeometry(1.5, 4);
     this.material =  new THREE.ShaderMaterial({
       uniforms: this.uniforms,
-      fragmentShader: this.fragmentShader(),
-      vertexShader: this.vertexShader(),
+      fragmentShader: starFragmentShader,
+      vertexShader: starVertexShader,
       transparent: true
     })
 
@@ -34,37 +34,11 @@ class Nebula_sp{
     //this.uniforms.cameraPosition.value = camera_sp.position;
   }
 
-  vertexShader() {
-    return `
-  varying vec3 vertexPos; 
-  varying float angle;
 
-  void main() {
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    vec4 center2 = projectionMatrix * modelViewMatrix * vec4(0.0, 0.0, 0.0, 1.0);
-    vec3 NinView  = normalize(normalMatrix * normal);
-    
-    vec4 posInView = modelViewMatrix * vec4(position, 1.0);
-    posInView /= posInView[3];
-    vec3 VinView = normalize(-posInView.xyz); 
-    angle = dot(NinView , VinView);
-  }
-  `
-  }
   
   fragmentShader() {
     return `
 
-  varying float angle;
-  
-  void main() {
-    if(angle <= 0.50){
-      gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
-    }else{
-      gl_FragColor = vec4(angle, angle, angle, 1.0);
-    }
-    
-  }
   `
   }
 }
