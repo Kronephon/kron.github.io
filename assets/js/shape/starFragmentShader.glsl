@@ -156,6 +156,6 @@ vec4 getDiffuseColor(vec2 coord, float offset){
 void main() {
 
     vec4 gradient;
-    float a = snoise(vec4(UV,0.0,0.0), gradient);
+    float a = snoise(vec4(UV*50.0,0.0,time * 0.5), gradient);
     gl_FragColor = vec4(gradient.x,gradient.y,gradient.z,1.0);   
 }
