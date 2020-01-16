@@ -13,5 +13,4 @@ void main() {
   posInView /= posInView[3];
   vec3 VinView = normalize(-posInView.xyz); 
   angle = dot(NinView , VinView);
-  time;
 }

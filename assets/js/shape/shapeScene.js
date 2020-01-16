@@ -41,8 +41,13 @@ window.onresize = function (event) {
 
 var starFragmentShader;
 var starVertexShader;
+var volVertexShader;
+var volFragShader;
 function aboutSceneInit(canvas){
-    loadFiles(['assets/js/shape/starFragmentShader.glsl', 'assets/js/shape/starVertexShader.glsl'], 
+    loadFiles(['assets/js/shape/starFragmentShader.glsl', 
+               'assets/js/shape/starVertexShader.glsl',
+               'assets/js/shape/volVertexShader.glsl',
+               'assets/js/shape/volFragShader.glsl'], 
     function callback(result){
         starFragmentShader = result[0];
         starVertexShader = result[1];
@@ -65,22 +70,13 @@ function postloadInit(canvas) {
 
     var backgroundStars = new Stars_sp();
     var mainStar = new MainStar_sp(starVertexShader, starFragmentShader);
-
-    geometry = new THREE.IcosahedronBufferGeometry(1.5, 5);
-    material =  new THREE.MeshNormalMaterial({
-      transparent: true
-    })
-    this.mesh = new THREE.Mesh(this.geometry, this.material);
-    scene_sp.add(this.mesh);
-    mesh.position.z = -1.0;
-    mesh.position.x = 1.0;
-    mesh.material.opacity =0.5;
+    var volumetricNebulaCenterPiece = new VolumetricNebula_sp(volVertexShader, volFragShader);
 
     function animate() {
         backgroundStars.update();
         mainStar.update();
+        volumetricNebulaCenterPiece.update();
         paralax();
-
         renderer_sp.render(scene_sp, camera_sp);
         requestAnimationFrame(animate);
     }
