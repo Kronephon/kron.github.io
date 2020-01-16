@@ -1,7 +1,6 @@
 class VolumetricNebula_sp {
     constructor(vertexShader, fragmentShader) {
         this.clock = new THREE.Clock();
-
         this.uniforms = {
             time: {
                 type: 'float',
@@ -10,12 +9,12 @@ class VolumetricNebula_sp {
         }
 
         //since this is to generate a volume, a cube is a fast way to describe the bounding box volume
-        this.geometry = new THREE.BoxBufferGeometry(4.0, 4.0, 3.0); // width, height, depth
+        this.geometry = new THREE.BoxBufferGeometry(4.0, 4.0, 4.0); // width, height, depth
 
         this.material = new THREE.ShaderMaterial({
             uniforms: this.uniforms,
-            fragmentShader: starFragmentShader,
-            vertexShader: starVertexShader,
+            fragmentShader: fragmentShader,
+            vertexShader: vertexShader,
             transparent: true
         })
 
@@ -25,6 +24,8 @@ class VolumetricNebula_sp {
     }
     update() {
         this.uniforms.time.value = this.clock.getElapsedTime();
-        this.uniforms.center = this.mesh.position;
+        this.mesh.rotation.x += 0.01;
+        this.mesh.rotation.y += 0.01;
+        this.mesh.rotation.z += 0.01;
     }
 }

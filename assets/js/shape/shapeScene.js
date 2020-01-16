@@ -51,6 +51,8 @@ function aboutSceneInit(canvas){
     function callback(result){
         starFragmentShader = result[0];
         starVertexShader = result[1];
+        volVertexShader = result[2];
+        volFragShader = result[3];
         postloadInit(canvas);
     },
     function errorCallback(){
