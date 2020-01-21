@@ -29,6 +29,10 @@ class VolumetricNebula_sp {
             minZ: {
                 type: 'float',
                 value: -2.0
+            },
+            lightCoord: {
+                type: 'v3',
+                value: [0,0,0]
             }
 
         }

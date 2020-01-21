@@ -6,8 +6,10 @@ uniform float maxZ;
 uniform float minX;
 uniform float minY;
 uniform float minZ;
+
+uniform vec3 lightCoord;
+
 varying vec3 worldPosition;
-varying vec3 viewDirection;
 
 ////
 //	Simplex 3D Noise 
@@ -17,7 +19,7 @@ vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
 
 float snoise(vec3 v){ 
-    const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
+    const vec2  C = vec2(1.0/6.0, 1.0/3.0);
     const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
 
 // First corner
@@ -85,55 +87,73 @@ float snoise(vec3 v){
                                 dot(p2,x2), dot(p3,x3) ) );
 }
 
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+mat4 rotationMatrix(vec3 axis, float angle)
+{
+    axis = normalize(axis);
+    float s = sin(angle);
+    float c = cos(angle);
+    float oc = 1.0 - c;
+    
+    return mat4(oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,  0.0,
+                oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,  0.0,
+                oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c,           0.0,
+                0.0,                                0.0,                                0.0,                                1.0);
+}
+
 ////
 
 vec4 localDensitySample (vec3 p)
 {
-            float local = 0.05*snoise(p * 5.0); // pow(distance(vec3(0.0,0.0,0.0), p),2.0);
-        clamp(local, 0.0, 1.0);
-        
-                float area = 1.0/pow(distance(vec3(0.0,0.0,0.0), p),2.0);
-        if(area > 0.5){
-        return vec4(0.01,0.01,0.01,local);
-        }else{
-        return vec4(0.00,0.00,0.00,0.0);
-        }
-        
-        
+    float local = (snoise(p * 20.0) + 1.0)/2.0; // pow(distance(vec3(0.0,0.0,0.0), p),2.0);
+    local = clamp(local, 0.0, 1.0);
+    
+    float sphere = 1.0/pow(distance(vec3(0.0,0.0,0.0), p),2.0);
+    float area = (snoise(p) + 1.0)/2.0;
+    area = clamp(area, 0.0, 1.0);
+    if(sphere < 0.5 && sphere > 0.2 && area > 0.6){
+        return 0.007*vec4(local,local,local,local);
+    }else{
+        return vec4(0.0,0.0,0.0,0.0);
+    } 
 }
 
 #define STEP_SIZE 0.005
 
-vec4 raymarchHit (vec3 in_position, vec3 direction)
+vec4 volumetricRayCast (vec3 in_position, vec3 direction, vec3 lightCoord)
 {
-    vec4 sample = vec4(0 , 0 , 0 , 0);
+    vec4 sample = vec4(0 , 0 , 0 , 0.0);
+    mat4 rotm = rotationMatrix(vec3(0.0,1.0,0.0), time * 0.02);
+
     for (int i = 0; i < 1000; i++) // change this to smart book lookup
     {
-        vec4 local = localDensitySample(in_position);
-        
-        if(local[3] > 0.00 ){
-        sample += local;
-        }
-        
-        if ( sample.w > 1.0 ){
-        clamp(sample, 0.0, 1.0);
-            break; //TODO normalization here?
-        }
-        in_position += direction * STEP_SIZE;
         if(in_position.x > maxX || in_position.x < minX ){
-        break;
+            break;
         }
         if(in_position.y > maxY || in_position.y < minY ){
-        break;
+            break;
         }
         if(in_position.z > maxZ || in_position.z < minZ ){
-        break;
+            break;
         }
+        if(sample[3] > 1.0){
+            break;
+        }
+        vec4 local = localDensitySample(vec3(vec4(in_position,0.0) * rotm));
+        sample += local;
+        //vec4 localLight = localDensitySample(in_position, lightCoord);
+
+        in_position += direction * STEP_SIZE;
     }
+
     return sample;
 }
 
 void main() {
-    gl_FragColor = raymarchHit(worldPosition, viewDirection); 
+    
+    gl_FragColor = volumetricRayCast( worldPosition, normalize(worldPosition - cameraPosition), lightCoord); 
 
 }
