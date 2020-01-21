@@ -108,13 +108,13 @@ mat4 rotationMatrix(vec3 axis, float angle)
 
 vec4 localDensitySample (vec3 p)
 {
-    float local = (snoise(p * 20.0) + 1.0)/2.0; // pow(distance(vec3(0.0,0.0,0.0), p),2.0);
+    float local = rand(vec2(p[0],p[1])* 50.0 + 25.0); // pow(distance(vec3(0.0,0.0,0.0), p),2.0);
     local = clamp(local, 0.0, 1.0);
     
     float sphere = 1.0/pow(distance(vec3(0.0,0.0,0.0), p),2.0);
     float area = (snoise(p) + 1.0)/2.0;
     area = clamp(area, 0.0, 1.0);
-    if(sphere < 0.5 && sphere > 0.2 && area > 0.6){
+    if(sphere < 0.5 && sphere > 0.2 && area > 0.8){
         return 0.007*vec4(local,local,local,local);
     }else{
         return vec4(0.0,0.0,0.0,0.0);
@@ -126,7 +126,7 @@ vec4 localDensitySample (vec3 p)
 vec4 volumetricRayCast (vec3 in_position, vec3 direction, vec3 lightCoord)
 {
     vec4 sample = vec4(0 , 0 , 0 , 0.0);
-    mat4 rotm = rotationMatrix(vec3(0.0,1.0,0.0), time * 0.02);
+    mat4 rotm = rotationMatrix(vec3(0.0,1.0,0.0), time * 0.4);
 
     for (int i = 0; i < 1000; i++) // change this to smart book lookup
     {
