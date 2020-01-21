@@ -5,11 +5,35 @@ class VolumetricNebula_sp {
             time: {
                 type: 'float',
                 value: 2.0
+            },
+            maxX: {
+                type: 'float',
+                value: 2.0
+            },
+            maxY: {
+                type: 'float',
+                value: 2.0
+            },  
+            maxZ: {
+                type: 'float',
+                value: 2.0
+            },
+            minX: {
+                type: 'float',
+                value: -2.0
+            },
+            minY: {
+                type: 'float',
+                value: -2.0
+            },
+            minZ: {
+                type: 'float',
+                value: -2.0
             }
+
         }
 
-        //since this is to generate a volume, a cube is a fast way to describe the bounding box volume
-        this.geometry = new THREE.BoxBufferGeometry(4.0, 4.0, 4.0); // width, height, depth
+        this.geometry = new THREE.BoxBufferGeometry(4.0, 4.0, 4.0, 20, 20, 20); // width, height, depth
 
         this.material = new THREE.ShaderMaterial({
             uniforms: this.uniforms,
@@ -24,8 +48,8 @@ class VolumetricNebula_sp {
     }
     update() {
         this.uniforms.time.value = this.clock.getElapsedTime();
-        this.mesh.rotation.x += 0.01;
-        this.mesh.rotation.y += 0.01;
-        this.mesh.rotation.z += 0.01;
+        //this.mesh.rotation.x += 0.01;
+        //this.mesh.rotation.y += 0.01;
+        //this.mesh.rotation.z += 0.01;
     }
 }
