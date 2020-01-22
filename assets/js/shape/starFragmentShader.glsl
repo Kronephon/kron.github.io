@@ -24,11 +24,16 @@ varying vec3 worldPosition;
 
 vec4 densityProbe(vec3 in_position){
     if(distance(in_position , meshPosition) <= starRadius){
-        return vec4(starEdgeColor, 0.1);
+        return vec4(starEdgeColor, 0.08);
     }else{
         return vec4(0.0,0.0,0.0,0.0);
     }
 
+}
+	
+float sphereDistance (vec3 p)
+{
+    return distance(p,meshPosition) - starRadius;
 }
 
 vec4 volumetricRayCast (vec3 in_position, vec3 direction)
@@ -54,8 +59,12 @@ vec4 volumetricRayCast (vec3 in_position, vec3 direction)
         //vec4 local = localDensitySample(vec3(vec4(in_position,0.0) * rotm));
         sample += local;
         //vec4 localLight = localDensitySample(in_position, lightCoord);
-
-        position += direction * STEP_SIZE;
+        float distance = sphereDistance(position);
+        if(distance > STEP_SIZE){
+            position += distance * direction;
+        }else{
+            position += direction * STEP_SIZE;
+        }
     }
 
     return sample;
