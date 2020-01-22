@@ -92,7 +92,7 @@ float snoise(vec3 v){
 //}
 
 float rand(vec2 co){
-    return 1.0;;
+    return 1.0;
 }
 
 mat4 rotationMatrix(vec3 axis, float angle)

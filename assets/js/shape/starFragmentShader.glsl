@@ -20,33 +20,49 @@ uniform vec3 meshPosition;
 varying vec3 worldPosition;
 
 
-float sphereSDF(vec3 p) {
-    return length(p) - 1.0;
-}
+#define STEP_SIZE 0.01
 
-#define MAX_MARCHING_STEPS 100
-#define EPSILON 0.002
-
-float raymarch(vec3 in_position, vec3 in_direction){
-    float depth = in_position;
-    for (int i = 0; i < MAX_MARCHING_STEPS; i++) {
-        float dist = sceneSDF(eye + depth * viewRayDirection);
-        if (dist < EPSILON) {
-            // We're inside the scene surface!
-            return depth;
-        }
-        // Move along the view ray
-        depth += dist;
-
-        if (depth >= end) {
-            // Gone too far; give up
-            return end;
-        }
+vec4 densityProbe(vec3 in_position){
+    if(distance(in_position , meshPosition) <= starRadius){
+        return vec4(starEdgeColor, 0.1);
+    }else{
+        return vec4(0.0,0.0,0.0,0.0);
     }
-    return end;
+
 }
 
-void main()
+vec4 volumetricRayCast (vec3 in_position, vec3 direction)
 {
-    gl_FragColor = gl_FragColor = raymarch( worldPosition, normalize(worldPosition - cameraPosition)); 
+    vec4 sample = vec4(0 , 0 , 0 , 0.0);
+    vec3 position = in_position;
+
+    for (int i = 0; i < 1000; i++) // change this to smart book lookup
+    {
+        if(position.x > maxX || position.x < minX ){
+            break;
+        }
+        if(position.y > maxY || position.y < minY ){
+            break;
+        }
+        if(position.z > maxZ || position.z < minZ ){
+            break;
+        }
+        if(sample[3] > 1.0){
+            break;
+        }
+        vec4 local = densityProbe(position);
+        //vec4 local = localDensitySample(vec3(vec4(in_position,0.0) * rotm));
+        sample += local;
+        //vec4 localLight = localDensitySample(in_position, lightCoord);
+
+        position += direction * STEP_SIZE;
+    }
+
+    return sample;
+}
+
+void main() {
+    
+    gl_FragColor = volumetricRayCast( worldPosition, normalize(worldPosition - cameraPosition)); 
+
 }

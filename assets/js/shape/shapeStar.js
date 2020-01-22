@@ -13,11 +13,11 @@ class MainStar_sp{
       maxY: {type: 'float', value: this.geometry.boundingBox.max.y},
       maxZ: {type: 'float', value: this.geometry.boundingBox.max.z},
 
-      starRadius: {type: 'float', value: 0.4},
+      starRadius: {type: 'float', value: 0.07},
 
       starColor: {type: 'vec3', value: new THREE.Vector3(0.9,0.7,0.9)},
 
-      starEdgeColor: {type: 'vec3', value: new THREE.Vector3(0.8,0.6,1.0)},
+      starEdgeColor: {type: 'vec3', value: new THREE.Vector3(0.2,0.6,1.0)},
 
       starEmission: {type: 'vec3', value: new THREE.Vector3(0.8,0.6,1.0)},
 
