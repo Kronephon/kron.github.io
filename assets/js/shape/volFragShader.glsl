@@ -87,8 +87,12 @@ float snoise(vec3 v){
                                 dot(p2,x2), dot(p3,x3) ) );
 }
 
+//float rand(vec2 co){
+//    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+//}
+
 float rand(vec2 co){
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+    return 1.0;;
 }
 
 mat4 rotationMatrix(vec3 axis, float angle)
@@ -108,17 +112,17 @@ mat4 rotationMatrix(vec3 axis, float angle)
 
 vec4 localDensitySample (vec3 p)
 {
-    float local = rand(vec2(p[0],p[1])* 50.0 + 25.0); // pow(distance(vec3(0.0,0.0,0.0), p),2.0);
+    float local = 1.0; //rand(vec2(p[0],p[1]) + 25.0); // pow(distance(vec3(0.0,0.0,0.0), p),2.0);
     local = clamp(local, 0.0, 1.0);
     
     float sphere = 1.0/pow(distance(vec3(0.0,0.0,0.0), p),2.0);
     float area = (snoise(p) + 1.0)/2.0;
     area = clamp(area, 0.0, 1.0);
-    if(sphere < 0.5 && sphere > 0.2 && area > 0.8){
-        return 0.007*vec4(local,local,local,local);
-    }else{
+    //if(sphere < 0.5 && sphere > 0.2 && area > 0.8){
+        //return 0.07*vec4(local,local,local,local);
+    //}else{
         return vec4(0.0,0.0,0.0,0.0);
-    } 
+    //} 
 }
 
 #define STEP_SIZE 0.005

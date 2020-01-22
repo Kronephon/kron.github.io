@@ -71,12 +71,12 @@ function postloadInit(canvas) {
     document.body.appendChild(renderer_sp.domElement);
 
     var backgroundStars = new Stars_sp();
-    //var mainStar = new MainStar_sp(starVertexShader, starFragmentShader);
+    var mainStar = new MainStar_sp(starVertexShader, starFragmentShader);
     var volumetricNebulaCenterPiece = new VolumetricNebula_sp(volVertexShader, volFragShader);
 
     function animate() {
         backgroundStars.update();
-        //mainStar.update();
+        mainStar.update();
         volumetricNebulaCenterPiece.update();
         paralax();
         renderer_sp.render(scene_sp, camera_sp);

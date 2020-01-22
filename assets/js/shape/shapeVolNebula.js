@@ -4,31 +4,31 @@ class VolumetricNebula_sp {
         this.uniforms = {
             time: {
                 type: 'float',
-                value: 2.0
+                value: 2.25
             },
             maxX: {
                 type: 'float',
-                value: 2.0
+                value: 2.25
             },
             maxY: {
                 type: 'float',
-                value: 2.0
+                value: 2.25
             },  
             maxZ: {
                 type: 'float',
-                value: 2.0
+                value: 2.25
             },
             minX: {
                 type: 'float',
-                value: -2.0
+                value: -2.25
             },
             minY: {
                 type: 'float',
-                value: -2.0
+                value: -2.25
             },
             minZ: {
                 type: 'float',
-                value: -2.0
+                value: -2.25
             },
             lightCoord: {
                 type: 'v3',
@@ -37,7 +37,7 @@ class VolumetricNebula_sp {
 
         }
 
-        this.geometry = new THREE.BoxBufferGeometry(4.0, 4.0, 4.0, 20, 20, 20); // width, height, depth
+        this.geometry = new THREE.BoxBufferGeometry(4.5, 4.5, 4.5, 1, 1, 1); // width, height, depth
 
         this.material = new THREE.ShaderMaterial({
             uniforms: this.uniforms,
@@ -48,7 +48,6 @@ class VolumetricNebula_sp {
 
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         scene_sp.add(this.mesh);
-        console.log(this.mesh);
     }
     update() {
         this.uniforms.time.value = this.clock.getElapsedTime();
