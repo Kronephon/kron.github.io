@@ -72,6 +72,9 @@ vec4 volumetricRayCast (vec3 in_position, vec3 direction)
 
 void main() {
     
+    vec2 uv = gl_FragCoord.xy; // gl_Viewport.xy;
+    //vec3 color = pow(texture(iChannel0, uv).rgb * colorRange, vec3(2.2));
+
     gl_FragColor = volumetricRayCast( worldPosition, normalize(worldPosition - cameraPosition)); 
 
 }

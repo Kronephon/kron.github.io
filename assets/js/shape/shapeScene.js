@@ -70,6 +70,10 @@ function postloadInit(canvas) {
     renderer_sp.setSize(window.innerWidth, window.innerHeight); // change this for smaller resolutions (setSize(window.innerWidth/2, window.innerHeight/2, false) )    
     document.body.appendChild(renderer_sp.domElement);
 
+    var composer_sp = new THREE.EffectComposer(renderer_sp);
+    var renderPass_sp = new RenderPass(scene_sp, camera_sp);
+    composer_sp.addPass(renderPass_sp);
+
     var backgroundStars = new Stars_sp();
     var mainStar = new MainStar_sp(starVertexShader, starFragmentShader);
     var volumetricNebulaCenterPiece = new VolumetricNebula_sp(volVertexShader, volFragShader);
@@ -79,7 +83,8 @@ function postloadInit(canvas) {
         mainStar.update();
         volumetricNebulaCenterPiece.update();
         paralax();
-        renderer_sp.render(scene_sp, camera_sp);
+        //renderer_sp.render(scene_sp, camera_sp);
+        composer_sp.render();
         requestAnimationFrame(animate);
     }
     animate();
