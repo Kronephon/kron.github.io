@@ -1,7 +1,8 @@
 class postProcessingShader_sp{
     constructor(vertexShader, fragmentShader){
         this.uniforms = {
-            time:   {type: 'float', value: 2.0}
+            tDiffuse:   {type: 'float', value: null },
+            amount:     {type: 'float', value: 1.0 }      
         };
 
         this.vertexShader = vertexShader;
