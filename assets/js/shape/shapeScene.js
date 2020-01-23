@@ -43,16 +43,22 @@ var starFragmentShader;
 var starVertexShader;
 var volVertexShader;
 var volFragShader;
+var postProcessingVertex;
+var postProcessingFragment;
 function aboutSceneInit(canvas){
     loadFiles(['assets/js/shape/starFragmentShader.glsl', 
                'assets/js/shape/starVertexShader.glsl',
                'assets/js/shape/volVertexShader.glsl',
-               'assets/js/shape/volFragShader.glsl'], 
+               'assets/js/shape/volFragShader.glsl',
+               'assets/js/shape/postProcessingVertex.glsl',
+               'assets/js/shape/postProcessingFragment.glsl'],
     function callback(result){
         starFragmentShader = result[0];
         starVertexShader = result[1];
         volVertexShader = result[2];
         volFragShader = result[3];
+        postProcessingVertex = result[4];
+        postProcessingFragment = result[5];
         postloadInit(canvas);
     },
     function errorCallback(){
@@ -73,6 +79,12 @@ function postloadInit(canvas) {
     var composer_sp = new THREE.EffectComposer(renderer_sp);
     var renderPass_sp = new RenderPass(scene_sp, camera_sp);
     composer_sp.addPass(renderPass_sp);
+
+    var shaderPass = new THREE.ShaderPass(new postProcessingShader_sp(postProcessingVertex, postProcessingFragment));
+    composer_sp.addPass(shaderPass);
+
+    //var secondPass = new THREE.ShaderPass();
+    //composer.addPass(shaderPass);
 
     var backgroundStars = new Stars_sp();
     var mainStar = new MainStar_sp(starVertexShader, starFragmentShader);
