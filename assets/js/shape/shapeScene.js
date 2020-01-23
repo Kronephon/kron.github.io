@@ -1,4 +1,4 @@
-var canvas_sp, scene_sp, camera_sp, renderer_sp;
+var canvas_sp, scene_sp, camera_sp, renderer_sp, renderPass_sp, shaderPass_sp, composer_sp;
 
 function paralaxInit(){
     camera_sp.userData.target = new THREE.Vector3(0,0,0);
@@ -37,6 +37,9 @@ window.onresize = function (event) {
     camera_sp.aspect = width / height;
     camera_sp.updateProjectionMatrix();
     renderer_sp.setSize(width, height);
+    renderPass_sp.setSize(width, height);
+    shaderPass_sp.setSize(width, height);
+    composer_sp.setSize(width, height);
 };
 
 var starFragmentShader;
@@ -76,12 +79,12 @@ function postloadInit(canvas) {
     renderer_sp.setSize(window.innerWidth, window.innerHeight); // change this for smaller resolutions (setSize(window.innerWidth/2, window.innerHeight/2, false) )    
     document.body.appendChild(renderer_sp.domElement);
 
-    var composer_sp = new THREE.EffectComposer(renderer_sp);
-    var renderPass_sp = new RenderPass(scene_sp, camera_sp);
+    composer_sp = new THREE.EffectComposer(renderer_sp);
+    renderPass_sp = new RenderPass(scene_sp, camera_sp);
     composer_sp.addPass(renderPass_sp);
 
-    var shaderPass = new THREE.ShaderPass(new postProcessingShader_sp(postProcessingVertex, postProcessingFragment));
-    composer_sp.addPass(shaderPass);
+    shaderPass_sp = new THREE.ShaderPass(new postProcessingShader_sp(postProcessingVertex, postProcessingFragment));
+    composer_sp.addPass(shaderPass_sp);
 
     //var secondPass = new THREE.ShaderPass();
     //composer.addPass(shaderPass);
