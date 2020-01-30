@@ -10,11 +10,11 @@ if(!canvas){
 var statueVertexShader, statueFragmentShader;
 
 function loadResourcesAndStart(canvas){
-    loadFiles(['assets/js/aboutBackground/statueVertexShader.glsl', 'assets/js/aboutBackground/statueFragmentShader.glsl'], 
+    loadFiles(['assets/js/aboutBackground/titaniaVertexShader.glsl', 'assets/js/aboutBackground/titaniaFragmentShader.glsl'], 
     function callback(result){
         statueVertexShader = result[0];
         statueFragmentShader = result[1]
-        aboutSceneInit(canvas);
+        aboutScene([statueVertexShader, statueFragmentShader]);
     },
     function errorCallback(){
         throw ("Error in loading pre requisites.");
