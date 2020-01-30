@@ -39,21 +39,7 @@ window.onresize = function (event) {
     renderer_sp.setSize(width, height);
 };
 
-var starFragmentShader;
-var starVertexShader;
-function aboutSceneInit(canvas){
-    loadFiles(['assets/js/shape/starFragmentShader.glsl', 'assets/js/shape/starVertexShader.glsl'], 
-    function callback(result){
-        starFragmentShader = result[0];
-        starVertexShader = result[1];
-        postloadInit(canvas);
-    },
-    function errorCallback(){
-        console.log("Error in load pre requisites.");
-    });
-}
-
-function postloadInit(canvas) {
+function aboutSceneInit(canvas) {
     scene_sp = new THREE.Scene();
     camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera_sp.position.z = 5;
@@ -63,8 +49,6 @@ function postloadInit(canvas) {
     renderer_sp.setSize(window.innerWidth, window.innerHeight); // change this for smaller resolutions (setSize(window.innerWidth/2, window.innerHeight/2, false) )    
     document.body.appendChild(renderer_sp.domElement);
 
-    var backgroundStars = new Stars_sp();
-    var mainStar = new MainStar_sp(starVertexShader, starFragmentShader);
 
     geometry = new THREE.IcosahedronBufferGeometry(1.5, 5);
     material =  new THREE.MeshNormalMaterial({
@@ -77,8 +61,6 @@ function postloadInit(canvas) {
     mesh.material.opacity =0.5;
 
     function animate() {
-        backgroundStars.update();
-        mainStar.update();
         paralax();
 
         renderer_sp.render(scene_sp, camera_sp);
