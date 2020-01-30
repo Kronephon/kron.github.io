@@ -125,20 +125,20 @@ vec3 GetBloom(vec2 coord)
     sum += texture2D(tDiffuse, vec2(texcoord.x, texcoord.y + 4.0*blurSize)) * 0.05;*/
 
 const float blurSize = 1.0/512.0;
-const float threshold = 0.5;
+const float threshold = 0.01;
 
 vec4 applyColorDodge(float intensity, vec4 colorTop, vec4 colorBottom){
     return mix(colorBottom, colorBottom / (1.0 - colorTop), intensity);
 }
+const float maxSize = 10.0;
 
-
-vec4 applyLocalAreaMask(){
-    const float maxSize = 6.0; 
+vec4 applyBloom(){
     vec2 size = vec2(maxSize/windowsResolution.x, maxSize/windowsResolution.y);
     vec2 pixel = vec2(1.0/windowsResolution.x, 1.0/windowsResolution.y);
     vec2 currentCoords = vUv;
 
-    vec4 result = vec4(0.0,0.0,0.0,0.0);
+    vec4 result = vec4(0.0,0.0,0.0,1.0);
+    vec4 nativeColor = texture2D( tDiffuse, currentCoords  );
     for(int x = int(-maxSize); x <= int(maxSize); x++){
         for(int y = int(-maxSize); y <= int(maxSize); y++){
             vec2 sampleCoords = vec2(currentCoords.x + float(x) * pixel.x, currentCoords.y + float(y) *pixel.y);
@@ -150,15 +150,49 @@ vec4 applyLocalAreaMask(){
             vec2 d_inPixels = sampleCoords - currentCoords;
             d_inPixels.x *= windowsResolution.x;
             d_inPixels.y *= windowsResolution.y;
-            if(length(d_inPixels) >= maxSize){
+            if(abs(length(d_inPixels)) >= maxSize){
                 continue;
             }
-
             //application
-            result += texture2D(tDiffuse, sampleCoords);
+            vec4 localColor = texture2D( tDiffuse, sampleCoords  );
+            result += 0.01 * (maxSize - abs(length(d_inPixels))) * localColor;
+
         }
     }
     return result;
+}
+
+
+vec4 applyLocalAreaMask(){
+    vec2 size = vec2(maxSize/windowsResolution.x, maxSize/windowsResolution.y);
+    vec2 pixel = vec2(1.0/windowsResolution.x, 1.0/windowsResolution.y);
+    vec2 currentCoords = vUv;
+
+    float sum = 0.0;
+    for(int x = int(-maxSize); x <= int(maxSize); x++){
+        for(int y = int(-maxSize); y <= int(maxSize); y++){
+            vec2 sampleCoords = vec2(currentCoords.x + float(x) * pixel.x, currentCoords.y + float(y) *pixel.y);
+            //border cases
+            if(sampleCoords.x < 0.0 || sampleCoords.y < 0.0 || sampleCoords.x > 1.0 || sampleCoords.y > 1.0){
+                continue;
+            }
+            //distance cases
+            vec2 d_inPixels = sampleCoords - currentCoords;
+            d_inPixels.x *= windowsResolution.x;
+            d_inPixels.y *= windowsResolution.y;
+            if(abs(length(d_inPixels)) >= maxSize){
+                continue;
+            }
+            //application
+            vec4 localColor = texture2D( tDiffuse, sampleCoords  );
+            sum += localColor.x + localColor.y + localColor.z;
+            if(sum >= 50.5){
+                return applyBloom();
+                //return vec4(1.0,0.0,0.0,1.0);
+            }
+        }
+    }
+    return texture2D( tDiffuse, currentCoords  );
 }
 
 void main() {
