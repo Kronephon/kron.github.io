@@ -1,4 +1,17 @@
-var canvas_sp, scene_sp, camera_sp, renderer_sp;
+var canvas_sp, scene_sp, camera_sp, renderer_sp, composer_sp, shaderPass_sp;
+
+class postProcessingShader_sp{
+    constructor(vertexShader, fragmentShader){
+        this.uniforms = {
+            tDiffuse:   {type: 'float', value: null },
+            amount:     {type: 'float', value: 1.0 },
+            windowsResolution: {type: 'vec2', value: renderer_sp.getSize()}  
+        };
+        this.vertexShader = vertexShader;
+        this.fragmentShader = fragmentShader;
+    }
+}
+
 /*
 function paralaxInit(){
     camera_sp.userData.target = new THREE.Vector3(0,0,0);
@@ -39,7 +52,12 @@ window.onresize = function (event) {
     renderer_sp.setSize(width, height);
 };
 
-function aboutScene(canvas) {
+function aboutScene(resources) {
+    var titaniaVertexShader = resources [0];
+    var titaniaFragmentShader = resources [1];
+    var postProcessingVertex = resources [2];
+    var postProcessingFragment = resources [3];
+
     scene_sp = new THREE.Scene();
     camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera_sp.position.z = 5;
@@ -47,6 +65,15 @@ function aboutScene(canvas) {
     renderer_sp = new THREE.WebGLRenderer();
     renderer_sp.setSize(window.innerWidth, window.innerHeight); // change this for smaller resolutions (setSize(window.innerWidth/2, window.innerHeight/2, false) )    
     document.body.appendChild(renderer_sp.domElement);
+
+    composer_sp = new THREE.EffectComposer(renderer_sp);
+    renderPass_sp = new RenderPass(scene_sp, camera_sp);
+    composer_sp.addPass(renderPass_sp);
+
+    titania_sp = new titania_sp(titaniaVertexShader, titaniaFragmentShader, scene_sp);
+
+    shaderPass_sp = new THREE.ShaderPass(new postProcessingShader_sp(postProcessingVertex, postProcessingFragment));
+    composer_sp.addPass(shaderPass_sp);
 
     geometry = new THREE.IcosahedronBufferGeometry(1.5, 5);
     material = new THREE.MeshNormalMaterial({
@@ -60,8 +87,7 @@ function aboutScene(canvas) {
 
     function animate() {
         //paralax();
-
-        renderer_sp.render(scene_sp, camera_sp);
+        composer_sp.render();
         requestAnimationFrame(animate);
     }
     animate();
