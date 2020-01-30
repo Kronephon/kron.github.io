@@ -97,12 +97,8 @@ vec3 GetBloom(vec2 coord)
 
 	return bloom;
 }*/
-const float blurSize = 1.0/512.0;
-const float intensity = 2.75;
 
-void main() {
-
-    vec4 color = texture2D( tDiffuse, vUv  );
+    /*vec4 color = texture2D( tDiffuse, vUv  );
     
     vec4 sum = vec4(0);
     vec2 texcoord = gl_FragCoord.xy/windowsResolution.xy;
@@ -126,15 +122,66 @@ void main() {
     sum += texture2D(tDiffuse, vec2(texcoord.x, texcoord.y + blurSize)) * 0.15;
     sum += texture2D(tDiffuse, vec2(texcoord.x, texcoord.y + 2.0*blurSize)) * 0.12;
     sum += texture2D(tDiffuse, vec2(texcoord.x, texcoord.y + 3.0*blurSize)) * 0.09;
-    sum += texture2D(tDiffuse, vec2(texcoord.x, texcoord.y + 4.0*blurSize)) * 0.05;
+    sum += texture2D(tDiffuse, vec2(texcoord.x, texcoord.y + 4.0*blurSize)) * 0.05;*/
 
-    //color += vec4(GetBloom(vUv) * 0.08, color[3]);
-    //color *= 20.0;
-    //vec3 c = color.rgb;
-    //color.r = dot( c, vec3( 1.0 - 0.607 * amount, 0.769 * amount, 0.189 * amount ) );
-    //color.g = dot( c, vec3( 0.349 * amount, 1.0 - 0.314 * amount, 0.168 * amount ) );
-    //color.b = dot( c, vec3( 0.272 * amount, 0.534 * amount, 1.0 - 0.869 * amount ) );
+const float blurSize = 1.0/512.0;
+const float threshold = 0.5;
 
-    gl_FragColor = sum * intensity + color;
+vec4 applyColorDodge(float intensity, vec4 colorTop, vec4 colorBottom){
+    return mix(colorBottom, colorBottom / (1.0 - colorTop), intensity);
+}
+
+
+vec4 applyLocalAreaMask(){
+    const float maxSize = 6.0; 
+    vec2 size = vec2(maxSize/windowsResolution.x, maxSize/windowsResolution.y);
+    vec2 pixel = vec2(1.0/windowsResolution.x, 1.0/windowsResolution.y);
+    vec2 currentCoords = vUv;
+
+    vec4 result = vec4(0.0,0.0,0.0,0.0);
+    for(int x = int(-maxSize); x <= int(maxSize); x++){
+        for(int y = int(-maxSize); y <= int(maxSize); y++){
+            vec2 sampleCoords = vec2(currentCoords.x + float(x) * pixel.x, currentCoords.y + float(y) *pixel.y);
+            //border cases
+            if(sampleCoords.x < 0.0 || sampleCoords.y < 0.0 || sampleCoords.x > 1.0 || sampleCoords.y > 1.0){
+                continue;
+            }
+            //distance cases
+            vec2 d_inPixels = sampleCoords - currentCoords;
+            d_inPixels.x *= windowsResolution.x;
+            d_inPixels.y *= windowsResolution.y;
+            if(length(d_inPixels) >= maxSize){
+                continue;
+            }
+
+            //application
+            result += texture2D(tDiffuse, sampleCoords);
+        }
+    }
+    return result;
+}
+
+void main() {
+    //create an area filter pass
+
+
+    //determining sufficient size and color
+
+    //applying the radial color dodge based bloom
+
+    //make uniforms update on update size etc
+
+    //uniform sampler2D tDiffuse;
+
+    // applyColorDodge(1.0, vec4(1.0,1.0,1.0,1.0),baseTextureColor) ;
+
+    vec4 baseTextureColor = texture2D( tDiffuse, vUv  );
+    //if(baseTextureColor[0] >= threshold){
+        gl_FragColor = applyLocalAreaMask();
+    //}else{
+    //    gl_FragColor = baseTextureColor;
+    //}
+
+    
 
 }

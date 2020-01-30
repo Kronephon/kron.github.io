@@ -40,6 +40,7 @@ window.onresize = function (event) {
     renderPass_sp.setSize(width, height);
     shaderPass_sp.setSize(width, height);
     composer_sp.setSize(width, height);
+    shaderPass_sp.uniforms.windowsResolution = renderer_sp.getSize();
 };
 
 var starFragmentShader;
