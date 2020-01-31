@@ -1,8 +1,7 @@
-
 class titania_sp {
     constructor(vertexShader, fragmentShader, scene) {
         this.clock = new THREE.Clock();
-        this.geometry = this.geometry = new THREE.BoxBufferGeometry(2.0, 2.0, 2.0, 1, 1, 1); // width, height, depth;
+        this.geometry = this.geometry = new THREE.BoxBufferGeometry(8.0, 8.0, 8.0, 1, 1, 1); // width, height, depth;
         this.geometry.computeBoundingBox();
         this.uniforms = {
             time: { type: 'float', value: 2.0 },
@@ -14,7 +13,7 @@ class titania_sp {
             maxY: { type: 'float', value: this.geometry.boundingBox.max.y },
             maxZ: { type: 'float', value: this.geometry.boundingBox.max.z },
 
-            starRadius: { type: 'float', value: 0.07 },
+            radius: { type: 'float', value: 1.0 },
 
             starColor: { type: 'vec3', value: new THREE.Vector3(0.9, 0.7, 0.9) },
 
@@ -32,13 +31,14 @@ class titania_sp {
             uniforms: this.uniforms,
             fragmentShader: fragmentShader,
             vertexShader: vertexShader,
-            transparent: true
+            transparent: true,
+            side: THREE.DoubleSide
         })
 
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         scene.add(this.mesh);
     }
-      update() {
+    update() {
         this.uniforms.time.value = this.clock.getElapsedTime();
         this.uniforms.center = this.mesh.position; // todo add random to emission color
     }

@@ -1,27 +1,28 @@
 var canvas_sp, scene_sp, camera_sp, renderer_sp, composer_sp, shaderPass_sp;
 
-class postProcessingShader_sp{
-    constructor(vertexShader, fragmentShader){
+class postProcessingShader_sp {
+    constructor(vertexShader, fragmentShader) {
         this.uniforms = {
-            tDiffuse:   {type: 'float', value: null },
-            amount:     {type: 'float', value: 1.0 },
-            windowsResolution: {type: 'vec2', value: renderer_sp.getSize()}  
+            tDiffuse: { type: 'float', value: null },
+            amount: { type: 'float', value: 1.0 },
+            windowsResolution: { type: 'vec2', value: renderer_sp.getSize() }
         };
         this.vertexShader = vertexShader;
         this.fragmentShader = fragmentShader;
     }
 }
 
-/*
-function paralaxInit(){
-    camera_sp.userData.target = new THREE.Vector3(0,0,0);
-    camera_sp.userData.cameraLook = new THREE.Vector3(0,0,0);
-    camera_sp.userData.velocity = new THREE.Vector3(0,0,0);
+
+function paralaxInit() {
+    camera_sp.userData.target = new THREE.Vector3(0, 0, 0);
+    camera_sp.userData.cameraLook = new THREE.Vector3(0, 0, 0);
+    camera_sp.userData.velocity = new THREE.Vector3(0, 0, 0);
     camera_sp.userData.attraction = 0.001;
     camera_sp.userData.attriction = 0.01;
-    document.addEventListener('mousemove', onDocumentMouseMove, false );
+    document.addEventListener('mousemove', onDocumentMouseMove, false);
 }
-function paralax(){
+
+function paralax() {
     var fx = (camera_sp.userData.target.x - camera_sp.userData.cameraLook.x) * camera_sp.userData.attraction;
     var fy = (camera_sp.userData.target.y - camera_sp.userData.cameraLook.y) * camera_sp.userData.attraction;
 
@@ -40,9 +41,9 @@ function paralax(){
 function onDocumentMouseMove(event) {
     camera_sp.userData.target.x = 2 * (event.clientX / window.innerWidth - 0.5) * 0.75;
     camera_sp.userData.target.y = -2 * (event.clientY / window.innerWidth - 0.5) * 0.75;
-}*/
+}
 
-window.onresize = function (event) {
+window.onresize = function(event) {
     renderer_sp.setSize(window.innerWidth, window.innerHeight);
 
     var width = window.innerWidth;
@@ -53,15 +54,16 @@ window.onresize = function (event) {
 };
 
 function aboutScene(resources) {
-    var titaniaVertexShader = resources [0];
-    var titaniaFragmentShader = resources [1];
-    var postProcessingVertex = resources [2];
-    var postProcessingFragment = resources [3];
+    var titaniaVertexShader = resources[0];
+    var titaniaFragmentShader = resources[1];
+    var postProcessingVertex = resources[2];
+    var postProcessingFragment = resources[3];
 
     scene_sp = new THREE.Scene();
     camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera_sp.position.z = 5;
 
+    paralaxInit();
     renderer_sp = new THREE.WebGLRenderer();
     renderer_sp.setSize(window.innerWidth, window.innerHeight); // change this for smaller resolutions (setSize(window.innerWidth/2, window.innerHeight/2, false) )    
     document.body.appendChild(renderer_sp.domElement);
@@ -75,18 +77,17 @@ function aboutScene(resources) {
     shaderPass_sp = new THREE.ShaderPass(new postProcessingShader_sp(postProcessingVertex, postProcessingFragment));
     composer_sp.addPass(shaderPass_sp);
 
-    geometry = new THREE.IcosahedronBufferGeometry(1.5, 5);
+    //test stuff
+    geometry = new THREE.IcosahedronBufferGeometry(5, 5);
     material = new THREE.MeshNormalMaterial({
-        transparent: true
+        transparent: true,
+        side: THREE.DoubleSide
     })
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     scene_sp.add(this.mesh);
-    mesh.position.z = -1.0;
-    mesh.position.x = 1.0;
-    mesh.material.opacity = 0.5;
 
     function animate() {
-        //paralax();
+        paralax();
         composer_sp.render();
         requestAnimationFrame(animate);
     }
