@@ -19,6 +19,92 @@ uniform vec3 meshPosition;
 
 varying vec3 worldPosition;
 
+
+/// Ray Related
+struct Ray {
+    vec3 position;
+    vec4 color;
+    vec3 direction;
+};
+
+void calculateColorShift(){
+
+}
+
+void calculateGravityShift(){
+
+}
+
+void rayStep(){
+
+}
+
+/// General Physics Related
+
+const float speedOfLight = 173.0; // au per day
+const float newtonsConstant = 3.3604e63; // au3 sun-1 day-2
+
+/// Titania Related
+
+const float titania_mass = 70.0;  //sun
+//const float titania_innerTorus;
+//const float titania_outerTorus;
+//const vec3 titania_position;
+
+
+float sdfTitania(Titania object, Ray probe){ //returns distance to "minimum" lensing
+    //float schwarzschildRadius =
+    return 0.0;
+}
+
+float sdfEventHorizon(Titania object, Ray probe){ //returns distance to event horizon
+    return 0.0;
+}
+
+/// Accretion Disk & Emission Disk Related
+struct AccretionDisk{
+    float radiusOuter;
+    float radiusInner;
+    vec3 position;
+};
+
+float sdfAccretionDisk(AccretionDisk object, Ray probe){
+    return 0.0;
+}
+
+struct EmissionCone{
+    float distanceToCenter;
+    float angle;
+};
+
+float sdfEmissionCone(EmissionCone object, Ray probe){
+    return 0.0;
+}
+
+/// Scene Related
+
+void sdfSpaceDistanceProbe(){
+    //function must query all constituents
+}
+
+void rayMarch(vec3 position, vec3 direction){
+    //TODO: create 4 rays and interpolate results ?
+    //perhaps ray splitting can occur based on the degree of tilting? We would need r for this.    
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 float rand(vec2 co){
     return sin(co.x);
 }
@@ -104,5 +190,6 @@ vec4 volumetricRayCast (vec3 in_position, vec3 direction)
 
 void main()
 {
+
     gl_FragColor = volumetricRayCast( worldPosition, normalize(worldPosition - cameraPosition)); 
 }

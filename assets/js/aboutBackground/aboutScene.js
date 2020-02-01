@@ -43,6 +43,22 @@ function onDocumentMouseMove(event) {
     camera_sp.userData.target.y = -2 * (event.clientY / window.innerWidth - 0.5) * 0.75;
 }
 
+function onKeyPress(event) {
+    var cameraspeed = 0.01;
+    if(event.key == "w"){
+        camera_sp.position.z -= cameraspeed;
+    }
+    if(event.key == "s"){
+        camera_sp.position.z += cameraspeed;
+    }
+    if(event.key == "a"){
+        camera_sp.position.x -= cameraspeed;
+    }
+    if(event.key == "d"){
+        camera_sp.position.x += cameraspeed;
+    }
+}
+
 window.onresize = function(event) {
     renderer_sp.setSize(window.innerWidth, window.innerHeight);
 
@@ -64,6 +80,7 @@ function aboutScene(resources) {
     camera_sp.position.z = 5;
 
     paralaxInit();
+    document.addEventListener('keydown', onKeyPress, false); //test camera controls
     renderer_sp = new THREE.WebGLRenderer();
     renderer_sp.setSize(window.innerWidth, window.innerHeight); // change this for smaller resolutions (setSize(window.innerWidth/2, window.innerHeight/2, false) )    
     document.body.appendChild(renderer_sp.domElement);
