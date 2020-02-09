@@ -57,6 +57,9 @@ function onKeyPress(event) {
     if(event.key == "d"){
         camera_sp.position.x += cameraspeed;
     }
+    if(event.key == " "){
+        camera_sp.position.y += cameraspeed;
+    }
 }
 
 window.onresize = function(event) {
@@ -76,8 +79,9 @@ function aboutScene(resources) {
     var postProcessingFragment = resources[3];
 
     scene_sp = new THREE.Scene();
-    camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera_sp.position.z = 5;
+    camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 2000);
+    camera_sp.position.z = 20;
+    camera_sp.position.y = 1;
 
     paralaxInit();
     document.addEventListener('keydown', onKeyPress, false); //test camera controls
@@ -95,15 +99,16 @@ function aboutScene(resources) {
     composer_sp.addPass(shaderPass_sp);
 
     //test stuff
-    geometry = new THREE.IcosahedronBufferGeometry(5, 5);
-    material = new THREE.MeshNormalMaterial({
-        transparent: true,
-        side: THREE.DoubleSide
-    })
-    this.mesh = new THREE.Mesh(this.geometry, this.material);
-    scene_sp.add(this.mesh);
+    //geometry = new THREE.IcosahedronBufferGeometry(5, 5);
+    //material = new THREE.MeshNormalMaterial({
+        //transparent: true//,
+        //side: THREE.DoubleSide
+    //})
+    //this.mesh = new THREE.Mesh(this.geometry, this.material);
+    //scene_sp.add(this.mesh);
 
     function animate() {
+        titania_sp.update();
         paralax();
         composer_sp.render();
         requestAnimationFrame(animate);

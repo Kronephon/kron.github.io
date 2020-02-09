@@ -1,17 +1,33 @@
+
 class titania_sp {
     constructor(vertexShader, fragmentShader, scene) {
+
+        this.mass = 100.0;
+        this.graviticConstant = 5.0;
+        this.epsilon = 0.00001;           //minimal distortion
+        this.simulationRadialStep = Math.PI * 2 / 5; //rad, big one TODO pick divisible steps
+        this.simulationRadialDirectionStep = Math.PI * 2 / 5; //rad, direction steps
+        this.lightspeed = 2000.0;
+        this.photonMass = 0.00001;
+        this.minimumStep = 0.01; //time for simplicity sake (TODO change?)
+        this.maximumStep = 1;
+        this.computerFragmentShader = fragmentShader;
+        this.computeTrajectories();
+        
         this.clock = new THREE.Clock();
-        this.geometry = this.geometry = new THREE.BoxBufferGeometry(8.0, 8.0, 8.0, 1, 1, 1); // width, height, depth;
-        this.geometry.computeBoundingBox();
+        var outerdimensions = camera_sp.position.z * 2.0;
+        console.log(outerdimensions);
+        this.geometry = new THREE.PlaneBufferGeometry((1.0, 1.0, 1, 1));
         this.uniforms = {
             time: { type: 'float', value: 2.0 },
+            random: {type: 'float', value: Math.random()},
 
-            minX: { type: 'float', value: this.geometry.boundingBox.min.x },
-            minY: { type: 'float', value: this.geometry.boundingBox.min.y },
-            minZ: { type: 'float', value: this.geometry.boundingBox.min.z },
-            maxX: { type: 'float', value: this.geometry.boundingBox.max.x },
-            maxY: { type: 'float', value: this.geometry.boundingBox.max.y },
-            maxZ: { type: 'float', value: this.geometry.boundingBox.max.z },
+            minX: { type: 'float', value: -1 * this.radius }, //TODO convert radial
+            minY: { type: 'float', value: -1 * this.radius },
+            minZ: { type: 'float', value: -1 * this.radius },
+            maxX: { type: 'float', value: this.radius },
+            maxY: { type: 'float', value: this.radius },
+            maxZ: { type: 'float', value: this.radius },
 
             radius: { type: 'float', value: 1.0 },
 
@@ -26,20 +42,59 @@ class titania_sp {
             meshPosition: { type: 'vec4', value: new THREE.Vector3(0, 0, 0) }
         }
 
-
         this.material = new THREE.ShaderMaterial({
             uniforms: this.uniforms,
-            fragmentShader: fragmentShader,
+            fragmentShader: this.computerFragmentShader,
             vertexShader: vertexShader,
             transparent: true,
             side: THREE.DoubleSide
         })
 
         this.mesh = new THREE.Mesh(this.geometry, this.material);
+        this.setMeshOnCamera();
+        console.log(this.mesh);
         scene.add(this.mesh);
+    }
+    setMeshOnCamera(){ //TODO
+        this.mesh.position.x = camera_sp.position.x;
+        this.mesh.position.y = camera_sp.position.y;
+        this.mesh.position.z = camera_sp.position.z - 2.0;
+        this.mesh.rotation.x = camera_sp.rotation.x;
+        this.mesh.rotation.y = camera_sp.rotation.y;
+        this.mesh.rotation.z = camera_sp.rotation.z;
+
     }
     update() {
         this.uniforms.time.value = this.clock.getElapsedTime();
+        this.uniforms.random.value = Math.random();
         this.uniforms.center = this.mesh.position; // todo add random to emission color
     }
+    computeTrajectories(){   // f = mM/d^2, assumes 0,0 as enter of force
+        this.radius = Math.sqrt(this.graviticConstant * this.mass * this.photonMass / this.epsilon);
+        this.trajectories = [];
+        console.log(this.radius);
+        for(var incomingAngle = 0; incomingAngle < Math.PI * 2; incomingAngle += this.simulationRadialStep ){
+            for(var incomingAngleVelocity = 0; incomingAngleVelocity < Math.PI * 2; incomingAngleVelocity += this.simulationRadialDirectionStep ){
+                var velocity = [Math.sin(incomingAngleVelocity) * this.lightspeed, Math.cos(incomingAngleVelocity) * this.lightspeed] ; //aligned with incomingDirection
+                var position = [this.incomingAngle, this.radius]; //2D polar coordinates
+                var trajectory = [];
+                for(var step = 0; step < this.maximumStep; step++){
+                    //TODO check if exited or exiting
+                    var radialForce = this.photonMass * this.mass * this.graviticConstant; //radial vector
+                    var radialAcceleration  = radialForce / this.photonMass; //radial vector
+                    var thetaMovement = velocity[0] * this.minimumStep;
+                    var radialMovement = velocity[1] * this.minimumStep + 0.5 * radialAcceleration  * this.minimumStep * this.minimumStep;
+                    velocity[0] = thetaMovement/this.minimumStep;
+                    velocity[1] = radialMovement/this.minimumStep;
+                    position[0] += thetaMovement;
+                    position[1] += radialMovement;
+                    trajectory.push(position, velocity);
+                }
+                this.trajectories.push([incomingAngle, incomingAngleVelocity , trajectory]);
+            }
+        }
+        console.log(this.trajectories);
+        console.log(this.computerFragmentShader);
+    }
+    
 }

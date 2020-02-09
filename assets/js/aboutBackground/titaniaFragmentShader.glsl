@@ -16,94 +16,91 @@ uniform vec3 starEdgeColor;
 uniform vec3 starEmission;
 
 uniform vec3 meshPosition;
+uniform vec3 cameraVelocity;
 
 varying vec3 worldPosition;
 
 
-/// Ray Related
-struct Ray {
-    vec3 position;
-    vec4 color;
-    vec3 direction;
-};
+/// simplified version
+const float gargantuaMass = 1.0;
+const float speedOfLight = 10.0;
+const float graviticConstant = 1.0;
+const int stepTimeOut = 2000;
+float simulationRadius = maxX;
+const float minStep = 0.1;
+const float schwarzschild = 4.07;
+const float plankconstant = 0.00001;
 
-void calculateColorShift(){
 
+int trajectoryApproximator(vec3 out_pos, vec3 out_dir){
+    //%%%%AUTOMATEDAREASTART1
+    //%%%%AUTOMATEDAREAEND1
+    return 0;
 }
 
-void calculateGravityShift(){
-
+// dynamically filled area
+vec3 trajectoryQuery(int trajectoryIndex, int step){
+    //%%%%AUTOMATEDAREASTART2
+    //%%%%AUTOMATEDAREAEND2
+    return vec3(0.0,0.0,0.0);
 }
 
-void rayStep(){
-
+// convert coordinates to polar. assumes origin is at 0,0,0
+// of in_pos
+vec3 toPolar(vec3 in_pos){
+    float r = length(in_pos);
+    float t = acos(in_pos.x/sqrt(in_pos.x*in_pos.x + in_pos.y*in_pos.y));
+    float p = asin(in_pos.y/sqrt(in_pos.x*in_pos.x + in_pos.y*in_pos.y));
+    return vec3(r,t,p);
 }
 
-/// General Physics Related
-
-const float speedOfLight = 173.0; // au per day
-const float newtonsConstant = 3.3604e63; // au3 sun-1 day-2
-
-/// Titania Related
-
-const float titania_mass = 70.0;  //sun
-//const float titania_innerTorus;
-//const float titania_outerTorus;
-//const vec3 titania_position;
-
-
-float sdfTitania(Titania object, Ray probe){ //returns distance to "minimum" lensing
-    //float schwarzschildRadius =
-    return 0.0;
+vec3 toCartesian(vec3 in_pos){
+    return vec3(in_pos.x*sin(in_pos.y)*cos(in_pos.z),
+                in_pos.x*sin(in_pos.y)*sin(in_pos.z),
+                in_pos.x*cos(in_pos.y));
 }
 
-float sdfEventHorizon(Titania object, Ray probe){ //returns distance to event horizon
-    return 0.0;
+vec4 getCelestialSphereValue(vec2 in_coords){ // TODO
+    return vec4(sin(in_coords.x + time), cos(in_coords.x - time),sin(in_coords.y * time),1.0);
 }
 
-/// Accretion Disk & Emission Disk Related
-struct AccretionDisk{
-    float radiusOuter;
-    float radiusInner;
-    vec3 position;
-};
+mat3 rayStep(vec3 in_rayPosition, vec3 in_rayDirection, float distance){    //TODO
 
-float sdfAccretionDisk(AccretionDisk object, Ray probe){
-    return 0.0;
+    vec3 position = in_rayPosition + in_rayDirection * minStep;
+    return mat3(position, in_rayDirection, vec3(1.0,1.0,1.0));
 }
 
-struct EmissionCone{
-    float distanceToCenter;
-    float angle;
-};
-
-float sdfEmissionCone(EmissionCone object, Ray probe){
-    return 0.0;
+float distanceToTravel(vec3 in_rayPosition, vec3 in_rayDirection){ // TODO
+    return minStep;
 }
 
-/// Scene Related
-
-void sdfSpaceDistanceProbe(){
-    //function must query all constituents
+bool outerBound(vec3 in_rayPosition, vec3 in_rayDirection){ // TODO
+    if(toPolar(in_rayPosition).x > simulationRadius){
+        return true;
+    }
+    return false;
 }
 
-void rayMarch(vec3 position, vec3 direction){
-    //TODO: create 4 rays and interpolate results ?
-    //perhaps ray splitting can occur based on the degree of tilting? We would need r for this.    
+vec4 sampleColor(){
+    vec3 rayPosition = worldPosition;
+    vec3 rayDirection = normalize(worldPosition - cameraPosition);
 
+    for(int i = 0 ; i < stepTimeOut; i++){
+        float distanceToStep = distanceToTravel(rayPosition,rayDirection);
+        mat3 newRay = rayStep(rayPosition, rayDirection, distanceToStep);
+        rayPosition = newRay[0];
+        rayDirection = newRay[1];
+        if(toPolar(rayPosition).x <= schwarzschild){ // shortcut
+            break;
+        }
+        if(outerBound(rayPosition, rayDirection)){
+            return getCelestialSphereValue(toPolar(rayPosition).yz);
+        }
+    }
+    return vec4(0.0,0.0,0.0,1.0);
 }
 
-
-
-
-
-
-
-
-
-
-
-
+///
 
 float rand(vec2 co){
     return sin(co.x);
@@ -137,7 +134,7 @@ vec4 getBackground(vec3 out_position, vec3 direction){
         if(distanceToSphere < 0.0){
             out_position += distanceToSphere * direction;
         }else{
-            return vec4(rand(out_position.xy),rand(out_position.yz),rand(out_position.xz) , 1.0); //todo clamp might be needed
+            return getCelestialSphereValue(toPolar(out_position).yz); //todo clamp might be needed
         }
     }
     return vec4(0.0,0.0,0.0,1.0);
@@ -187,9 +184,9 @@ vec4 volumetricRayCast (vec3 in_position, vec3 direction)
     return sample;
 }
 
-
 void main()
 {
-
+    //gl_FragColor = vec4(1.0,1.0,0.0,1.0);
+    //gl_FragColor = sampleColor();
     gl_FragColor = volumetricRayCast( worldPosition, normalize(worldPosition - cameraPosition)); 
 }
