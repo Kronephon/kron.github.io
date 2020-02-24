@@ -74,14 +74,34 @@ class titania_sp {
         this.trajectories = [];
         console.log(this.radius);
         for(var incomingAngle = 0; incomingAngle < Math.PI * 2; incomingAngle += this.simulationRadialStep ){
-            for(var incomingAngleVelocity = 0; incomingAngleVelocity < Math.PI * 2; incomingAngleVelocity += this.simulationRadialDirectionStep ){
-                var velocity = [Math.sin(incomingAngleVelocity) * this.lightspeed, Math.cos(incomingAngleVelocity) * this.lightspeed] ; //aligned with incomingDirection
-                var position = [this.incomingAngle, this.radius]; //2D polar coordinates
+
+            var initialPositionX = Math.sin(incomingAngle) * this.radius;
+            var initialPositionY = Math.cos(incomingAngle) * this.radius;
+
+            for(var incomingAngleVelocity = 0; incomingAngleVelocity < Math.PI * 2; incomingAngleVelocity += this.simulationRadialDirectionStep ){            
+
+                var initialVelocityX = Math.sin(incomingAngle) * this.lightspeed + initialPositionX; // minus maybe?
+                var initialVelocityY = Math.cos(incomingAngle) * this.lightspeed + initialPositionY; // minus maybe?
+
+                var position =  new THREE.Vector2(initialPositionX, initialPositionY);
+                var velocity =  new THREE.Vector2(initialVelocityX, initialVelocityY); 
+
                 var trajectory = [];
+
                 for(var step = 0; step < this.maximumStep; step++){
                     //TODO check if exited or exiting
-                    var radialForce = this.photonMass * this.mass * this.graviticConstant; //radial vector
-                    var radialAcceleration  = radialForce / this.photonMass; //radial vector
+                    
+                    var distanceSquared = position.length();
+
+                    var radialForce = this.photonMass * this.mass * this.graviticConstant / distanceSquared; //radial vector
+
+                    var forceX = Math.sin(position.angle()) * radialForce;
+                    var forceY = Math.cos(position.angle()) * radialForce;
+
+                    var force = new THREE.Vector2(forceX, forceY);
+
+                    var acceleration  = force.divideScalar(this.photonMass);
+
                     var thetaMovement = velocity[0] * this.minimumStep;
                     var radialMovement = velocity[1] * this.minimumStep + 0.5 * radialAcceleration  * this.minimumStep * this.minimumStep;
                     velocity[0] = thetaMovement/this.minimumStep;
