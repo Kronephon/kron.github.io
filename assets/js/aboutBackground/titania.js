@@ -9,8 +9,8 @@ class titania_sp {
         this.simulationRadialDirectionStep = Math.PI * 2 / 5; //rad, direction steps
         this.lightspeed = 2000.0;
         this.photonMass = 0.00001;
-        this.minimumStep = 0.01; //time for simplicity sake (TODO change?)
-        this.maximumStep = 1;
+        this.epsilonTime = 0.01; //time for simplicity sake (TODO change?)
+        this.maximumNumberOfStep = 8000;
         this.computerFragmentShader = fragmentShader;
         this.computeTrajectories();
         
@@ -87,34 +87,40 @@ class titania_sp {
                 var velocity =  new THREE.Vector2(initialVelocityX, initialVelocityY); 
 
                 var trajectory = [];
+                trajectory.push([position.x, position.y], [velocity.x, velocity.y]);
 
-                for(var step = 0; step < this.maximumStep; step++){
+                for(var step = 0; step < this.maximumNumberOfStep; step++){
                     //TODO check if exited or exiting
                     
-                    var distanceSquared = position.length();
+                    var distanceSquared = position.length() * position.length();
 
                     var radialForce = this.photonMass * this.mass * this.graviticConstant / distanceSquared; //radial vector
+
+                    // assumes that for epsilon the force is constant
 
                     var forceX = Math.sin(position.angle()) * radialForce;
                     var forceY = Math.cos(position.angle()) * radialForce;
 
                     var force = new THREE.Vector2(forceX, forceY);
 
-                    var acceleration  = force.divideScalar(this.photonMass);
+                    var acceleration = force.divideScalar(this.photonMass);
 
-                    var thetaMovement = velocity[0] * this.minimumStep;
-                    var radialMovement = velocity[1] * this.minimumStep + 0.5 * radialAcceleration  * this.minimumStep * this.minimumStep;
-                    velocity[0] = thetaMovement/this.minimumStep;
-                    velocity[1] = radialMovement/this.minimumStep;
-                    position[0] += thetaMovement;
-                    position[1] += radialMovement;
-                    trajectory.push(position, velocity);
+                    var shiftX = velocity.x  * this.epsilonTime + 0.5 * acceleration.x * this.epsilonTime; //TODO, add sampling 
+                    var shiftY = velocity.y  * this.epsilonTime + 0.5 * acceleration.y * this.epsilonTime;
+
+                    position.x += shiftX;
+                    position.y += shiftY;
+                    
+                    velocity.x = shiftX / this.epsilonTime;
+                    velocity.y = shiftY / this.epsilonTime;
+                    
+                    trajectory.push([position.x, position.y], [velocity.x, velocity.y]);
                 }
-                this.trajectories.push([incomingAngle, incomingAngleVelocity , trajectory]);
+                this.trajectories.push([incomingAngle, incomingAngleVelocity , trajectory.copyWithin(trajectory)]);
             }
+            break;
         }
         console.log(this.trajectories);
-        console.log(this.computerFragmentShader);
     }
     
 }
