@@ -1,0 +1,4 @@
+class krParticleSystem{
+    constructor(
+    )
+}

@@ -75,7 +75,6 @@ window.onresize = function(event) {
 function aboutScene(resources) {
     var postProcessingVertex = resources[0];
     var postProcessingFragment = resources[1];
-    console.log("here");
 
     scene_sp = new THREE.Scene();
     camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 2000);
@@ -98,13 +97,13 @@ function aboutScene(resources) {
     composer_sp.addPass(shaderPass_sp);
 
     //test stuff
-    //geometry = new THREE.IcosahedronBufferGeometry(5, 5);
-    //material = new THREE.MeshNormalMaterial({
-        //transparent: true//,
-        //side: THREE.DoubleSide
-    //})
-    //this.mesh = new THREE.Mesh(this.geometry, this.material);
-    //scene_sp.add(this.mesh);
+    /*geometry = new THREE.IcosahedronBufferGeometry(5, 5);
+    material = new THREE.MeshNormalMaterial({
+        transparent: true,
+        side: THREE.DoubleSide
+    })
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    scene_sp.add(this.mesh);*/
 
     function animate() {
         paralax();
