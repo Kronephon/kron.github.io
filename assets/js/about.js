@@ -1,9 +1,24 @@
-if(!THREE){
+if (!THREE) {
     throw ("three.min.js not present");
 }
 const canvas = document.getElementById('aboutCanvas');
-if(!canvas){
+if (!canvas) {
     throw ("aboutCanvas not present");
 }
 
-aboutSceneInit(canvas);
+//extra resources besides js or css
+
+function loadResourcesAndStart(canvas) {
+    loadFiles([
+        'assets/js/aboutBackground/postProcessingVertexShader.glsl',
+        'assets/js/aboutBackground/postProcessingFragmentShader.glsl'
+        ],
+        function callback(result) {
+            aboutScene(result);
+        },
+        function errorCallback() {
+            throw ("Error in loading pre requisites. Missing Files.");
+        });
+}
+
+loadResourcesAndStart();
