@@ -11,7 +11,8 @@ if (!canvas) {
 function loadResourcesAndStart(canvas) {
     loadFiles([
         'assets/js/aboutBackground/postProcessingVertexShader.glsl',
-        'assets/js/aboutBackground/postProcessingFragmentShader.glsl'
+        'assets/js/aboutBackground/postProcessingFragmentShader.glsl',
+        'assets/js/aboutBackground/trajan.gltf'
         ],
         function callback(result) {
             aboutScene(result);

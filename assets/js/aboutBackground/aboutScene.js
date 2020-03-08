@@ -75,6 +75,7 @@ window.onresize = function(event) {
 function aboutScene(resources) {
     var postProcessingVertex = resources[0];
     var postProcessingFragment = resources[1];
+    var statue = resources[2];
 
     scene_sp = new THREE.Scene();
     camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 2000);
@@ -91,10 +92,9 @@ function aboutScene(resources) {
     renderPass_sp = new RenderPass(scene_sp, camera_sp);
     composer_sp.addPass(renderPass_sp);
 
-    
-
     shaderPass_sp = new THREE.ShaderPass(new postProcessingShader_sp(postProcessingVertex, postProcessingFragment));
     composer_sp.addPass(shaderPass_sp);
+
 
     //test stuff
     /*geometry = new THREE.IcosahedronBufferGeometry(5, 5);
@@ -104,6 +104,8 @@ function aboutScene(resources) {
     })
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     scene_sp.add(this.mesh);*/
+
+    particleSystem = new krParticleSystem(undefined,undefined,undefined,scene_sp);
 
     function animate() {
         paralax();
