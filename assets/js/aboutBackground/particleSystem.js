@@ -1,38 +1,58 @@
 
-class krParticleSystem extends THREE.Points{
+class krParticleSystem{
     constructor(polygonalVertexShader, polygonalFragmentShader, target, scene) {
-        var geometry = new THREE.BufferGeometry();
-        var material = new THREE.PointsMaterial({
+        this.spawnChance = 0.8; //per frame new particles
+        this.clock = new THREE.Clock();
+
+        var geometry = new THREE.IcosahedronBufferGeometry(1,0);
+        var material = new THREE.MeshNormalMaterial({
         });
-        super(geometry, material);
+        this.pointMesh = new THREE.Points(geometry, material);
+        console.log(this.mesh);
+
         if(target == undefined){
-            this.userData.target = new THREE.IcosahedronBufferGeometry(1, 1);
+            this.target = new THREE.IcosahedronBufferGeometry(1, 0);
         }else{
-            this.userData.target = target;
+            this.target = target;
         }
 
-        this.userData.spawnChance = 0.8; //per frame new particles
-        this.userData.particleLife = 30; //frames of assured life
-        this.userData.deathChange = 0.8; //per frame death change (after particleLife)
+        console.log(this.target);
+        geometry.setAttribute( 'position',  new krFloat32BufferAttribute(this.target.attributes.position.array, this.target.attributes.position.dimensions));
+        //
+		//geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) ); //or visible?
 
+        console.log(this.pointMesh);
+        scene.add(this.pointMesh);
+    }
+    pickNewParticle(){
+        if(this.target.attributes.position.count != 0){
+            var particleIndex = Math.random() * this.target.attributes.position.count;
+            //this.geometry.setAttribute( 'position',  this.geometry.attributes.position.push(new THREE.Vector3(0,0,0)));
+        }
+    }
+    update(){
+        this.pickNewParticle();
 
-
-        geometry.setAttribute( 'position', this.userData.target.attributes.position );
-		//geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
-
-        console.log(this);
-        scene.add(this);
     }
 }
 
-class krParticles extends THREE.Mesh{
-    constructor(scene){
-        var material = new THREE.PointsMaterial({
-            
-        })
-        var geometry = new THREE.BufferGeometry();
-        super(geometry, material);
+class krFloat32BufferAttribute extends THREE.Float32BufferAttribute{
+    constructor(array, dimensions){
+        super(array, dimensions);
+        
+        this.index = []; // each index in array will be here aswell. Also their unique content.
+        for(var i = 0; i < this.count; i++){
+            var point = [this.getX(i), this.getY(i), this.getZ(i)]; //this needs to be more flexible maybe
+            for(var j = 0; j < this.index.length; j++){
 
-        scene.add(this);
+            }
+        }
+
+        
+
     }
+    //updated index of common points
+    //automatic propagation of changes
+
 }
+

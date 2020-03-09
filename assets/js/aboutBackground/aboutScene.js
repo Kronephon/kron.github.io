@@ -109,6 +109,7 @@ function aboutScene(resources) {
 
     function animate() {
         paralax();
+        particleSystem.update();
         composer_sp.render();
         requestAnimationFrame(animate);
     }
