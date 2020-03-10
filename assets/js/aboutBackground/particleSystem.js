@@ -5,7 +5,7 @@ class krParticleSystem{
         this.clock = new THREE.Clock();
 
         var geometry = new THREE.BufferGeometry();
-        var material = new THREE.MeshNormalMaterial({
+        var material = new THREE.PointsMaterial({
         });
 
         if(target == undefined){
@@ -17,17 +17,29 @@ class krParticleSystem{
         geometry.setAttribute( 'enabled', new THREE.Float32BufferAttribute( this.target.attributes.position.count, 1 ) ); //enabled at 0
         geometry.computeVertexNormals();
 
-        this.gateMesh = new THREE.Mesh(geometry, material);
+        this.gateMesh = new THREE.Points(geometry, material);
 
         scene.add(this.gateMesh);
     }
-    
-    pickNewParticle(){
-    
+
+    updatePositions(){
+        for(var i = 0; i < this.gateMesh.geometry.attributes.position.count; i++){
+            var point = [this.gateMesh.geometry.attributes.position.getX(i), this.gateMesh.geometry.attributes.position.getY(i), this.gateMesh.geometry.attributes.position.getZ(i)];
+            this.applyForce(point);
+            this.gateMesh.geometry.attributes.position.setXYZ(i, point[0], point[1], point[2]);
+        }
+        this.gateMesh.geometry.attributes.position.needsUpdate = true;
+        this.gateMesh.geometry.computeVertexNormals();
     }
+
+    applyForce(pointBefore, target){
+        pointBefore[0] += 0.01 * (Math.random() - 0.5);
+        pointBefore[1] += 0.01 * (Math.random() - 0.5);
+        pointBefore[2] += 0.01 * (Math.random() - 0.5);
+    }
+
     update(){
-        
-        this.pickNewParticle();
+        this.updatePositions();
     }
 
     getPointIndex(buffer){ // expects Float32BufferAttribute
