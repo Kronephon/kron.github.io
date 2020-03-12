@@ -27,12 +27,12 @@ class krParticleSystem{
                                              geometry.attributes.velocity.getY(i), 
                                              geometry.attributes.velocity.getZ(i));      
 
-            point.x = Math.random();
-            point.y = Math.random();
-            point.z = Math.random();
-            velocity.x = 0.03 * Math.random();
-            velocity.y = 0.03 *Math.random();
-            velocity.z = 0.03 * Math.random();
+            point.x = camera_sp.position.x;
+            point.y = camera_sp.position.y;
+            point.z = camera_sp.position.z;
+            velocity.x = (Math.random() - 0.5);
+            velocity.y = (Math.random() - 0.5);
+            velocity.z = (Math.random() - 0.5);
             geometry.attributes.position.setXYZ(i, point.x, point.y, point.z);
             geometry.attributes.velocity.setXYZ(i, velocity.x, velocity.y, velocity.z);
         }
@@ -74,13 +74,14 @@ class krParticleSystem{
         
         var accelerationValue = - this.forceConstant* (distance * distance);
         var acceleration = new THREE.Vector3();
+
         acceleration = acceleration.subVectors(pointBefore, target).normalize();
         acceleration = acceleration.multiplyScalar(accelerationValue);
         
         var newPosition = new THREE.Vector3();
-        newPosition.x = pointBefore.x + initVelocity.x + acceleration.x * 0.5; 
-        newPosition.y = pointBefore.y + initVelocity.y + acceleration.y * 0.5; 
-        newPosition.z = pointBefore.z + initVelocity.z + acceleration.z * 0.5; 
+        newPosition.x = pointBefore.x + 0.99 * initVelocity.x + acceleration.x * 0.5; 
+        newPosition.y = pointBefore.y + 0.99 * initVelocity.y + acceleration.y * 0.5; 
+        newPosition.z = pointBefore.z + 0.99 * initVelocity.z + acceleration.z * 0.5; 
         //console.log(newPosition);
         //console.log(pointBefore);
 
