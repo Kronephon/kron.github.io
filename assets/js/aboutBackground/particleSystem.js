@@ -3,6 +3,8 @@ class krParticleSystem{
     constructor(polygonalVertexShader, polygonalFragmentShader, target, scene) {
         this.spawnChance = 0.8; //per frame new particles
         this.forceConstant = 0.01;
+        this.targetSpin = new THREE.Matrix4();
+        this.targetSpin.makeRotationY(0.2);
         this.clock = new THREE.Clock();
 
         var geometry = new THREE.BufferGeometry();
@@ -29,7 +31,7 @@ class krParticleSystem{
 
             point.x = camera_sp.position.x;
             point.y = camera_sp.position.y;
-            point.z = camera_sp.position.z;
+            point.z = camera_sp.position.z + 1;
             velocity.x = (Math.random() - 0.5);
             velocity.y = (Math.random() - 0.5);
             velocity.z = (Math.random() - 0.5);
@@ -71,17 +73,21 @@ class krParticleSystem{
     applyForce(pointBefore, target, velocity){ // each frame is t = 1
         var distance = pointBefore.distanceTo(target);
         var initVelocity = velocity.clone();
+
+        var attrictionValue = -0.4 * initVelocity.length();
+        var attriction = new THREE.Vector3();
+        attriction = initVelocity.normalize();
+        attriction = attriction.multiplyScalar(attrictionValue);
         
         var accelerationValue = - this.forceConstant* (distance * distance);
         var acceleration = new THREE.Vector3();
-
         acceleration = acceleration.subVectors(pointBefore, target).normalize();
         acceleration = acceleration.multiplyScalar(accelerationValue);
         
         var newPosition = new THREE.Vector3();
-        newPosition.x = pointBefore.x + 0.99 * initVelocity.x + acceleration.x * 0.5; 
-        newPosition.y = pointBefore.y + 0.99 * initVelocity.y + acceleration.y * 0.5; 
-        newPosition.z = pointBefore.z + 0.99 * initVelocity.z + acceleration.z * 0.5; 
+        newPosition.x = pointBefore.x + initVelocity.x + (acceleration.x + attriction.x) * 0.5; 
+        newPosition.y = pointBefore.y + initVelocity.y + (acceleration.y + attriction.y) * 0.5;  
+        newPosition.z = pointBefore.z + initVelocity.z + (acceleration.z + attriction.z) * 0.5;
         //console.log(newPosition);
         //console.log(pointBefore);
 
@@ -104,6 +110,9 @@ class krParticleSystem{
     }
 
     update(){
+        this.target.rotateX(Math.random() * 0.003);
+        this.target.rotateY(Math.random() * 0.003);
+        this.target.rotateZ(Math.random() * 0.003);
         this.updatePositions();
     }
 
