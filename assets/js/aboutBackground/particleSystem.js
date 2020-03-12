@@ -2,14 +2,15 @@
 class krParticleSystem{
     constructor(polygonalVertexShader, polygonalFragmentShader, target, scene) {
         this.spawnChance = 0.8; //per frame new particles
-        this.forceConstant = 0.01;
-        this.targetSpin = new THREE.Matrix4();
-        this.targetSpin.makeRotationY(0.2);
+        this.forceConstant = 5.0;
         this.clock = new THREE.Clock();
 
         var geometry = new THREE.BufferGeometry();
-        var material = new THREE.PointsMaterial({
+        var point_material = new THREE.PointsMaterial({
             size: 0.001
+        });
+
+        var material = new THREE.MeshNormalMaterial({
         });
 
         if(target == undefined){
@@ -21,17 +22,11 @@ class krParticleSystem{
         geometry.setAttribute( 'velocity',  new THREE.Float32BufferAttribute( this.target.attributes.position.count * 3, 3));
 
         for(var i = 0; i < geometry.attributes.position.count; i++){
-            var point = new THREE.Vector3(geometry.attributes.position.getX(i), 
-                                          geometry.attributes.position.getY(i), 
-                                          geometry.attributes.position.getZ(i));
-
-            var velocity = new THREE.Vector3(geometry.attributes.velocity.getX(i), 
-                                             geometry.attributes.velocity.getY(i), 
-                                             geometry.attributes.velocity.getZ(i));      
-
-            point.x = camera_sp.position.x;
-            point.y = camera_sp.position.y;
-            point.z = camera_sp.position.z + 1;
+            var point = new THREE.Vector3();
+            var velocity = new THREE.Vector3();
+            point.x = camera_sp.position.x + (Math.random() - 0.5);
+            point.y = camera_sp.position.y + (Math.random() - 0.5);
+            point.z = camera_sp.position.z - 1 +(Math.random() - 0.5);
             velocity.x = (Math.random() - 0.5);
             velocity.y = (Math.random() - 0.5);
             velocity.z = (Math.random() - 0.5);
@@ -42,9 +37,10 @@ class krParticleSystem{
         geometry.setAttribute( 'enabled',   new THREE.Float32BufferAttribute( this.target.attributes.position.count, 1)); //enabled at 0
         geometry.computeVertexNormals();
 
-        this.gateMesh = new THREE.Points(geometry, material);
-
+        this.gateMesh = new THREE.Points(geometry, point_material);
+        this.gateMesh2 = new THREE.Mesh(this.target, material);
         scene.add(this.gateMesh);
+        //scene.add(this.gateMesh2);
     }
 
     updatePositions(){
@@ -58,8 +54,8 @@ class krParticleSystem{
                                              this.gateMesh.geometry.attributes.velocity.getZ(i));     
                                              
             var target = new THREE.Vector3(this.target.attributes.position.getX(i), 
-                                             this.target.attributes.position.getY(i), 
-                                             this.target.attributes.position.getZ(i));                                               
+                                           this.target.attributes.position.getY(i), 
+                                           this.target.attributes.position.getZ(i));                                               
 
             this.applyForce(point, target, velocity);
             this.gateMesh.geometry.attributes.position.setXYZ(i, point.x, point.y, point.z);
@@ -74,15 +70,19 @@ class krParticleSystem{
         var distance = pointBefore.distanceTo(target);
         var initVelocity = velocity.clone();
 
-        var attrictionValue = -0.4 * initVelocity.length();
+        var attrictionValue = 0.2 * initVelocity.length();
         var attriction = new THREE.Vector3();
         attriction = initVelocity.normalize();
         attriction = attriction.multiplyScalar(attrictionValue);
-        
-        var accelerationValue = - this.forceConstant* (distance * distance);
+
+        var accelerationValue = 0;
+        if(distance != 0){
+            accelerationValue = - this.forceConstant / (distance * distance);
+        }
         var acceleration = new THREE.Vector3();
         acceleration = acceleration.subVectors(pointBefore, target).normalize();
         acceleration = acceleration.multiplyScalar(accelerationValue);
+        acceleration = acceleration.clampLength(-1, 1);
         
         var newPosition = new THREE.Vector3();
         newPosition.x = pointBefore.x + initVelocity.x + (acceleration.x + attriction.x) * 0.5; 
@@ -95,6 +95,7 @@ class krParticleSystem{
         velocity.y = newPosition.y - pointBefore.y;
         velocity.z = newPosition.z - pointBefore.z;
 
+        //console.log(pointBefore);
         pointBefore.x = newPosition.x;
         pointBefore.y = newPosition.y;
         pointBefore.z = newPosition.z;
@@ -110,9 +111,10 @@ class krParticleSystem{
     }
 
     update(){
-        this.target.rotateX(Math.random() * 0.003);
-        this.target.rotateY(Math.random() * 0.003);
-        this.target.rotateZ(Math.random() * 0.003);
+        this.target.rotateX(Math.random() * 0.05);
+        this.target.rotateY(Math.random() * 0.05);
+        this.target.rotateZ(Math.random() * 0.05);
+        this.target.attributes.position.needsUpdate = true;
         this.updatePositions();
     }
 
