@@ -2,10 +2,12 @@
 class krParticleSystem{
     constructor(polygonalVertexShader, polygonalFragmentShader, target, scene) {
         this.spawnChance = 0.8; //per frame new particles
+        this.forceConstant = 0.01;
         this.clock = new THREE.Clock();
 
         var geometry = new THREE.BufferGeometry();
         var material = new THREE.PointsMaterial({
+            size: 0.001
         });
 
         if(target == undefined){
@@ -13,8 +15,29 @@ class krParticleSystem{
         }else{
             this.target = target;
         }
-        geometry.setAttribute( 'position',  this.target.attributes.position); //TODO gl.DYNAMIC_DRAW add
-        geometry.setAttribute( 'enabled', new THREE.Float32BufferAttribute( this.target.attributes.position.count, 1 ) ); //enabled at 0
+        geometry.setAttribute( 'position',  new THREE.Float32BufferAttribute( this.target.attributes.position.count * 3, 3)); //TODO gl.DYNAMIC_DRAW add
+        geometry.setAttribute( 'velocity',  new THREE.Float32BufferAttribute( this.target.attributes.position.count * 3, 3));
+
+        for(var i = 0; i < geometry.attributes.position.count; i++){
+            var point = new THREE.Vector3(geometry.attributes.position.getX(i), 
+                                          geometry.attributes.position.getY(i), 
+                                          geometry.attributes.position.getZ(i));
+
+            var velocity = new THREE.Vector3(geometry.attributes.velocity.getX(i), 
+                                             geometry.attributes.velocity.getY(i), 
+                                             geometry.attributes.velocity.getZ(i));      
+
+            point.x = Math.random();
+            point.y = Math.random();
+            point.z = Math.random();
+            velocity.x = 0.03 * Math.random();
+            velocity.y = 0.03 *Math.random();
+            velocity.z = 0.03 * Math.random();
+            geometry.attributes.position.setXYZ(i, point.x, point.y, point.z);
+            geometry.attributes.velocity.setXYZ(i, velocity.x, velocity.y, velocity.z);
+        }
+
+        geometry.setAttribute( 'enabled',   new THREE.Float32BufferAttribute( this.target.attributes.position.count, 1)); //enabled at 0
         geometry.computeVertexNormals();
 
         this.gateMesh = new THREE.Points(geometry, material);
@@ -24,18 +47,59 @@ class krParticleSystem{
 
     updatePositions(){
         for(var i = 0; i < this.gateMesh.geometry.attributes.position.count; i++){
-            var point = [this.gateMesh.geometry.attributes.position.getX(i), this.gateMesh.geometry.attributes.position.getY(i), this.gateMesh.geometry.attributes.position.getZ(i)];
-            this.applyForce(point);
-            this.gateMesh.geometry.attributes.position.setXYZ(i, point[0], point[1], point[2]);
+            var point = new THREE.Vector3(this.gateMesh.geometry.attributes.position.getX(i), 
+                                          this.gateMesh.geometry.attributes.position.getY(i), 
+                                          this.gateMesh.geometry.attributes.position.getZ(i));
+
+            var velocity = new THREE.Vector3(this.gateMesh.geometry.attributes.velocity.getX(i), 
+                                             this.gateMesh.geometry.attributes.velocity.getY(i), 
+                                             this.gateMesh.geometry.attributes.velocity.getZ(i));     
+                                             
+            var target = new THREE.Vector3(this.target.attributes.position.getX(i), 
+                                             this.target.attributes.position.getY(i), 
+                                             this.target.attributes.position.getZ(i));                                               
+
+            this.applyForce(point, target, velocity);
+            this.gateMesh.geometry.attributes.position.setXYZ(i, point.x, point.y, point.z);
+            this.gateMesh.geometry.attributes.velocity.setXYZ(i, velocity.x, velocity.y, velocity.z);
         }
+        this.gateMesh.geometry.attributes.velocity.needsUpdate = true;
         this.gateMesh.geometry.attributes.position.needsUpdate = true;
         this.gateMesh.geometry.computeVertexNormals();
     }
 
-    applyForce(pointBefore, target){
-        pointBefore[0] += 0.01 * (Math.random() - 0.5);
-        pointBefore[1] += 0.01 * (Math.random() - 0.5);
-        pointBefore[2] += 0.01 * (Math.random() - 0.5);
+    applyForce(pointBefore, target, velocity){ // each frame is t = 1
+        var distance = pointBefore.distanceTo(target);
+        var initVelocity = velocity.clone();
+        
+        var accelerationValue = - this.forceConstant* (distance * distance);
+        var acceleration = new THREE.Vector3();
+        acceleration = acceleration.subVectors(pointBefore, target).normalize();
+        acceleration = acceleration.multiplyScalar(accelerationValue);
+        
+        var newPosition = new THREE.Vector3();
+        newPosition.x = pointBefore.x + initVelocity.x + acceleration.x * 0.5; 
+        newPosition.y = pointBefore.y + initVelocity.y + acceleration.y * 0.5; 
+        newPosition.z = pointBefore.z + initVelocity.z + acceleration.z * 0.5; 
+        //console.log(newPosition);
+        //console.log(pointBefore);
+
+        velocity.x = newPosition.x - pointBefore.x;
+        velocity.y = newPosition.y - pointBefore.y;
+        velocity.z = newPosition.z - pointBefore.z;
+
+        pointBefore.x = newPosition.x;
+        pointBefore.y = newPosition.y;
+        pointBefore.z = newPosition.z;
+
+        
+        
+        //console.log(pointBefore);
+        //throw("adw");
+
+        //pointBefore.x += 0.01 * (Math.random() - 0.5);
+        //pointBefore.y += 0.01 * (Math.random() - 0.5);
+        //pointBefore.z += 0.01 * (Math.random() - 0.5);
     }
 
     update(){
