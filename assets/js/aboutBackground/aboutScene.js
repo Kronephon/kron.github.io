@@ -45,19 +45,19 @@ function onDocumentMouseMove(event) {
 
 function onKeyPress(event) {
     var cameraspeed = 0.01;
-    if(event.key == "w"){
+    if (event.key == "w") {
         camera_sp.position.z -= cameraspeed;
     }
-    if(event.key == "s"){
+    if (event.key == "s") {
         camera_sp.position.z += cameraspeed;
     }
-    if(event.key == "a"){
+    if (event.key == "a") {
         camera_sp.position.x -= cameraspeed;
     }
-    if(event.key == "d"){
+    if (event.key == "d") {
         camera_sp.position.x += cameraspeed;
     }
-    if(event.key == " "){
+    if (event.key == " ") {
         camera_sp.position.y += cameraspeed;
     }
 }
@@ -79,8 +79,7 @@ function aboutScene(resources) {
 
     scene_sp = new THREE.Scene();
     camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 2000);
-    camera_sp.position.z = 20;
-    camera_sp.position.y = 1;
+    camera_sp.position.z = 5;
 
     paralaxInit();
     document.addEventListener('keydown', onKeyPress, false); //test camera controls
@@ -105,7 +104,7 @@ function aboutScene(resources) {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     scene_sp.add(this.mesh);*/
 
-    particleSystem = new krParticleSystem(undefined,undefined,undefined,scene_sp);
+    particleSystem = new krParticleSystem(undefined, undefined, undefined, scene_sp);
 
     function animate() {
         paralax();
