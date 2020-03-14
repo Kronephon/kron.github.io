@@ -84,6 +84,28 @@ function aboutScene(resources) {
     camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 2000);
     camera_sp.position.z = 5;
 
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load(
+        'assets/js/aboutBackground/2009 Dusk Pink Sky/2009 Dusk Pink Sky.jpg',
+      );
+    texture.magFilter = THREE.LinearFilter;
+    texture.minFilter = THREE.LinearFilter;
+    const shader = THREE.ShaderLib.equirect;
+    const material = new THREE.ShaderMaterial({
+    fragmentShader: shader.fragmentShader,
+    vertexShader: shader.vertexShader,
+    uniforms: shader.uniforms,
+    depthWrite: false,
+    side: THREE.BackSide,
+    });
+    material.uniforms.tEquirect.value = texture;
+
+    const plane = new THREE.BoxBufferGeometry(10, 10, 10);
+    bgMesh = new THREE.Mesh(plane, material);
+    scene_sp.add(bgMesh);
+    
+    console.log(texture);
+
     paralaxInit();
     document.addEventListener('keydown', onKeyPress, false); //test camera controls
     renderer_sp = new THREE.WebGLRenderer();

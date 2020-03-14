@@ -1,0 +1,15 @@
+Usage notes:
+
+(OPTIONAL for 3dsmax 2009 only) Load using the bitmap loader in max and choose RealPixel Float (RGB) instead of RGBA as there is no alpha channel. This saves 200-300 mb when rendering.
+
+When using versions of 3dsmax newer than 2009 there seems to be issues loading the exr files, there is some info on this in the comments on my blog here: http://www.peterguthrie.net/blog/2010/02/hdri-sky-lighting-tutorial/
+
+Remember to change the mapping type to environ/spherical environment.
+
+In all HDRs the sun is oriented south>north for easy control of shadow direction. To change the rotation enter a value from 0-1 in the bitmap offset, for example to have the sun coming from the east, change it to 0.25, from the north: 0.5 etc.
+
+I usually use the exr in a vray dome light rather than as a max environment map. If you are using a vrayphysical camera then a good starting point would be to set the output of the exr (in the bitmap loader) to 1, set the vray dome light to a multiplier of 1 and leave the vrayphysical camera exposure at default. (F8, 1/200th, ISO 100) From there you can adjust either the bitmap output multiplier or the vraydomelight multiplier till you are happy with the exposure. (I find the multiplier can vary between 0.5 and 2.0)
+
+If you are confused by apparent overexposure in photoshop, remember photoshop is displaying a preview of part of the whole dynamic range, you can simply drag the exposure slider down at the bootom left of the image window to view the full range.
+
+If you get stuck, feel free to contact me at peter@peterguthrie.net

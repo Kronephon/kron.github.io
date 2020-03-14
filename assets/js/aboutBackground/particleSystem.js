@@ -1,8 +1,8 @@
 class krParticleSystem {
     constructor(pointShader, gateShader, camera, scene) {
-        this.spawnChance = 0.00015; //per frame new particles
+        this.spawnChance = 0.0015; //per frame new particles
         this.forceConstant = 9;
-        this.eccentricity = 1.08;
+        this.eccentricity = 0.08;
         this.target = new THREE.IcosahedronBufferGeometry(1, 0);
         this.clock = new THREE.Clock();
         this.clock.start();
@@ -32,9 +32,9 @@ class krParticleSystem {
         for (var i = 0; i < geometry.attributes.position.count; i++) {
             var point = new THREE.Vector3();
             var velocity = new THREE.Vector3();
-            point.x = camera_sp.position.x + (Math.random() - 0.5);
-            point.y = camera_sp.position.y + (Math.random() - 0.5);
-            point.z = camera_sp.position.z - 1 + (Math.random() - 0.5);
+            point.x = camera.position.x + (Math.random() - 0.5);
+            point.y = camera.position.y + (Math.random() - 0.5);
+            point.z = camera.position.z - 1 + (Math.random() - 0.5);
             velocity.x = 0.2 * (Math.random() - 0.5);
             velocity.y = 0.2 * (Math.random() - 0.5);
             velocity.z = 0.2 * (Math.random() - 0.5);
@@ -106,7 +106,7 @@ class krParticleSystem {
             this.gateMesh.geometry.attributes.distance.setX(i, point.distanceTo(target));
             if(point.distanceTo(target) <= 1.0){
                 this.eccentricity -= 0.0001;
-                this.eccentricity = Math.abs(Math.max(0.1, this.eccentricity));
+                this.eccentricity = Math.abs(Math.max(0.01, this.eccentricity));
             }
         }
         this.gatePoints.geometry.attributes.velocity.needsUpdate = true;
