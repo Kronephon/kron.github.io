@@ -73,9 +73,12 @@ window.onresize = function(event) {
 };
 
 function aboutScene(resources) {
-    var postProcessingVertex = resources[0];
+    var postProcessingVertex   = resources[0];
     var postProcessingFragment = resources[1];
-    var statue = resources[2];
+    
+    var gateShader   = [resources[2], resources[3]];
+
+    var pointShader  = [resources[4], resources[5]];
 
     scene_sp = new THREE.Scene();
     camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 2000);
@@ -104,7 +107,7 @@ function aboutScene(resources) {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     scene_sp.add(this.mesh);*/
 
-    particleSystem = new krParticleSystem(undefined, undefined, undefined, scene_sp);
+    particleSystem = new krParticleSystem(pointShader, gateShader, camera_sp, scene_sp);
 
     function animate() {
         paralax();

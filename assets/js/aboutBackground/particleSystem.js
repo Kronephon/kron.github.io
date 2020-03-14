@@ -1,8 +1,9 @@
 class krParticleSystem {
-    constructor(polygonalVertexShader, polygonalFragmentShader, target, scene) {
-        this.spawnChance = 0.0008; //per frame new particles
-        this.forceConstant = 10.0;
-        this.eccentricity = 1.0;
+    constructor(pointShader, gateShader, camera, scene) {
+        this.spawnChance = 0.00015; //per frame new particles
+        this.forceConstant = 9;
+        this.eccentricity = 1.08;
+        this.target = new THREE.IcosahedronBufferGeometry(1, 0);
         this.clock = new THREE.Clock();
         this.clock.start();
 
@@ -21,49 +22,10 @@ class krParticleSystem {
                     value: window.innerHeight / 2.0
                 }
             },
-            vertexShader: `
-                    
-              uniform float scale;
-              uniform float size;
-
-              attribute float enabled;
-              attribute float distance;
-              
-              varying float vOpacity;
-              varying float vDistance;
-              
-              void main() {
-                vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-                gl_PointSize = size * ( scale / length( mvPosition.xyz ) );
-                gl_Position = projectionMatrix * mvPosition;
-                vOpacity = enabled;
-                vDistance = distance;
-              }
-          `,
-            fragmentShader: `
-              uniform vec3 diffuse;
-
-              varying float vOpacity;
-              varying float vDistance;
-        
-              void main() {
-                if(vDistance > 0.2){
-                    gl_FragColor = vec4( diffuse, vOpacity  );
-                }else{
-                    if(vDistance < 0.05){
-                        discard;
-                    }
-                    gl_FragColor = vec4( diffuse, vDistance  );
-                }
-              }
-          `
+            vertexShader: pointShader[0],
+            fragmentShader: pointShader[1]
         });
 
-        if (target == undefined) {
-            this.target = new THREE.IcosahedronBufferGeometry(1, 0);
-        } else {
-            this.target = target;
-        }
         geometry.setAttribute('position', new THREE.Float32BufferAttribute(this.target.attributes.position.count * 3, 3)); //TODO gl.DYNAMIC_DRAW add
         geometry.setAttribute('velocity', new THREE.Float32BufferAttribute(this.target.attributes.position.count * 3, 3));
 
@@ -97,33 +59,8 @@ class krParticleSystem {
                     value: new THREE.Color("aqua")
                 }
             },
-            vertexShader: `
-              attribute float enabled;
-              attribute float distance;
-              
-              varying float vEnabled;
-              varying float vDistance;
-              
-              void main() {
-                vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-                gl_Position = projectionMatrix * mvPosition;
-                vEnabled = enabled;
-                vDistance = distance;
-              }
-          `,
-            fragmentShader: `
-              uniform vec3 diffuse;
-
-              varying float vEnabled;
-              varying float vDistance;
-        
-              void main() {
-                gl_FragColor = vec4( diffuse, 0.0);
-                if(vDistance < 0.8){
-                    gl_FragColor = vec4( diffuse, 1.0 - abs(vDistance));
-                }
-              }
-          `
+            vertexShader: gateShader[0],
+            fragmentShader: gateShader[1]
         });
 
         var gateGeometry = new THREE.BufferGeometry();
@@ -167,6 +104,10 @@ class krParticleSystem {
             this.gatePoints.geometry.attributes.velocity.setXYZ(i, velocity.x, velocity.y, velocity.z);
             this.gatePoints.geometry.attributes.distance.setX(i, point.distanceTo(target));
             this.gateMesh.geometry.attributes.distance.setX(i, point.distanceTo(target));
+            if(point.distanceTo(target) <= 1.0){
+                this.eccentricity -= 0.0001;
+                this.eccentricity = Math.abs(Math.max(0.1, this.eccentricity));
+            }
         }
         this.gatePoints.geometry.attributes.velocity.needsUpdate = true;
         this.gatePoints.geometry.attributes.position.needsUpdate = true;
@@ -175,9 +116,6 @@ class krParticleSystem {
 
         this.gatePoints.geometry.computeVertexNormals();
         this.gateMesh.geometry.computeVertexNormals();
-
-        //console.log(this.gateMesh.geometry.attributes.distance);
-        //throw ("dawonj");
 
         if (this.spawnChance < 1.0) {
             this.spawnChance += this.spawnChance / 100;
@@ -200,32 +138,28 @@ class krParticleSystem {
         var acceleration = new THREE.Vector3();
         acceleration = acceleration.subVectors(pointBefore, target).normalize();
         acceleration = acceleration.multiplyScalar(accelerationValue);
-        acceleration = acceleration.clampLength(-0.01, 0.01);
+        acceleration = acceleration.clampLength(-0.2, 0.02);
 
         var newPosition = new THREE.Vector3();
         newPosition.x = pointBefore.x + initVelocity.x + (acceleration.x + attriction.x) * 0.5;
         newPosition.y = pointBefore.y + initVelocity.y + (acceleration.y + attriction.y) * 0.5;
         newPosition.z = pointBefore.z + initVelocity.z + (acceleration.z + attriction.z) * 0.5;
 
-        //console.log(newPosition);
-        //console.log(pointBefore);
-
         velocity.x = newPosition.x - pointBefore.x;
         velocity.y = newPosition.y - pointBefore.y;
         velocity.z = newPosition.z - pointBefore.z;
 
-        //console.log(pointBefore);
         pointBefore.x = newPosition.x;
         pointBefore.y = newPosition.y;
         pointBefore.z = newPosition.z;
     }
 
     update() {
-        this.target.rotateX((Math.random() - 0.6) * 0.001);
-        this.target.rotateY((Math.random() - 0.25) * 0.002);
-        this.target.rotateZ((Math.random() - 0.2) * 0.005);
-        this.target.rotateY(0.06 * Math.abs(Math.sin((1 * this.clock.getElapsedTime()))));
-        this.target.rotateZ(0.025 * Math.abs(Math.cos((0.7 * this.clock.getElapsedTime()))));
+        this.target.rotateX(this.eccentricity * (Math.random() + 0.5) * 0.05);
+        this.target.rotateY(this.eccentricity * (Math.random() + 0.5) * 0.05);
+        this.target.rotateZ(this.eccentricity * (Math.random() + 0.5) * 0.05);
+        this.target.rotateY(this.eccentricity * 0.06 * Math.abs(Math.cos((1 * this.clock.getElapsedTime())+0.5)));
+        this.target.rotateZ(this.eccentricity * 0.005 * Math.abs(Math.sin((0.7 * this.clock.getElapsedTime()+0.5))));
 
         this.updatePositions();
     }
