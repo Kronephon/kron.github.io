@@ -17,7 +17,9 @@ function loadResourcesAndStart(canvas) {
         'assets/js/aboutBackground/gateFragment.glsl',
 
         'assets/js/aboutBackground/pointVertex.glsl',
-        'assets/js/aboutBackground/pointFragment.glsl'
+        'assets/js/aboutBackground/pointFragment.glsl',
+
+        'assets/poly/trajan.gltf'
         ],
         function callback(result) {
             aboutScene(result);

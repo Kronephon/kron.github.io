@@ -73,6 +73,12 @@ window.onresize = function(event) {
 };
 
 function aboutScene(resources) {
+    const gltfLoader = new GLTFLoader();
+    //console.log(resources[6]);
+    //const gltfParser = gltfLoader.parse(resources[6]);
+
+    console.log(gltfLoader.parse(resources[6]));
+    
     var postProcessingVertex   = resources[0];
     var postProcessingFragment = resources[1];
     
@@ -103,8 +109,6 @@ function aboutScene(resources) {
     const plane = new THREE.BoxBufferGeometry(10, 10, 10);
     bgMesh = new THREE.Mesh(plane, material);
     scene_sp.add(bgMesh);
-    
-    console.log(texture);
 
     paralaxInit();
     document.addEventListener('keydown', onKeyPress, false); //test camera controls

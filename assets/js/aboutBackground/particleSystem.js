@@ -2,7 +2,7 @@ class krParticleSystem {
     constructor(pointShader, gateShader, camera, scene) {
         this.spawnChance = 0.0015; //per frame new particles
         this.forceConstant = 9;
-        this.eccentricity = 0.08;
+        this.eccentricity = 0.19;
         this.target = new THREE.IcosahedronBufferGeometry(1, 0);
         this.clock = new THREE.Clock();
         this.clock.start();
@@ -32,12 +32,31 @@ class krParticleSystem {
         for (var i = 0; i < geometry.attributes.position.count; i++) {
             var point = new THREE.Vector3();
             var velocity = new THREE.Vector3();
-            point.x = camera.position.x + (Math.random() - 0.5);
-            point.y = camera.position.y + (Math.random() - 0.5);
-            point.z = camera.position.z - 1 + (Math.random() - 0.5);
-            velocity.x = 0.2 * (Math.random() - 0.5);
-            velocity.y = 0.2 * (Math.random() - 0.5);
-            velocity.z = 0.2 * (Math.random() - 0.5);
+            var assigned = false;
+            for(var j = 0; j < i; j++){
+                if(this.target.attributes.position.getX(i) == this.target.attributes.position.getX(j) &&
+                this.target.attributes.position.getY(i) == this.target.attributes.position.getY(j) &&
+                this.target.attributes.position.getZ(i) == this.target.attributes.position.getZ(j)){
+                    point.x = geometry.attributes.position.getX(j);
+                    point.y = geometry.attributes.position.getY(j);
+                    point.z = geometry.attributes.position.getZ(j);
+                    
+                    velocity.x = geometry.attributes.velocity.getX(j);
+                    velocity.y = geometry.attributes.velocity.getY(j);
+                    velocity.z = geometry.attributes.velocity.getZ(j);
+                    assigned = true;
+                    break;
+                }
+            }
+            if(!assigned){
+                point.x = camera.position.x + (Math.random() - 0.5);
+                point.y = camera.position.y + (Math.random() - 0.5);
+                point.z = camera.position.z - 1 + (Math.random() - 0.5);
+                velocity.x = 0.2 * (Math.random() - 0.5);
+                velocity.y = 0.2 * (Math.random() - 0.5);
+                velocity.z = 0.2 * (Math.random() - 0.5);
+            }
+
             geometry.attributes.position.setXYZ(i, point.x, point.y, point.z);
             geometry.attributes.velocity.setXYZ(i, velocity.x, velocity.y, velocity.z);
         }
@@ -105,7 +124,7 @@ class krParticleSystem {
             this.gatePoints.geometry.attributes.distance.setX(i, point.distanceTo(target));
             this.gateMesh.geometry.attributes.distance.setX(i, point.distanceTo(target));
             if(point.distanceTo(target) <= 1.0){
-                this.eccentricity -= 0.0001;
+                this.eccentricity -= 0.000001;
                 this.eccentricity = Math.abs(Math.max(0.01, this.eccentricity));
             }
         }
