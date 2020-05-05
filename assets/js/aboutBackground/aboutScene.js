@@ -72,13 +72,8 @@ window.onresize = function(event) {
     renderer_sp.setSize(width, height);
 };
 
-function aboutScene(resources) {
-    const gltfLoader = new GLTFLoader();
-    //console.log(resources[6]);
-    //const gltfParser = gltfLoader.parse(resources[6]);
+function aboutScene(resources) {    
 
-    console.log(gltfLoader.parse(resources[6]));
-    
     var postProcessingVertex   = resources[0];
     var postProcessingFragment = resources[1];
     
@@ -132,8 +127,9 @@ function aboutScene(resources) {
     })
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     scene_sp.add(this.mesh);*/
-
-    particleSystem = new krParticleSystem(pointShader, gateShader, camera_sp, scene_sp);
+    scene_sp.add(resources[6]);
+    console.log(resources[6]);
+    particleSystem = new krParticleSystem(pointShader, gateShader, camera_sp, scene_sp, resources[6]);
 
     function animate() {
         paralax();

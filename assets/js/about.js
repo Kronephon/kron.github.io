@@ -18,14 +18,29 @@ function loadResourcesAndStart(canvas) {
 
         'assets/js/aboutBackground/pointVertex.glsl',
         'assets/js/aboutBackground/pointFragment.glsl',
-
-        'assets/poly/trajan.gltf'
         ],
         function callback(result) {
-            aboutScene(result);
+            loadGLTF(result);
         },
         function errorCallback() {
             throw ("Error in loading pre requisites. Missing Files.");
+        });
+}
+
+//bypass due to dedicated THREEjs loaders/parsers
+
+function loadGLTF(result) {
+
+    const gltfLoader = new THREE.GLTFLoader();
+
+    gltfLoader.load('assets/poly/trajan.gltf',
+        function callback(gltf) {
+            gltf.scene.traverse( function ( child ) {
+                if ( child.isMesh ) {
+                    result.push(child);
+                }
+            } ); 
+            aboutScene(result);
         });
 }
 

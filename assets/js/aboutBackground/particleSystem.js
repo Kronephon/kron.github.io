@@ -1,9 +1,9 @@
 class krParticleSystem {
-    constructor(pointShader, gateShader, camera, scene) {
+    constructor(pointShader, gateShader, camera, scene, target) {
         this.spawnChance = 0.0015; //per frame new particles
         this.forceConstant = 9;
         this.eccentricity = 0.19;
-        this.target = new THREE.IcosahedronBufferGeometry(1, 0);
+        this.target = target;
         this.clock = new THREE.Clock();
         this.clock.start();
 
