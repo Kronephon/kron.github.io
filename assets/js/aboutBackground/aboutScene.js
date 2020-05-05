@@ -1,4 +1,4 @@
-var canvas_sp, scene_sp, camera_sp, renderer_sp, composer_sp, shaderPass_sp;
+var canvas_sp, scene_sp, camera_sp, renderer_sp, composer_sp, shaderPass_sp, world_sp;
 
 class postProcessingShader_sp {
     constructor(vertexShader, fragmentShader) {
@@ -72,39 +72,11 @@ window.onresize = function(event) {
     renderer_sp.setSize(width, height);
 };
 
-function aboutScene(resources) {    
 
-    var postProcessingVertex   = resources[0];
-    var postProcessingFragment = resources[1];
-    
-    var gateShader   = [resources[2], resources[3]];
-
-    var pointShader  = [resources[4], resources[5]];
-
+function sceneSetup(postProcessingShader){
     scene_sp = new THREE.Scene();
     camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 2000);
     camera_sp.position.z = 5;
-
-    const loader = new THREE.TextureLoader();
-    const texture = loader.load(
-        'assets/js/aboutBackground/2009 Dusk Pink Sky/2009 Dusk Pink Sky.jpg',
-      );
-    texture.magFilter = THREE.LinearFilter;
-    texture.minFilter = THREE.LinearFilter;
-    const shader = THREE.ShaderLib.equirect;
-    const material = new THREE.ShaderMaterial({
-    fragmentShader: shader.fragmentShader,
-    vertexShader: shader.vertexShader,
-    uniforms: shader.uniforms,
-    depthWrite: false,
-    side: THREE.BackSide,
-    });
-    material.uniforms.tEquirect.value = texture;
-
-    const plane = new THREE.BoxBufferGeometry(10, 10, 10);
-    bgMesh = new THREE.Mesh(plane, material);
-    scene_sp.add(bgMesh);
-
     paralaxInit();
     document.addEventListener('keydown', onKeyPress, false); //test camera controls
     renderer_sp = new THREE.WebGLRenderer();
@@ -115,9 +87,21 @@ function aboutScene(resources) {
     renderPass_sp = new RenderPass(scene_sp, camera_sp);
     composer_sp.addPass(renderPass_sp);
 
-    shaderPass_sp = new THREE.ShaderPass(new postProcessingShader_sp(postProcessingVertex, postProcessingFragment));
+    shaderPass_sp = new THREE.ShaderPass(new postProcessingShader_sp(postProcessingShader[0], postProcessingShader[1]));
     composer_sp.addPass(shaderPass_sp);
+}
 
+function worldSetup(gateShader){
+    world_sp = new KrWorld(gateShader);
+}
+
+function aboutScene(resources) {
+    var postProcessingShader = [resources[0], resources[1]];
+    var gateShader   = [resources[2], resources[3]];
+    var statue = resources[4];
+
+    sceneSetup(postProcessingShader);
+    worldSetup(gateShader);
 
     //test stuff
     /*geometry = new THREE.IcosahedronBufferGeometry(5, 5);
@@ -127,15 +111,12 @@ function aboutScene(resources) {
     })
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     scene_sp.add(this.mesh);*/
-    scene_sp.add(resources[6]);
-    console.log(resources[6]);
-    particleSystem = new krParticleSystem(pointShader, gateShader, camera_sp, scene_sp, resources[6]);
 
     function animate() {
         paralax();
-        particleSystem.update();
+        world_sp.update();
         composer_sp.render();
         requestAnimationFrame(animate);
     }
-    animate();
+    requestAnimationFrame(animate);
 }
