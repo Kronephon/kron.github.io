@@ -8,7 +8,9 @@ class KrWorld {
 
         this.sphereCenter = this.setupCore(sphereCenterRadius, gateShader);
 
-        this.setupArtifacts(0.03, 1000, 2.0, 1.0, 0.5, sphereCenterRadius);
+        this.setupArtifacts(0.03, 200, 2.0, 1.0, 0.5, sphereCenterRadius);
+
+
         /*
         var geometry = new THREE.BufferGeometry();
         var point_material = new THREE.ShaderMaterial({
@@ -113,20 +115,31 @@ class KrWorld {
     }
 
     setupArtifacts(sizeElement, numberOfArtifacts, outerBoundRegion, internalFactor1 , internalFactor2, innerBoundRegion){
+        var material = new THREE.MeshStandardMaterial( {
+
+            color: 0xffffff,
+        
+            roughness: 0,
+            metalness: 1,
+
+            transparent: true,
+            opacity: 0.3
+        
+            //envMap: envMap, // important -- especially for metals!
+            //envMapIntensity: envMapIntensity
+        
+        } );
+        var geometry = new THREE.OctahedronBufferGeometry(sizeElement);
+        geometry.scale(1,1,7);
         for(var i = 0; i <= numberOfArtifacts; ++i){
-            var geometry = new THREE.OctahedronBufferGeometry(sizeElement);
-            var material = new THREE.MeshBasicMaterial(
-                {
-                    color: 0xff0f00
-                }
-            )
+
             var artifact = new THREE.Mesh( geometry, material );
             
             var x = (Math.random()-0.5) * outerBoundRegion * 2;
             var y = (Math.random()-0.5) * outerBoundRegion * 2;
             var z = (Math.random()-0.5) * outerBoundRegion * 2;
             
-            while( x*x + y*y + z*z < (innerBoundRegion + sizeElement) * (innerBoundRegion + sizeElement) ||
+            while( x*x + y*y + z*z < (innerBoundRegion + sizeElement *  7) * (innerBoundRegion + sizeElement *  7) ||
                    x*x + y*y + z*z > (outerBoundRegion) * (outerBoundRegion)){
                 x = (Math.random()-0.5) * outerBoundRegion * 2;
                 y = (Math.random()-0.5) * outerBoundRegion * 2;
@@ -135,7 +148,14 @@ class KrWorld {
             artifact.position.x = x;
             artifact.position.y = y;
             artifact.position.z = z;
+
+            artifact.lookAt(0,0,0);
             scene_sp.add( artifact );
+
+
+            this.light = new THREE.PointLight(0xFFFFFF, 1);
+            this.light.position.set(0, 0, 0);
+            scene_sp.add(this.light);
 
         }
     }
