@@ -8,7 +8,9 @@ class KrWorld {
 
         this.sphereCenter = this.setupCore(sphereCenterRadius, gateShader);
 
-        this.setupArtifacts(0.03, 200, 2.0, 1.0, 0.5, sphereCenterRadius);
+        this.setupArtifacts(0.03, 25, 2.0, 1.0, 0.5, sphereCenterRadius);
+
+        this.setupBackground();
 
 
         /*
@@ -102,12 +104,13 @@ class KrWorld {
     }
 
     setupCore(radius, shader){
-        var geometry = new THREE.DodecahedronBufferGeometry(radius, 6);
-        var material = new THREE.MeshBasicMaterial( 
+        var geometry = new THREE.DodecahedronBufferGeometry(radius, 3);
+        var material = new THREE.MeshStandardMaterial( 
             {
                 color: 0xffff00,
                 transparent: true,
-                opacity: 0.3
+                opacity: 0.1,
+                side: THREE.DoubleSide
             });
         var sphere = new THREE.Mesh( geometry, material );
         scene_sp.add( sphere );
@@ -115,22 +118,28 @@ class KrWorld {
     }
 
     setupArtifacts(sizeElement, numberOfArtifacts, outerBoundRegion, internalFactor1 , internalFactor2, innerBoundRegion){
+        this.artifacts = new THREE.Group();
+        this.light = new THREE.PointLight(0xf1f9c7, 2);
+        this.light.position.set(0, 0, 0);
+        this.artifacts.add(this.light);
+
         var material = new THREE.MeshStandardMaterial( {
 
-            color: 0xffffff,
-        
-            roughness: 0,
-            metalness: 1,
-
+            color: 0xff00ff,
+            metalness: 1.00,
+            roughness: 0.0,
+            blending:  THREE.AdditiveBlending,
+            //side: THREE.BackSide,
             transparent: true,
             opacity: 0.3
+            
         
             //envMap: envMap, // important -- especially for metals!
             //envMapIntensity: envMapIntensity
         
         } );
-        var geometry = new THREE.OctahedronBufferGeometry(sizeElement);
-        geometry.scale(1,1,7);
+        var geometry = new THREE.OctahedronBufferGeometry(sizeElement, 3);
+        geometry.scale(0.4,0.4,20);
         for(var i = 0; i <= numberOfArtifacts; ++i){
 
             var artifact = new THREE.Mesh( geometry, material );
@@ -139,7 +148,7 @@ class KrWorld {
             var y = (Math.random()-0.5) * outerBoundRegion * 2;
             var z = (Math.random()-0.5) * outerBoundRegion * 2;
             
-            while( x*x + y*y + z*z < (innerBoundRegion + sizeElement *  7) * (innerBoundRegion + sizeElement *  7) ||
+            while( x*x + y*y + z*z < (innerBoundRegion + sizeElement *  20) * (innerBoundRegion + sizeElement *  20) ||
                    x*x + y*y + z*z > (outerBoundRegion) * (outerBoundRegion)){
                 x = (Math.random()-0.5) * outerBoundRegion * 2;
                 y = (Math.random()-0.5) * outerBoundRegion * 2;
@@ -150,17 +159,40 @@ class KrWorld {
             artifact.position.z = z;
 
             artifact.lookAt(0,0,0);
-            scene_sp.add( artifact );
-
-
-            this.light = new THREE.PointLight(0xFFFFFF, 1);
-            this.light.position.set(0, 0, 0);
-            scene_sp.add(this.light);
+            this.artifacts.add( artifact );
 
         }
+        scene_sp.add(this.artifacts);
+    }
+
+    setupBackground(){
+        var geometry = new THREE.DodecahedronBufferGeometry(20, 6);
+        var material = new THREE.MeshBasicMaterial( 
+            {
+                color: new THREE.Color("rgb(0, 0, 80)"),
+                side: THREE.BackSide
+            });
+        var sphere = new THREE.Mesh( geometry, material );
+        scene_sp.add( sphere );
+        return sphere;
+    }
+
+    updateArtifacts(){
+        this.artifacts.rotateY(0.001);
+        for ( var a = 1; a < this.artifacts.children.length; a ++ ) {
+            this.artifacts.children[a].rotateZ(0.002 );
+
+            /*var intensity = 0.005;
+            this.artifacts.children[a].translateX((Math.random()-0.5) * intensity );
+            this.artifacts.children[a].translateY((Math.random()-0.5) * intensity );
+            this.artifacts.children[a].translateZ((Math.random()-0.5) * intensity );
+            this.artifacts.children[a].lookAt(0,0,0);*/
+
+        }
+        //this.artifacts.children[0].intensity = Math.abs(Math.sin(this.clock.getElapsedTime()));
     }
 
     update() {
-
+        this.updateArtifacts();
     }
 }
