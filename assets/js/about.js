@@ -15,6 +15,9 @@ function loadResourcesAndStart(canvas) {
 
         'assets/js/aboutBackground/gateVertex.glsl',
         'assets/js/aboutBackground/gateFragment.glsl',
+
+        'assets/js/aboutBackground/worldBackgroundVertexShader.glsl',
+        'assets/js/aboutBackground/worldBackgroundFragmentShader.glsl',
         ],
         function callback(result) {
             loadGLTF(result);

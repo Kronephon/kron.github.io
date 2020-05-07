@@ -79,7 +79,7 @@ function sceneSetup(postProcessingShader){
     camera_sp.position.z = 5;
     paralaxInit();
     document.addEventListener('keydown', onKeyPress, false); //test camera controls
-    renderer_sp = new THREE.WebGLRenderer({ antialias: true });
+    renderer_sp = new THREE.WebGLRenderer({ antialias: false });
     renderer_sp.setSize(window.innerWidth, window.innerHeight); // change this for smaller resolutions (setSize(window.innerWidth/2, window.innerHeight/2, false) )    
     document.body.appendChild(renderer_sp.domElement);
 
@@ -91,26 +91,18 @@ function sceneSetup(postProcessingShader){
     composer_sp.addPass(shaderPass_sp);
 }
 
-function worldSetup(gateShader){
-    world_sp = new KrWorld(gateShader);
+function worldSetup(gateShader, backgroundShader){
+    world_sp = new KrWorld(gateShader, backgroundShader);
 }
 
 function aboutScene(resources) {
     var postProcessingShader = [resources[0], resources[1]];
     var gateShader   = [resources[2], resources[3]];
-    var statue = resources[4];
+    var backgroundShader   = [resources[4], resources[5]];
+    var statue = resources[6];
 
     sceneSetup(postProcessingShader);
-    worldSetup(gateShader);
-
-    //test stuff
-    /*geometry = new THREE.IcosahedronBufferGeometry(5, 5);
-    material = new THREE.MeshNormalMaterial({
-        transparent: true,
-        side: THREE.DoubleSide
-    })
-    this.mesh = new THREE.Mesh(this.geometry, this.material);
-    scene_sp.add(this.mesh);*/
+    worldSetup(gateShader, backgroundShader);
 
     function animate() {
         paralax();
