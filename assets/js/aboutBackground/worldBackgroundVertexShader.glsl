@@ -1,3 +1,4 @@
+uniform float clock;
 varying vec2 vUv;
 varying vec3 vNormal;
 

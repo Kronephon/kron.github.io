@@ -13,8 +13,8 @@ function loadResourcesAndStart(canvas) {
         'assets/js/aboutBackground/postProcessingVertexShader.glsl',
         'assets/js/aboutBackground/postProcessingFragmentShader.glsl',
 
-        'assets/js/aboutBackground/gateVertex.glsl',
-        'assets/js/aboutBackground/gateFragment.glsl',
+        'assets/js/aboutBackground/gateVertexShader.glsl',
+        'assets/js/aboutBackground/gateFragmentShader.glsl',
 
         'assets/js/aboutBackground/worldBackgroundVertexShader.glsl',
         'assets/js/aboutBackground/worldBackgroundFragmentShader.glsl',

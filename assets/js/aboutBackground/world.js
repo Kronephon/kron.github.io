@@ -19,16 +19,19 @@ class KrWorld {
 
     setupCore(radius, shader){
         var geometry = new THREE.DodecahedronBufferGeometry(radius, 3);
-        var material = new THREE.MeshStandardMaterial( 
-            {
-                color: 0xffffff,
-                transparent: true,
-                opacity: 1.0,
-                side: THREE.BackSide
-            });
+
+        let uniforms = {
+            colorB: {type: 'vec3', value: new THREE.Color(0xACB6E5)},
+            colorA: {type: 'vec3', value: new THREE.Color(0x74ebd5)}
+        };
+        let material =  new THREE.ShaderMaterial({
+            uniforms: uniforms,
+            vertexShader: shader[0],
+            fragmentShader: shader[1],
+            side: THREE.BackSide
+          });
         var sphere = new THREE.Mesh( geometry, material );
         scene_sp.add( sphere );
-        
         return sphere;
     }
 
@@ -71,24 +74,6 @@ class KrWorld {
         return artifacts;
     }
 
-    setupBackground(backgroundShader){
-        var geometry = new THREE.DodecahedronBufferGeometry(20, 6);
-
-        let uniforms = {
-            colorB: {type: 'vec3', value: new THREE.Color(0xACB6E5)},
-            colorA: {type: 'vec3', value: new THREE.Color(0x74ebd5)}
-        };
-        let material =  new THREE.ShaderMaterial({
-            uniforms: uniforms,
-            vertexShader: backgroundShader[0],
-            fragmentShader: backgroundShader[1],
-            side: THREE.BackSide
-          });
-        var sphere = new THREE.Mesh( geometry, material );
-        scene_sp.add( sphere );
-        return sphere;
-    }
-
     updateArtifacts(){
         this.artifacts.rotateY(0.0005);
         for ( var a = 1; a < this.artifacts.children.length; a ++ ) {
@@ -114,7 +99,29 @@ class KrWorld {
         //this.artifacts.children[0].intensity = Math.abs(Math.sin(this.clock.getElapsedTime()));
     }
 
+    setupBackground(backgroundShader){
+        var geometry = new THREE.DodecahedronBufferGeometry(20, 6);
+
+        let uniforms = {
+            clock: {type: 'float', value: this.clock.getElapsedTime()}
+        };
+        let material =  new THREE.ShaderMaterial({
+            uniforms: uniforms,
+            vertexShader: backgroundShader[0],
+            fragmentShader: backgroundShader[1],
+            side: THREE.BackSide
+          });
+        var sphere = new THREE.Mesh( geometry, material );
+        scene_sp.add( sphere );
+        return sphere;
+    }
+
+    updateBackground(){
+        this.background.material.uniforms.clock.value = this.clock.getElapsedTime();
+    }
+
     update() {
         this.updateArtifacts();
+        this.updateBackground();
     }
 }
