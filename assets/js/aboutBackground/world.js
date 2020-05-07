@@ -6,7 +6,7 @@ class KrWorld {
 
         this.sphere1 = this.setupCore(1.0, gateShader);
 
-        this.setupArtifacts(0.03);
+        this.setupArtifacts(0.03, 10000, 3.0, 1.0, 0.5);
         /*
         var geometry = new THREE.BufferGeometry();
         var point_material = new THREE.ShaderMaterial({
@@ -105,7 +105,7 @@ class KrWorld {
         return sphere;
     }
 
-    setupArtifacts(){
+    setupArtifacts(sizeElement, numberOfArtifacts, spawnArea, internalFactor1 , internalFactor2){
         /*const base = new THREE.OctahedronBufferGeometry(0.03);
         var geometry = new THREE.InstancedBufferGeometry();
         geometry.maxInstancedCount = 50000;
