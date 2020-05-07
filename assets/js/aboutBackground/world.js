@@ -4,9 +4,11 @@ class KrWorld {
         this.clock = new THREE.Clock();
         this.clock.start();
 
-        this.sphere1 = this.setupCore(1.0, gateShader);
+        const sphereCenterRadius = 1.0;
 
-        this.setupArtifacts(0.03, 10000, 3.0, 1.0, 0.5);
+        this.sphereCenter = this.setupCore(sphereCenterRadius, gateShader);
+
+        this.setupArtifacts(0.03, 1000, 2.0, 1.0, 0.5, sphereCenterRadius);
         /*
         var geometry = new THREE.BufferGeometry();
         var point_material = new THREE.ShaderMaterial({
@@ -99,15 +101,41 @@ class KrWorld {
 
     setupCore(radius, shader){
         var geometry = new THREE.DodecahedronBufferGeometry(radius, 6);
-        var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+        var material = new THREE.MeshBasicMaterial( 
+            {
+                color: 0xffff00,
+                transparent: true,
+                opacity: 0.3
+            });
         var sphere = new THREE.Mesh( geometry, material );
         scene_sp.add( sphere );
         return sphere;
     }
 
-    setupArtifacts(sizeElement, numberOfArtifacts, spawnArea, internalFactor1 , internalFactor2){
-        for(i = 0; i <= numberOfArtifacts; ++i){
-            var geometry = new THREE.DodecahedronBufferGeometry(radius, 6);
+    setupArtifacts(sizeElement, numberOfArtifacts, outerBoundRegion, internalFactor1 , internalFactor2, innerBoundRegion){
+        for(var i = 0; i <= numberOfArtifacts; ++i){
+            var geometry = new THREE.OctahedronBufferGeometry(sizeElement);
+            var material = new THREE.MeshBasicMaterial(
+                {
+                    color: 0xff0f00
+                }
+            )
+            var artifact = new THREE.Mesh( geometry, material );
+            
+            var x = (Math.random()-0.5) * outerBoundRegion * 2;
+            var y = (Math.random()-0.5) * outerBoundRegion * 2;
+            var z = (Math.random()-0.5) * outerBoundRegion * 2;
+            
+            while( x*x + y*y + z*z < (innerBoundRegion + sizeElement) * (innerBoundRegion + sizeElement) ||
+                   x*x + y*y + z*z > (outerBoundRegion) * (outerBoundRegion)){
+                x = (Math.random()-0.5) * outerBoundRegion * 2;
+                y = (Math.random()-0.5) * outerBoundRegion * 2;
+                z = (Math.random()-0.5) * outerBoundRegion * 2;
+            }
+            artifact.position.x = x;
+            artifact.position.y = y;
+            artifact.position.z = z;
+            scene_sp.add( artifact );
 
         }
     }
