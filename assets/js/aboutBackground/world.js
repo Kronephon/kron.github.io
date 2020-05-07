@@ -6,7 +6,7 @@ class KrWorld {
 
         this.sphere1 = this.setupCore(1.0, gateShader);
 
-        this.setupArtifacts(0.03);
+        this.setupArtifacts(0.03, 10000, 3.0, 1.0, 0.5);
         /*
         var geometry = new THREE.BufferGeometry();
         var point_material = new THREE.ShaderMaterial({
@@ -105,15 +105,11 @@ class KrWorld {
         return sphere;
     }
 
-    setupArtifacts(){
-        /*const base = new THREE.OctahedronBufferGeometry(0.03);
-        var geometry = new THREE.InstancedBufferGeometry();
-        geometry.maxInstancedCount = 50000;
-        var positions = [];
-        geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
-        var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-        var mesh = new THREE.Mesh( geometry, material );
-        scene_sp.add( mesh );*/
+    setupArtifacts(sizeElement, numberOfArtifacts, spawnArea, internalFactor1 , internalFactor2){
+        for(i = 0; i <= numberOfArtifacts; ++i){
+            var geometry = new THREE.DodecahedronBufferGeometry(radius, 6);
+
+        }
     }
 
     update() {
