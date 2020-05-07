@@ -107,21 +107,22 @@ class KrWorld {
         var geometry = new THREE.DodecahedronBufferGeometry(radius, 3);
         var material = new THREE.MeshStandardMaterial( 
             {
-                color: 0xffff00,
+                color: 0xf00fff,
                 transparent: true,
-                opacity: 0.1,
-                side: THREE.DoubleSide
+                opacity: 1.0,
+                side: THREE.BackSide
             });
         var sphere = new THREE.Mesh( geometry, material );
         scene_sp.add( sphere );
+        
         return sphere;
     }
 
     setupArtifacts(sizeElement, numberOfArtifacts, outerBoundRegion, internalFactor1 , internalFactor2, innerBoundRegion){
         this.artifacts = new THREE.Group();
-        this.light = new THREE.PointLight(0xf1f9c7, 2);
-        this.light.position.set(0, 0, 0);
-        this.artifacts.add(this.light);
+        var light = new THREE.PointLight(0xf1f9c7, 1);
+        light.position.set(0, 0, 0);
+        this.artifacts.add(light);
 
         var material = new THREE.MeshStandardMaterial( {
 
@@ -131,7 +132,7 @@ class KrWorld {
             blending:  THREE.AdditiveBlending,
             //side: THREE.BackSide,
             transparent: true,
-            opacity: 0.3
+            opacity: 0.6
             
         
             //envMap: envMap, // important -- especially for metals!
@@ -139,7 +140,7 @@ class KrWorld {
         
         } );
         var geometry = new THREE.OctahedronBufferGeometry(sizeElement, 3);
-        geometry.scale(0.4,0.4,20);
+        geometry.scale(0.6,0.6,10);
         for(var i = 0; i <= numberOfArtifacts; ++i){
 
             var artifact = new THREE.Mesh( geometry, material );
@@ -169,7 +170,7 @@ class KrWorld {
         var geometry = new THREE.DodecahedronBufferGeometry(20, 6);
         var material = new THREE.MeshBasicMaterial( 
             {
-                color: new THREE.Color("rgb(0, 0, 80)"),
+                color: new THREE.Color("rgb(0, 0, 10)"),
                 side: THREE.BackSide
             });
         var sphere = new THREE.Mesh( geometry, material );
@@ -180,13 +181,14 @@ class KrWorld {
     updateArtifacts(){
         this.artifacts.rotateY(0.001);
         for ( var a = 1; a < this.artifacts.children.length; a ++ ) {
-            this.artifacts.children[a].rotateZ(0.002 );
+            this.artifacts.children[a].rotateZ(0.06 );
+            //this.artifacts.children[a].scale.z += (Math.random()-0.5) * 0.02;
 
-            /*var intensity = 0.005;
+            var intensity = 0.001;
             this.artifacts.children[a].translateX((Math.random()-0.5) * intensity );
             this.artifacts.children[a].translateY((Math.random()-0.5) * intensity );
             this.artifacts.children[a].translateZ((Math.random()-0.5) * intensity );
-            this.artifacts.children[a].lookAt(0,0,0);*/
+            this.artifacts.children[a].lookAt(0,0,0);
 
         }
         //this.artifacts.children[0].intensity = Math.abs(Math.sin(this.clock.getElapsedTime()));
