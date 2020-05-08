@@ -75,7 +75,7 @@ class KrWorld {
     }
 
     updateArtifacts(){
-        this.artifacts.rotateY(0.0005);
+        this.artifacts.rotateY(0.0002);
         for ( var a = 1; a < this.artifacts.children.length; a ++ ) {
             this.artifacts.children[a].rotateZ(0.06 );
             if (Math.random() < 0.3) {
@@ -90,10 +90,7 @@ class KrWorld {
             
             this.artifacts.children[a].rotateOnAxis(new THREE.Vector3(0,0,1), Math.random());
 
-            if(Math.random() < 0.03){
-                this.artifacts.children[a].material.opacity = 0;
-            }
-            //this.artifacts.children[a].lookAt(0,0,0);
+            this.artifacts.children[a].lookAt(0,0,0);
 
         }
         //this.artifacts.children[0].intensity = Math.abs(Math.sin(this.clock.getElapsedTime()));

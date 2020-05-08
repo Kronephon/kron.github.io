@@ -12,5 +12,14 @@ float random(){
 }
 
 void main() {
-    gl_FragColor = vec4(- normalize( vNormal ).y * 0.2 + random() * 0.1, random() * 0.05, - normalize( vNormal ).y * 0.2 + random() * 0.1 , 1.0 );
+    /*if(normalize(vNormal).z >= -0.90){ // make periodic 0.9 and 0.98
+        gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+    }else{
+        gl_FragColor = vec4(0.0,1.0,0.0,1.0);
+    }*/
+
+
+
+    float intensity = 0.5 +  random() * (normalize(vNormal).z + 0.85);
+    gl_FragColor = vec4(intensity, intensity, intensity , 1.0 );
 }
