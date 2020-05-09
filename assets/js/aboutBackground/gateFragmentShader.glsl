@@ -12,12 +12,12 @@ struct Ray{
     vec3 dir;
 };
 
-const float minStep = 0.01;
+const float minStep = 0.005;
 const int timeout = int(1.0/minStep) * 10;
 
 
 vec4 rayMarch(Ray ray){
-    vec4 result = vec4(0.0,0.0,0.0,0.0);
+    vec4 result = vec4(1.0,0.0,0.0,0.0);
     vec3 pos = ray.pos;
     vec3 dir = ray.dir;
     for(int i = 0; i < timeout ; ++i){
@@ -28,16 +28,16 @@ vec4 rayMarch(Ray ray){
             break;
         }
         if(length(pos) < 1.0 && length(pos) > 0.9){
-            result += vec4(0.0001,0.0001,0.0001,0.0001);
+            //result += vec4(0.001,0.001,0.001,0.001);
         }
         if(length(pos) < 0.9 && length(pos) > 0.8){
-            result += vec4(0.0096,0.001,0.0057,0.001);
+            //result += vec4(0.01,0.01,0.01,0.01);
         }
         if(length(pos) <= 0.8){
-            result += vec4(-0.1,-0.1,-0.1,0.01);
+            //result += vec4(-0.01,-0.01,-0.01,0.01);
         }
         //ray.pos += ray.dir * minStep;
-        pos = pos - dir * minStep;
+        pos = pos + dir * minStep;
 
     }
 

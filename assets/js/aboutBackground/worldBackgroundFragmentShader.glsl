@@ -38,7 +38,7 @@ void main() {
 
     vec4 colorCenter = vec4( 29.0/255.0,45.0/255.0,68.0/255.0, 1.0);
     
-    gl_FragColor = mix(ran * colorCenter, vec4(23.0/255.0,29.0/255.0,33.0/255.0,1.0), 0.4);
+    gl_FragColor = mix(ran * colorCenter, vec4(23.0/255.0,29.0/255.0,33.0/255.0,1.0), 0.5);
 
     /*float random = random();
     if(random <= 0.3){
