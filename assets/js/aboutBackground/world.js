@@ -18,7 +18,7 @@ class KrWorld {
     }
 
     setupCore(radius, shader){
-        var geometry = new THREE.DodecahedronBufferGeometry(radius, 3);
+        var geometry = new THREE.DodecahedronBufferGeometry(radius, 6);
 
         let uniforms = {
             colorB: {type: 'vec3', value: new THREE.Color(0xACB6E5)},
@@ -28,7 +28,8 @@ class KrWorld {
             uniforms: uniforms,
             vertexShader: shader[0],
             fragmentShader: shader[1],
-            side: THREE.BackSide
+            side: THREE.BackSide,
+            transparent: true
           });
         var sphere = new THREE.Mesh( geometry, material );
         scene_sp.add( sphere );
@@ -39,7 +40,7 @@ class KrWorld {
         var artifacts = new THREE.Group();
 
         var material = new THREE.MeshStandardMaterial( {
-            color: 0xffaaff,
+            color: 0xa7a3d4,
             metalness: 1.00,
             roughness: 0.0,
             blending:  THREE.AdditiveBlending,

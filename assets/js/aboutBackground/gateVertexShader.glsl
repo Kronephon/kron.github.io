@@ -1,12 +1,9 @@
-attribute float enabled;
-attribute float distance;
-
+varying vec3 worldPosition;
 varying float vEnabled;
 varying float vDistance;
 
 void main() {
-    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0 );
     gl_Position = projectionMatrix * mvPosition;
-    vEnabled = enabled;
-    vDistance = distance;
+    worldPosition = vec3(modelMatrix * vec4(position, 1.0));
 }
