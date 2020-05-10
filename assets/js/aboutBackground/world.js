@@ -26,7 +26,8 @@ class KrWorld {
 
         let uniforms = {
             colorB: {type: 'vec3', value: new THREE.Color(0xACB6E5)},
-            colorA: {type: 'vec3', value: new THREE.Color(0x74ebd5)}
+            colorA: {type: 'vec3', value: new THREE.Color(0x74ebd5)},
+            clock: {type: 'float', value: this.clock.getElapsedTime()}
         };
         let material =  new THREE.ShaderMaterial({
             uniforms: uniforms,
@@ -37,6 +38,7 @@ class KrWorld {
             depthTest: true
         });
         var sphere = new THREE.Mesh( geometry, material );
+        //sphere.geometry.computeVertexNormals();
         scene_sp.add( sphere );
         return sphere;
     }
@@ -75,6 +77,7 @@ class KrWorld {
 
             artifact.lookAt(0,0,0);
             artifacts.add( artifact );
+            //artifact.geometry.computeVertexNormals();
 
         }
         scene_sp.add(artifacts);
@@ -114,10 +117,11 @@ class KrWorld {
             vertexShader: backgroundShader[0],
             fragmentShader: backgroundShader[1],
             side: THREE.BackSide,
-            transparent: true,
-            depthTest: true
+            transparent: false,
+            depthTest: false
           });
         var sphere = new THREE.Mesh( geometry, material );
+        //sphere.geometry.computeVertexNormals();
         scene_sp.add( sphere );
         return sphere;
     }
@@ -126,16 +130,17 @@ class KrWorld {
         this.background.material.uniforms.clock.value = this.clock.getElapsedTime();
     }
 
+    updateCore(){
+        this.sphereCenter.material.uniforms.clock.value = this.clock.getElapsedTime();
+    }
+
     update() {
         this.updateArtifacts();
         this.updateBackground();
+        this.updateCore();
         this.starfield.update();
     }
 }
-
-
-
-
 
 // class responsible for background stars
 const NUMBER_OF_STARS_SP = 90000;
@@ -219,8 +224,8 @@ class Stars_sp{
         }
 
         var mat = new THREE.PointsMaterial({vertexColors: THREE.VertexColors,
-                                            blending: THREE.AdditiveBlending, 
-                                            depthTest: true, transparent: true,
+                                            blending: THREE.AdditiveBlending//, 
+                                            //depthTest: true, transparent: true,
                                             });
 
         mat.onBeforeCompile = shader => {

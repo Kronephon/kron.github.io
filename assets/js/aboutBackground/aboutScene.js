@@ -79,7 +79,7 @@ function sceneSetup(postProcessingShader){
     camera_sp.position.z = 5;
     paralaxInit();
     document.addEventListener('keydown', onKeyPress, false); //test camera controls
-    renderer_sp = new THREE.WebGLRenderer({ antialias: false });
+    renderer_sp = new THREE.WebGLRenderer();
     renderer_sp.setSize(window.innerWidth, window.innerHeight); // change this for smaller resolutions (setSize(window.innerWidth/2, window.innerHeight/2, false) )    
     document.body.appendChild(renderer_sp.domElement);
 

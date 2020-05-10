@@ -31,7 +31,7 @@ float top = -0.965;
 }
 
 void main() {
-    float ran = 0.85 * random() * randomOverlay(normalize(vNormal).z);
+    float ran = 1.0 * random() * randomOverlay(normalize(vNormal).z);
     if(ran < 0.7){
         ran = 0.0;
     }
