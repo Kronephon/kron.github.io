@@ -16,8 +16,11 @@ class KrWorld {
         light.position.set(0, 0, 0);
         scene_sp.add(light);
 
-
-
+        var geometry = new THREE.DodecahedronBufferGeometry(0.01, 6);
+        var material = new THREE.MeshBasicMaterial({color:0xffffff});
+        var lightmesh = new THREE.Mesh(geometry, material);
+        lightmesh.geometry.translate(0.3,0.0,1.3);
+        scene_sp.add(lightmesh);
         this.starfield = new Stars_sp();
     }
 

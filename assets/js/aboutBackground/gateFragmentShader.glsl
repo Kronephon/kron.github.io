@@ -127,6 +127,7 @@ uniform float clock;
 varying vec3 worldPosition;
 
 const float EPSILON = 0.001;
+
 struct Light{
     vec3 pos;
     float intensity;
@@ -142,6 +143,29 @@ float sdSphere( vec3 p, float s )
 {
   return length(p)-s;
 }
+
+float sdRoundCone( vec3 p, float r1, float r2, float h )
+{
+  vec2 q = vec2( length(p.xz), p.y );
+    
+  float b = (r1-r2)/h;
+  float a = sqrt(1.0-b*b);
+  float k = dot(q,vec2(-b,a));
+    
+  if( k < 0.0 ) return length(q) - r1;
+  if( k > a*h ) return length(q-vec2(0.0,h)) - r2;
+        
+  return dot(q, vec2(a,b) ) - r1;
+}
+
+float sdEllipsoid( vec3 p, vec3 r )
+{
+  float k0 = length(p/r);
+  float k1 = length(p/(r*r));
+  return k0*(k0-1.0)/k1;
+}
+
+
 
 float intersectSDF(float distA, float distB) {
     return max(distA, distB);
@@ -199,8 +223,10 @@ float opCheapBend( in sdf3d primitive, in vec3 p )
     return primitive(q);
 }*/
 
+#define sphere1 sdSphere(point, 1.0)
+
 float sceneSDF(vec3 point){
-    return sdSphere(point, 0.3);
+    return sphere1;
 }
 
 vec3 estimateNormal(vec3 p) {
@@ -211,10 +237,37 @@ vec3 estimateNormal(vec3 p) {
     ));
 }
 
-const float minStep = 0.02;
-const int timeout = int(1.0/minStep) * 10;
+vec3 shade(vec3 point, vec3 direction){ // using phong for now
+
+    float specularity = 1.0;
+    float diffuse = 1.0;
+    float ambient = 1.0;
+    float shinniness = 500.0;
+
+    vec3 ambientColor = vec3(0.0,0.0,0.2);
+    vec3 diffuseColor = vec3(0.6,0.6,0.6);
+    vec3 specularColor = vec3(1.0,1.0,1.0);
+    
+    Light mainLight = Light(vec3(0.3,0.0,1.3), 1.0, vec3(1.0,1.0,1.0));
+    vec3 lightVector = normalize(mainLight.pos - point);
+    vec3 normal  = normalize(estimateNormal(point));
+    vec3 reflected = normalize(2.0 * dot(lightVector, normal) * normal - lightVector);
+ 
+    vec3 ambientSection = ambient * ambientColor;
+    vec3 diffuseSection = diffuse * (dot(lightVector, normal)) * diffuseColor;
+
+    vec3 specularSection = vec3(0.0,0.0,0.0);   
+    if(dot(reflected, normalize(-direction)) > 0.0){
+        specularSection = clamp(specularity * pow((dot(reflected, normalize(-direction))), shinniness) * specularColor, 0.0,1.0);
+    }
+    
+    return ambientSection + diffuseSection + specularSection;
+}
 
 vec4 rayMarch(Ray ray){
+    const float minStep = 0.02;
+    const int timeout = int(1.0/minStep) * 10;
+
     vec4 result = vec4(0.0,0.0,0.0,0.0);
     vec3 pos = ray.pos;
     vec3 dir = ray.dir;
@@ -228,7 +281,7 @@ vec4 rayMarch(Ray ray){
         float dist = sceneSDF(pos);
         
         if(dist <= 0.0){
-            result = vec4(1.0,1.0,1.0,1.0);
+            result = vec4(shade(pos, dir),1.0);
         }
         pos = pos + dir * max(dist, minStep);
 
@@ -242,5 +295,5 @@ void main() {
 
     Ray ray = Ray(worldPosition, normalize(worldPosition - cameraPosition));
     vec4 result = rayMarch(ray);
-    gl_FragColor = vec4(1.0,1.0,1.0,0.0);
+    gl_FragColor = result;
 }
