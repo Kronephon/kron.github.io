@@ -107,7 +107,7 @@ float opCheapBend( in sdf3d primitive, in vec3 p )
 }*/
 // Based on Morgan McGuire @morgan3d
 // https://www.shadertoy.com/view/4dS3Wd
-float noise (in vec2 _st) {
+/*float noise (in vec2 _st) {
     vec2 i = floor(_st);
     vec2 f = fract(_st);
 
@@ -124,7 +124,7 @@ float noise (in vec2 _st) {
             (d - b) * u.x * u.y;
 }
 
-#define NUM_OCTAVES 4
+#define NUM_OCTAVES 2
 
 float fbm ( in vec2 _st) {
     float v = 0.0;
@@ -139,6 +139,68 @@ float fbm ( in vec2 _st) {
         a *= 0.5;
     }
     return v;
+} */
+
+
+// rotation matrix for fbm octaves
+mat3 m = mat3( 0.00,  0.80,  0.60,
+              -0.80,  0.36, -0.48,
+              -0.60, -0.48,  0.64 );
+
+float hash( float n )
+{
+    return fract(sin(n)*43758.5453123);
+}
+
+// 3d noise function
+float noise( in vec3 x )
+{
+    vec3 p = floor(x);
+    vec3 f = fract(x);
+    f = f*f*(3.0-2.0*f);
+    float n = p.x + p.y*57.0 + 113.0*p.z;
+    float res = mix(mix(mix( hash(n+  0.0), hash(n+  1.0),f.x),
+                        mix( hash(n+ 57.0), hash(n+ 58.0),f.x),f.y),
+                    mix(mix( hash(n+113.0), hash(n+114.0),f.x),
+                        mix( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
+    return res;
+}
+
+// fbm noise for 2-4 octaves including rotation per octave
+float fbm( vec3 p )
+{
+    float f = 0.0;
+    f += 0.5000*noise( p );
+	p = m*p*2.02;
+    f += 0.2500*noise( p ); 
+// set to 1 for 2 octaves	
+#if 1	
+	return f/0.75;
+#else	
+	p = m*p*2.03;
+    f += 0.1250*noise( p );
+// set to 1 for 3 octaves, 0 for 4 octaves	
+#if 1	
+	return f/0.875;
+#else	
+	p = m*p*2.01;
+    f += 0.0625*noise( p );
+    return f/0.9375;
+#endif	
+#endif	
+}
+
+mat4 rotationMatrix(vec3 axis, float angle)
+{
+    axis = normalize(axis);
+    float s = sin(angle);
+    float c = cos(angle);
+    float oc = 1.0 - c;
+    
+    return mat4(oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,  0.0,
+                oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,  0.0,
+                oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c,           0.0,
+                0.0,                                0.0,                                0.0,                                1.0);
 }
 
 #define maxSphere sdSphere(point, 1.0)
@@ -150,17 +212,15 @@ float sceneSDF(vec3 point){
 
     float halfMoon = smoothSubtractionSDF(cone, shapeSphere, 0.3);
     float halfMoonC = smoothSubtractionSDF(shapeCenter, halfMoon, 0.1);
-    
+
+    mat4 rot = rotationMatrix(vec3(sin(clock), sin(clock), cos(clock)), 0.929);    
     //fl5 * distortionFactoroat distortion = 0.03 * sin(clock*point.x)*cos(clock*point.y)*sin(clock*point.z);
-    
-    float distortion = 0.2 * mod(clock,1.0); 
 
-
-    //float displacement = sin(disp*point.x)*sin(disp*point.y)*sin(disp*point.z);
-    //float displacement = noise(vec2(disp, disp));
-    //float removeCenter = smoothSubtractionSDF(sdSphere(point, 0.01), shapeOrigin + displacement, 1.0);
-    float mixer = halfMoonC - distortion;
-    return smoothIntersectionSDF(maxSphere, mixer, 0.01);
+    vec3 rotPoint = vec3(dot(vec4(point,0.0), rot[0]),dot(vec4(point,0.0), rot[1]),dot(vec4(point,0.0), rot[2]));
+    float distortion = 0.35 * fbm(10.0 * distortionFactor * rotPoint );
+    float mixer = halfMoon - distortion;
+    //float mixer2 = smoothSubtractionSDF(mixer, halfMoonC, 0.4);
+    return smoothIntersectionSDF(maxSphere, mixer, 0.9);
 }
 
 vec3 estimateNormal(vec3 p) {
