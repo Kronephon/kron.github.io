@@ -124,7 +124,7 @@ float noise (in vec2 _st) {
             (d - b) * u.x * u.y;
 }
 
-#define NUM_OCTAVES 3
+#define NUM_OCTAVES 4
 
 float fbm ( in vec2 _st) {
     float v = 0.0;
@@ -151,13 +151,14 @@ float sceneSDF(vec3 point){
     float halfMoon = smoothSubtractionSDF(cone, shapeSphere, 0.3);
     float halfMoonC = smoothSubtractionSDF(shapeCenter, halfMoon, 0.1);
     
-    //float dispT = 0.25  * sin(clock*0.1) + 0.25  * (cos(clock*0.2 + 0.3) + 0.08);
+    //float distortion = 0.03 * sin(clock*point.x)*cos(clock*point.y)*sin(clock*point.z);
     
-    float final = 0.25 * distortionFactor * (fbm(point.xy) + 0.02 *fbm(vec2(0.3* clock, 20.0 * point.z)));
+    float distortion = 0.5 * distortionFactor * noise(vec2(noise(20.0 *point.xy),0.3* random(vec2(point.z, clock))));//* (fbm(point.xy) + 0.02 *fbm(vec2(0.3* clock, 20.0 * point.z)));
     //float displacement = sin(disp*point.x)*sin(disp*point.y)*sin(disp*point.z);
     //float displacement = noise(vec2(disp, disp));
     //float removeCenter = smoothSubtractionSDF(sdSphere(point, 0.01), shapeOrigin + displacement, 1.0);
-    return smoothIntersectionSDF(maxSphere, halfMoonC  - final, 0.01);
+    float mixer = halfMoonC -distortion;
+    return smoothIntersectionSDF(maxSphere, mixer, 0.01);
 }
 
 vec3 estimateNormal(vec3 p) {
@@ -196,7 +197,7 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
 }
 
 vec4 rayMarch(Ray ray){
-    const float minStep = 0.04;
+    const float minStep = 0.02;
     const int timeout = int(1.0/minStep) * 10;
 
     vec4 result = vec4(0.0,0.0,0.0,0.0);

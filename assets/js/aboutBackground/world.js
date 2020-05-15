@@ -252,7 +252,7 @@ class Stars_sp{
                 `gl_PointSize = size;`,
                 `
                 float shineCalc = cos((time + shine * 5000.0)/8.0)/0.5 + 0.5;
-                gl_PointSize = size * shine * 0.03 ;
+                gl_PointSize = size * shine * 0.16;
                 vShine = shineCalc;
                 `
             );
