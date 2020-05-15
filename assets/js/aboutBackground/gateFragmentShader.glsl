@@ -5,7 +5,7 @@ uniform float clock;
 uniform float distortionFactor;
 varying vec3 worldPosition;
 
-const float EPSILON = 0.1;
+const float EPSILON = 0.001;
 
 struct Light{
     vec3 pos;
@@ -151,13 +151,15 @@ float sceneSDF(vec3 point){
     float halfMoon = smoothSubtractionSDF(cone, shapeSphere, 0.3);
     float halfMoonC = smoothSubtractionSDF(shapeCenter, halfMoon, 0.1);
     
-    //float distortion = 0.03 * sin(clock*point.x)*cos(clock*point.y)*sin(clock*point.z);
+    //fl5 * distortionFactoroat distortion = 0.03 * sin(clock*point.x)*cos(clock*point.y)*sin(clock*point.z);
     
-    float distortion = 0.1 + 0.5 * distortionFactor * noise(vec2(noise(80.0 *point.xy),0.4* random(vec2(point.z, clock))));//* (fbm(point.xy) + 0.02 *fbm(vec2(0.3* clock, 20.0 * point.z)));
+    float distortion = 0.2 * mod(clock,1.0); 
+
+
     //float displacement = sin(disp*point.x)*sin(disp*point.y)*sin(disp*point.z);
     //float displacement = noise(vec2(disp, disp));
     //float removeCenter = smoothSubtractionSDF(sdSphere(point, 0.01), shapeOrigin + displacement, 1.0);
-    float mixer = halfMoonC -distortion;
+    float mixer = halfMoonC - distortion;
     return smoothIntersectionSDF(maxSphere, mixer, 0.01);
 }
 
@@ -197,7 +199,7 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
 }
 
 vec4 rayMarch(Ray ray){
-    const float minStep = 0.07;
+    const float minStep = 0.007;
     const int timeout = int(1.0/minStep) * 10;
 
     vec4 result = vec4(0.0,0.0,0.0,0.0);
@@ -218,8 +220,9 @@ vec4 rayMarch(Ray ray){
             extra += vec4(0.04,0.02,0.02,0.05);
         }
         
-        if(dist <= 0.0){
+        if(dist <= EPSILON){
             result = vec4(shade(pos, dir),1.0);
+            break;
         }
         pos = pos + dir * max(dist, minStep);
 
