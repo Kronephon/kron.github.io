@@ -126,7 +126,7 @@ uniform vec3 diffuse;
 uniform float clock;
 varying vec3 worldPosition;
 
-const float EPSILON = 0.001;
+const float EPSILON = 0.1;
 
 struct Light{
     vec3 pos;
@@ -223,10 +223,15 @@ float opCheapBend( in sdf3d primitive, in vec3 p )
     return primitive(q);
 }*/
 
-#define sphere1 sdSphere(point, 1.0)
+
+#define maxSphere sdSphere(point, 1.0)
 
 float sceneSDF(vec3 point){
-    return sphere1;
+    float shapeOrigin = sdSphere(point, 0.5);
+    float disp = mod(clock*0.1,3.5)*mod(clock*0.1,-3.5);
+    float displacement = sin(disp*point.x)*sin(disp*point.y)*sin(disp*point.z);
+    float removeCenter = smoothSubtractionSDF(sdSphere(point, 0.01), shapeOrigin + displacement, 1.0);
+    return shapeOrigin + displacement;//smoothIntersectionSDF(maxSphere, removeCenter, 1.0);
 }
 
 vec3 estimateNormal(vec3 p) {
@@ -244,11 +249,11 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
     float ambient = 1.0;
     float shinniness = 500.0;
 
-    vec3 ambientColor = vec3(0.0,0.0,0.2);
-    vec3 diffuseColor = vec3(0.6,0.6,0.6);
+    vec3 ambientColor = vec3(0.058,0.078,0.094);
+    vec3 diffuseColor = vec3(0.058,0.078,0.094);
     vec3 specularColor = vec3(1.0,1.0,1.0);
     
-    Light mainLight = Light(vec3(0.3,0.0,1.3), 1.0, vec3(1.0,1.0,1.0));
+    Light mainLight = Light(vec3(0.0,0.5,0.5), 1.0, vec3(1.0,1.0,1.0));
     vec3 lightVector = normalize(mainLight.pos - point);
     vec3 normal  = normalize(estimateNormal(point));
     vec3 reflected = normalize(2.0 * dot(lightVector, normal) * normal - lightVector);
@@ -265,14 +270,14 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
 }
 
 vec4 rayMarch(Ray ray){
-    const float minStep = 0.02;
+    const float minStep = 0.002;
     const int timeout = int(1.0/minStep) * 10;
 
     vec4 result = vec4(0.0,0.0,0.0,0.0);
     vec3 pos = ray.pos;
     vec3 dir = ray.dir;
     for(int i = 0; i < timeout ; ++i){
-        if(length(pos) > 1.001){
+        if(length(pos) > 1.00){
             break;
         }
         if(result.w >= 1.0){
