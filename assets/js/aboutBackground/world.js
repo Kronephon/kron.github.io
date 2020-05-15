@@ -28,12 +28,6 @@ class KrWorld {
         var light = new THREE.PointLight(0xf1f9c7, 10);
         light.position.set(0, 0, 0);
         scene_sp.add(light);
-
-        var geometry = new THREE.DodecahedronBufferGeometry(0.01, 6);
-        var material = new THREE.MeshBasicMaterial({color:0xffffff});
-        var lightmesh = new THREE.Mesh(geometry, material);
-        lightmesh.geometry.translate(0.3,0.0,1.3);
-        scene_sp.add(lightmesh);
         this.starfield = new Stars_sp();
     }
 
@@ -160,7 +154,7 @@ class KrWorld {
 }
 
 // class responsible for background stars
-const NUMBER_OF_STARS_SP = 90000;
+const NUMBER_OF_STARS_SP = 2000;
 const ZBACK_SP = -10;
 
 
@@ -286,5 +280,6 @@ class Stars_sp{
     update(){
         this.pointsUniforms.time.value = this.clock.getElapsedTime();
         this.starmap.rotation.z += 0.000003;
+        camera_sp.rotateZ(0.0);
     }
 }

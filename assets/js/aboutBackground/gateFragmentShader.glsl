@@ -150,7 +150,7 @@ float sceneSDF(vec3 point){
     float halfMoon = smoothSubtractionSDF(cone, shapeSphere, 0.1);
     float halfMoonC = smoothSubtractionSDF(shapeCenter, halfMoon, 0.1);
     
-    float dispT = 2.3  * sin(clock*0.1);
+    float dispT = 1.7  * sin(clock*0.1);
     
     float final = fbm(point.xy) * dispT;
     //float displacement = sin(disp*point.x)*sin(disp*point.y)*sin(disp*point.z);
@@ -195,7 +195,7 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
 }
 
 vec4 rayMarch(Ray ray){
-    const float minStep = 0.02;
+    const float minStep = 0.04;
     const int timeout = int(1.0/minStep) * 10;
 
     vec4 result = vec4(0.0,0.0,0.0,0.0);
