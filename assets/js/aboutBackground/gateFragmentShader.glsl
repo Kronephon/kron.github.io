@@ -147,7 +147,7 @@ float sdSphere( vec3 p, float s )
 
 float sdRoundCone( vec3 p, float r1, float r2, float h )
 {
-  vec2 q = vec2( length(p.xz), p.y );
+  vec2 q = vec2( length(p.xy), p.z );
     
   float b = (r1-r2)/h;
   float a = sqrt(1.0-b*b);
@@ -260,7 +260,7 @@ vec3 map( vec2 p )
 {   
     p *= 0.7;
 
-    float f = dot( fbm2( 1.0*(0.05*clock + p + fbm2(-0.05*clock+2.0*(p + fbm2(4.0*p)))) ), vec2(1.0,-1.0) );
+    float f =  fbm2(-0.05*clock+2.0*(p + fbm2(4.0*p))).x;
 
     float bl = smoothstep( -0.8, 0.8, f );
 
@@ -275,12 +275,17 @@ vec3 map( vec2 p )
 #define maxSphere sdSphere(point, 1.0)
 
 float sceneSDF(vec3 point){
-    float shapeOrigin = sdSphere(point, 0.9);
+    float shapeSphere = sdSphere(point, 0.9);
+    float cone = sdRoundCone(point, 0.02, 0.7, 0.9);
+
+    float halfMoon = smoothSubtractionSDF(cone, shapeSphere, 0.1);
     //float disp = mod(clock*0.1,3.5)*mod(clock*0.1,-3.5);
     //float displacement = sin(disp*point.x)*sin(disp*point.y)*sin(disp*point.z);
     float displacement = length(map(vec2(point.xy)));
     //float removeCenter = smoothSubtractionSDF(sdSphere(point, 0.01), shapeOrigin + displacement, 1.0);
-    return smoothIntersectionSDF(maxSphere, shapeOrigin + displacement, 1.0);
+    //return smoothIntersectionSDF(maxSphere, shapeOrigin + displacement, 1.0);
+
+    return halfMoon + displacement;
 }
 
 vec3 estimateNormal(vec3 p) {
@@ -319,7 +324,7 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
 }
 
 vec4 rayMarch(Ray ray){
-    const float minStep = 0.002;
+    const float minStep = 0.02;
     const int timeout = int(1.0/minStep) * 10;
 
     vec4 result = vec4(0.0,0.0,0.0,0.0);
