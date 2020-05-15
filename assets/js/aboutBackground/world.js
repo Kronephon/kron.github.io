@@ -38,7 +38,8 @@ class KrWorld {
             colorAmbient: {type: 'vec3', value: this.colorCoreAmbient},
             colorDiffuse: {type: 'vec3', value: this.colorCoreDiffuse},
             colorSpecular: {type: 'vec3', value: this.colorCoreSpecular},
-            clock: {type: 'float', value: this.clock.getElapsedTime()}
+            clock: {type: 'float', value: this.clock.getElapsedTime()},
+            distortionFactor: {type: 'float', value: 0.0}
         };
         let material =  new THREE.ShaderMaterial({
             uniforms: uniforms,
@@ -63,8 +64,7 @@ class KrWorld {
             roughness: 0.0,
             blending:  THREE.AdditiveBlending,
             transparent: true,
-            depthTest: true,
-            opacity: 0.0001       
+            depthTest: false     
         } );
         var geometry = new THREE.OctahedronBufferGeometry(sizeElement, 3);
         geometry.scale(0.3,0.3,10);
@@ -142,6 +142,7 @@ class KrWorld {
     }
 
     updateCore(){
+        this.sphereCenter.material.uniforms.distortionFactor.value = Math.sin(this.clock.getElapsedTime()*0.1) + (Math.cos(this.clock.getElapsedTime()*0.2 + 0.3) + 0.08);
         this.sphereCenter.material.uniforms.clock.value = this.clock.getElapsedTime();
     }
 
@@ -154,7 +155,7 @@ class KrWorld {
 }
 
 // class responsible for background stars
-const NUMBER_OF_STARS_SP = 8000;
+const NUMBER_OF_STARS_SP = 2000;
 const ZBACK_SP = -10;
 
 

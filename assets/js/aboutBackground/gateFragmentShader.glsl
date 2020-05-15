@@ -124,7 +124,7 @@ float noise (in vec2 _st) {
             (d - b) * u.x * u.y;
 }
 
-#define NUM_OCTAVES 6
+#define NUM_OCTAVES 3
 
 float fbm ( in vec2 _st) {
     float v = 0.0;
@@ -151,9 +151,9 @@ float sceneSDF(vec3 point){
     float halfMoon = smoothSubtractionSDF(cone, shapeSphere, 0.3);
     float halfMoonC = smoothSubtractionSDF(shapeCenter, halfMoon, 0.1);
     
-    float dispT = 0.25  * sin(clock*0.1) + 0.25  * (cos(clock*0.2 + 0.3) + 0.08);
+    //float dispT = 0.25  * sin(clock*0.1) + 0.25  * (cos(clock*0.2 + 0.3) + 0.08);
     
-    float final = 1.0 * (fbm(point.xy) * dispT + 0.02 *fbm(vec2(0.3* clock, 20.0 * point.z)));
+    float final = 0.25 * distortionFactor * (fbm(point.xy) + 0.02 *fbm(vec2(0.3* clock, 20.0 * point.z)));
     //float displacement = sin(disp*point.x)*sin(disp*point.y)*sin(disp*point.z);
     //float displacement = noise(vec2(disp, disp));
     //float removeCenter = smoothSubtractionSDF(sdSphere(point, 0.01), shapeOrigin + displacement, 1.0);
@@ -179,7 +179,7 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
     vec3 diffuseColor = colorDiffuse;
     vec3 specularColor = colorSpecular;
     
-    Light mainLight = Light(vec3(0.0,0.0,0.0),  abs(sin(clock*0.1) + cos(clock*0.2 + 0.3) + 0.08), vec3(1.0,1.0,1.0));
+    Light mainLight = Light(vec3(0.0,0.0,0.0),  abs(distortionFactor), vec3(1.0,1.0,1.0));
     vec3 lightVector = normalize(mainLight.pos - point);
     vec3 normal  = normalize(estimateNormal(point));
     vec3 reflected = normalize(2.0 * dot(lightVector, normal) * normal - lightVector);
