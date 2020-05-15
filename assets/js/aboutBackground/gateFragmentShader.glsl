@@ -153,7 +153,7 @@ float sceneSDF(vec3 point){
     
     //float distortion = 0.03 * sin(clock*point.x)*cos(clock*point.y)*sin(clock*point.z);
     
-    float distortion = 0.5 * distortionFactor * noise(vec2(noise(20.0 *point.xy),0.3* random(vec2(point.z, clock))));//* (fbm(point.xy) + 0.02 *fbm(vec2(0.3* clock, 20.0 * point.z)));
+    float distortion = 0.1 + 0.5 * distortionFactor * noise(vec2(noise(80.0 *point.xy),0.4* random(vec2(point.z, clock))));//* (fbm(point.xy) + 0.02 *fbm(vec2(0.3* clock, 20.0 * point.z)));
     //float displacement = sin(disp*point.x)*sin(disp*point.y)*sin(disp*point.z);
     //float displacement = noise(vec2(disp, disp));
     //float removeCenter = smoothSubtractionSDF(sdSphere(point, 0.01), shapeOrigin + displacement, 1.0);
@@ -197,7 +197,7 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
 }
 
 vec4 rayMarch(Ray ray){
-    const float minStep = 0.02;
+    const float minStep = 0.07;
     const int timeout = int(1.0/minStep) * 10;
 
     vec4 result = vec4(0.0,0.0,0.0,0.0);
