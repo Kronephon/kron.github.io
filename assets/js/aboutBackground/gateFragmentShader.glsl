@@ -121,8 +121,9 @@ float densityAt(vec3 point){
     return snoise(vec4(point + 5.0, clock * 0.05));
 } */
 
-
-uniform vec3 diffuse;
+uniform vec3 colorAmbient;            
+uniform vec3 colorDiffuse;
+uniform vec3 colorSpecular;
 uniform float clock;
 varying vec3 worldPosition;
 
@@ -164,8 +165,6 @@ float sdEllipsoid( vec3 p, vec3 r )
   float k1 = length(p/(r*r));
   return k0*(k0-1.0)/k1;
 }
-
-
 
 float intersectSDF(float distA, float distB) {
     return max(distA, distB);
@@ -222,16 +221,66 @@ float opCheapBend( in sdf3d primitive, in vec3 p )
     vec3  q = vec3(m*p.xy,p.z);
     return primitive(q);
 }*/
+const mat2 m = mat2( 0.80,  0.60, -0.60,  0.80 );
+
+float hash( vec2 p )
+{
+	float h = dot(p,vec2(127.1,311.7));
+    return -1.0 + 2.0*fract(sin(h)*43758.5453123);
+}
+
+float noise( in vec2 p )
+{
+    vec2 i = floor( p );
+    vec2 f = fract( p );
+	
+	vec2 u = f*f*(3.0-2.0*f);
+
+    return mix( mix( hash( i + vec2(0.0,0.0) ), 
+                     hash( i + vec2(1.0,0.0) ), u.x),
+                mix( hash( i + vec2(0.0,1.0) ), 
+                     hash( i + vec2(1.0,1.0) ), u.x), u.y);
+}
+
+float fbm( vec2 p )
+{
+    float f = 0.0;
+    f += 0.5000*noise( p ); p = m*p*2.02;
+    f += 0.2500*noise( p ); p = m*p*2.03;
+    f += 0.1250*noise( p ); p = m*p*2.01;
+    f += 0.0625*noise( p );
+    return f/0.9375;
+}
+
+vec2 fbm2( in vec2 p )
+{
+    return vec2( fbm(p.xy), fbm(p.yx) );
+}
+vec3 map( vec2 p )
+{   
+    p *= 0.7;
+
+    float f = dot( fbm2( 1.0*(0.05*clock + p + fbm2(-0.05*clock+2.0*(p + fbm2(4.0*p)))) ), vec2(1.0,-1.0) );
+
+    float bl = smoothstep( -0.8, 0.8, f );
+
+    float ti = smoothstep( -1.0, 1.0, fbm(p) );
+
+    return mix( mix( vec3(0.50,0.00,0.00), 
+                     vec3(1.00,0.75,0.35), ti ), 
+                     vec3(0.00,0.00,0.02), bl );
+}
 
 
 #define maxSphere sdSphere(point, 1.0)
 
 float sceneSDF(vec3 point){
-    float shapeOrigin = sdSphere(point, 0.5);
-    float disp = mod(clock*0.1,3.5)*mod(clock*0.1,-3.5);
-    float displacement = sin(disp*point.x)*sin(disp*point.y)*sin(disp*point.z);
-    float removeCenter = smoothSubtractionSDF(sdSphere(point, 0.01), shapeOrigin + displacement, 1.0);
-    return shapeOrigin + displacement;//smoothIntersectionSDF(maxSphere, removeCenter, 1.0);
+    float shapeOrigin = sdSphere(point, 0.9);
+    //float disp = mod(clock*0.1,3.5)*mod(clock*0.1,-3.5);
+    //float displacement = sin(disp*point.x)*sin(disp*point.y)*sin(disp*point.z);
+    float displacement = length(map(vec2(point.xy)));
+    //float removeCenter = smoothSubtractionSDF(sdSphere(point, 0.01), shapeOrigin + displacement, 1.0);
+    return smoothIntersectionSDF(maxSphere, shapeOrigin + displacement, 1.0);
 }
 
 vec3 estimateNormal(vec3 p) {
@@ -247,13 +296,13 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
     float specularity = 1.0;
     float diffuse = 1.0;
     float ambient = 1.0;
-    float shinniness = 500.0;
+    float shinniness = 100.0;
 
-    vec3 ambientColor = vec3(0.058,0.078,0.094);
-    vec3 diffuseColor = vec3(0.058,0.078,0.094);
-    vec3 specularColor = vec3(1.0,1.0,1.0);
+    vec3 ambientColor = colorAmbient;
+    vec3 diffuseColor = colorDiffuse;
+    vec3 specularColor = colorSpecular;
     
-    Light mainLight = Light(vec3(0.0,0.5,0.5), 1.0, vec3(1.0,1.0,1.0));
+    Light mainLight = Light(vec3(0.0,0.0,1.5), 1.0, vec3(1.0,1.0,1.0));
     vec3 lightVector = normalize(mainLight.pos - point);
     vec3 normal  = normalize(estimateNormal(point));
     vec3 reflected = normalize(2.0 * dot(lightVector, normal) * normal - lightVector);
@@ -266,7 +315,7 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
         specularSection = clamp(specularity * pow((dot(reflected, normalize(-direction))), shinniness) * specularColor, 0.0,1.0);
     }
     
-    return ambientSection + diffuseSection + specularSection;
+    return max(ambientSection + diffuseSection + specularSection, ambientSection);
 }
 
 vec4 rayMarch(Ray ray){
@@ -274,6 +323,7 @@ vec4 rayMarch(Ray ray){
     const int timeout = int(1.0/minStep) * 10;
 
     vec4 result = vec4(0.0,0.0,0.0,0.0);
+    vec4 extra = vec4(0.0,0.0,0.0,0.0);
     vec3 pos = ray.pos;
     vec3 dir = ray.dir;
     for(int i = 0; i < timeout ; ++i){
@@ -284,6 +334,14 @@ vec4 rayMarch(Ray ray){
             break;
         }
         float dist = sceneSDF(pos);
+
+        if(length(pos) <= 0.25){
+            extra += vec4(0.07,0.07,0.07,0.02);
+        }
+
+        if(length(pos) <= 0.1){
+            extra += vec4(0.14,0.1,0.04,0.15);
+        }
         
         if(dist <= 0.0){
             result = vec4(shade(pos, dir),1.0);
@@ -292,7 +350,7 @@ vec4 rayMarch(Ray ray){
 
     }
 
-    return result;
+    return extra + result;
 }
 
 void main() {

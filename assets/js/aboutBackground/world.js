@@ -6,9 +6,22 @@ class KrWorld {
 
         const sphereCenterRadius = 1.0;
 
+        this.colorBackground = new THREE.Color("rgb(29, 45, 68)");
+
+        this.colorCoreAmbient = new THREE.Color("rgb(14, 22, 34)");
+        this.colorCoreDiffuse = new THREE.Color("rgb(23, 36, 54)");
+        this.colorCoreSpecular = new THREE.Color("rgb(255, 196, 164)");
+
+       /* this.colorCoreAmbient     = THREE.Color("rgb(29,45,68)");
+        this.colorCoreDiffuse     = THREE.Color("rgb(29,45,68)");
+        this.colorCoreSpecularity = THREE.Color("rgb(29,45,68)");*/
+
+
+
+
         this.sphereCenter = this.setupCore(sphereCenterRadius, gateShader);
 
-        this.artifacts = this.setupArtifacts(0.03, 100, 2.0, 1.0, 0.5, sphereCenterRadius);
+        this.artifacts = this.setupArtifacts(0.03, 10, 2.0, 1.0, 0.5, sphereCenterRadius);
 
         this.background = this.setupBackground(backgroundShader);
 
@@ -28,8 +41,9 @@ class KrWorld {
         var geometry = new THREE.DodecahedronBufferGeometry(radius, 6);
 
         let uniforms = {
-            colorB: {type: 'vec3', value: new THREE.Color(0xACB6E5)},
-            colorA: {type: 'vec3', value: new THREE.Color(0x74ebd5)},
+            colorAmbient: {type: 'vec3', value: this.colorCoreAmbient},
+            colorDiffuse: {type: 'vec3', value: this.colorCoreDiffuse},
+            colorSpecular: {type: 'vec3', value: this.colorCoreSpecular},
             clock: {type: 'float', value: this.clock.getElapsedTime()}
         };
         let material =  new THREE.ShaderMaterial({
@@ -56,7 +70,7 @@ class KrWorld {
             blending:  THREE.AdditiveBlending,
             transparent: true,
             depthTest: true,
-            opacity: 0.8        
+            opacity: 0.0001       
         } );
         var geometry = new THREE.OctahedronBufferGeometry(sizeElement, 3);
         geometry.scale(0.3,0.3,10);
