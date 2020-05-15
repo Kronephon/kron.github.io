@@ -335,13 +335,13 @@ vec4 rayMarch(Ray ray){
         }
         float dist = sceneSDF(pos);
 
-        if(length(pos) <= 0.25){
+        if(dist <= 0.15){
             extra += vec4(0.07,0.07,0.07,0.02);
         }
 
-        if(length(pos) <= 0.1){
-            extra += vec4(0.14,0.1,0.04,0.15);
-        }
+        //if(length(pos) <= 0.1){
+        //    extra += vec4(0.14,0.1,0.04,0.15);
+        //}
         
         if(dist <= 0.0){
             result = vec4(shade(pos, dir),1.0);
