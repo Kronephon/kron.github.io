@@ -154,7 +154,7 @@ class KrWorld {
 }
 
 // class responsible for background stars
-const NUMBER_OF_STARS_SP = 2000;
+const NUMBER_OF_STARS_SP = 8000;
 const ZBACK_SP = -10;
 
 
@@ -280,6 +280,5 @@ class Stars_sp{
     update(){
         this.pointsUniforms.time.value = this.clock.getElapsedTime();
         this.starmap.rotation.z += 0.000003;
-        camera_sp.rotateZ(0.0);
     }
 }

@@ -76,7 +76,7 @@ window.onresize = function(event) {
 function sceneSetup(postProcessingShader){
     scene_sp = new THREE.Scene();
     camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 2000);
-    camera_sp.position.z = 5;
+    camera_sp.position.z = 4;
     paralaxInit();
     document.addEventListener('keydown', onKeyPress, false); //test camera controls
     renderer_sp = new THREE.WebGLRenderer();
@@ -105,8 +105,9 @@ function aboutScene(resources) {
     worldSetup(gateShader, backgroundShader);
 
     function animate() {
-        paralax();
+        //paralax();
         world_sp.update();
+        camera_sp.rotation.z += 0.0002;
         composer_sp.render();
         requestAnimationFrame(animate);
     }
