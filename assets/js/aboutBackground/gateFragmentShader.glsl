@@ -5,7 +5,7 @@ uniform float clock;
 uniform float distortionFactor;
 varying vec3 worldPosition;
 
-const float EPSILON = 0.001;
+const float EPSILON = 0.0001;
 
 struct Light{
     vec3 pos;
@@ -182,7 +182,7 @@ float fbm( vec3 p )
 	p = m*p*2.03;
     f += 0.1250*noise( p );
 // set to 1 for 3 octaves, 0 for 4 octaves	
-#if 0	
+#if 0
 	return f/0.875;
 #else	
 	p = m*p*2.01;
@@ -213,11 +213,11 @@ float sceneSDF(vec3 point){
     float shapeHollow = opSubtraction(shapeCenter, shapeSphere);
     mat4 rot = rotationMatrix(vec3(sin(clock), sin(clock), cos(clock)), 0.929);
     vec3 rotPoint = vec3(dot(vec4(point,0.0), rot[0]),dot(vec4(point,0.0), rot[1]),dot(vec4(point,0.0), rot[2]));
-    return smoothIntersectionSDF(shapeHollow, shapeCenter - fbm(0.5 + distortionFactor * 2.3 * rotPoint), 0.8);
+    return smoothIntersectionSDF(shapeHollow, shapeCenter - fbm(0.5 + distortionFactor * 5.3 * rotPoint), 0.08);
 
 
-/*
-    float shapeCenter = sdSphere(point, 0.2);
+
+    /*float shapeCenter = sdSphere(point, 0.2);
     float cone = sdRoundCone(point, 0.2, 0.79, 0.9);
 
     float halfMoon = smoothSubtractionSDF(cone, shapeSphere, 0.3);
@@ -270,7 +270,7 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
 }
 
 vec4 rayMarch(Ray ray){
-    const float minStep = 0.007;
+    const float minStep = 0.00001;
     const int timeout = int(1.0/minStep) * 10;
 
     vec4 result = vec4(0.0,0.0,0.0,0.0);
