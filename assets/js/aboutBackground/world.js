@@ -16,9 +16,6 @@ class KrWorld {
         this.colorCoreDiffuse     = THREE.Color("rgb(29,45,68)");
         this.colorCoreSpecularity = THREE.Color("rgb(29,45,68)");*/
 
-
-
-
         this.sphereCenter = this.setupCore(sphereCenterRadius, gateShader);
 
         this.artifacts = this.setupArtifacts(0.03, 10, 2.0, 1.0, 0.5, sphereCenterRadius);
@@ -252,7 +249,7 @@ class Stars_sp{
                 `gl_PointSize = size;`,
                 `
                 float shineCalc = cos((time + shine * 5000.0)/8.0)/0.5 + 0.5;
-                gl_PointSize = size * shine * 0.16;
+                gl_PointSize = size * shine * 0.26;
                 vShine = shineCalc;
                 `
             );
