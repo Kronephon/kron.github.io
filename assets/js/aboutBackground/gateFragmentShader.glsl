@@ -174,13 +174,13 @@ float fbm( vec3 p )
 	p = m*p*2.02;
     f += 0.2500*noise( p ); 
 // set to 1 for 2 octaves	
-#if 1	
+#if 2	
 	return f/0.75;
 #else	
 	p = m*p*2.03;
     f += 0.1250*noise( p );
 // set to 1 for 3 octaves, 0 for 4 octaves	
-#if 1	
+#if 0	
 	return f/0.875;
 #else	
 	p = m*p*2.01;
@@ -217,7 +217,7 @@ float sceneSDF(vec3 point){
     //fl5 * distortionFactoroat distortion = 0.03 * sin(clock*point.x)*cos(clock*point.y)*sin(clock*point.z);
 
     vec3 rotPoint = vec3(dot(vec4(point,0.0), rot[0]),dot(vec4(point,0.0), rot[1]),dot(vec4(point,0.0), rot[2]));
-    float distortion = 0.35 * fbm(10.0 * distortionFactor * rotPoint );
+    float distortion = 0.35 * fbm( 5.0 *distortionFactor * rotPoint );
     float mixer = halfMoon - distortion;
     //float mixer2 = smoothSubtractionSDF(mixer, halfMoonC, 0.4);
     return smoothIntersectionSDF(maxSphere, mixer, 0.9);
@@ -233,10 +233,10 @@ vec3 estimateNormal(vec3 p) {
 
 vec3 shade(vec3 point, vec3 direction){ // using phong for now
 
-    float specularity = 1.0;
+    float specularity = 0.2;
     float diffuse = 1.0;
     float ambient = 1.0;
-    float shinniness = 10.0;
+    float shinniness = 1000.0;
 
     vec3 ambientColor = colorAmbient;
     vec3 diffuseColor = colorDiffuse;
@@ -277,7 +277,7 @@ vec4 rayMarch(Ray ray){
 
         
         if(dist <= 0.1){
-            extra += vec4(0.04,0.02,0.02,0.05);
+            extra += vec4(0.04,0.02,0.02,0.01);
         }
         
         if(dist <= EPSILON){
