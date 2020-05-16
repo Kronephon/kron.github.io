@@ -243,29 +243,30 @@ vec3 estimateNormal(vec3 p) {
 
 vec3 shade(vec3 point, vec3 direction){ // using phong for now
 
-    float specularity = 0.2;
+    float specularity = 1.0;
     float diffuse = 1.0;
     float ambient = 1.0;
-    float shinniness = 1000.0;
+    float shinniness = 50.0;
 
     vec3 ambientColor = colorAmbient;
-    vec3 diffuseColor = colorDiffuse;
-    vec3 specularColor = colorSpecular;
+    //vec3 diffuseColor = colorDiffuse;
+    //vec3 specularColor = colorSpecular;
     
-    Light mainLight = Light(vec3(0.0,0.0,0.0),  abs(distortionFactor), vec3(1.0,1.0,1.0));
-    vec3 lightVector = normalize(mainLight.pos - point);
-    vec3 normal  = normalize(estimateNormal(point));
-    vec3 reflected = normalize(2.0 * dot(lightVector, normal) * normal - lightVector);
+    //Light mainLight = Light(vec3(0.0,0.0,0.0),  abs(distortionFactor), vec3(1.0,1.0,1.0));
+    //vec3 lightVector = normalize(mainLight.pos - point);
+    //vec3 normal  = normalize(estimateNormal(point));
+    //vec3 reflected = normalize(2.0 * dot(lightVector, normal) * normal - lightVector);
  
     vec3 ambientSection = ambient * ambientColor;
-    vec3 diffuseSection = diffuse * (dot(lightVector, normal)) * diffuseColor;
+    //vec3 diffuseSection = diffuse * (dot(lightVector, normal)) * diffuseColor;
 
-    vec3 specularSection = vec3(0.0,0.0,0.0);   
-    if(dot(reflected, normalize(-direction)) > 0.0){
-        specularSection = clamp(specularity * pow((dot(reflected, normalize(-direction))), shinniness) * specularColor, 0.0,1.0);
-    }
+    //vec3 specularSection = vec3(0.0,0.0,0.0);   
+    //if(dot(reflected, normalize(-direction)) > 0.0){
+    //    specularSection = clamp(specularity * pow((dot(reflected, normalize(-direction))), shinniness) * specularColor, 0.0,1.0);
+    //}
     
-    return max(ambientSection + mainLight.intensity * diffuseSection + specularSection, ambientSection);
+    //return max(ambientSection + mainLight.intensity * diffuseSection + specularSection, ambientSection);
+    return ambientSection;
 }
 
 vec4 rayMarch(Ray ray){
