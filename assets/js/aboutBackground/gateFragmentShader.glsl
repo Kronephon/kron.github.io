@@ -207,6 +207,7 @@ mat4 rotationMatrix(vec3 axis, float angle)
 
 float sceneSDF(vec3 point){
     float shapeSphere = sdSphere(point, 0.8);
+    return shapeSphere + fbm(distortionFactor * 5.0 * point);
     float shapeCenter = sdSphere(point, 0.2);
     float cone = sdRoundCone(point, 0.2, 0.79, 0.9);
 
@@ -214,7 +215,7 @@ float sceneSDF(vec3 point){
     float halfMoonC = smoothSubtractionSDF(shapeCenter, halfMoon, 0.1);
 
     mat4 rot = rotationMatrix(vec3(sin(clock), sin(clock), cos(clock)), 0.929);    
-    //fl5 * distortionFactoroat distortion = 0.03 * sin(clock*point.x)*cos(clock*point.y)*sin(clock*point.z);
+    //fl5 * fbm distortion = 0.03 * sin(clock*point.x)*cos(clock*point.y)*sin(clock*point.z);
 
     vec3 rotPoint = vec3(dot(vec4(point,0.0), rot[0]),dot(vec4(point,0.0), rot[1]),dot(vec4(point,0.0), rot[2]));
     float distortion = 0.35 * fbm( 5.0 *distortionFactor * rotPoint );
