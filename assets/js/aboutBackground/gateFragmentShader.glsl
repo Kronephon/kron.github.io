@@ -72,6 +72,8 @@ float smoothSubtractionSDF( float d1, float d2, float k ) {
     return mix( d2, -d1, h ) + k*h*(1.0-h); 
 }
 
+float opSubtraction( float d1, float d2 ) { return max(-d1,d2); }
+
 float smoothIntersectionSDF( float d1, float d2, float k ) {
     float h = clamp( 0.5 - 0.5*(d2-d1)/k, 0.0, 1.0 );
     return mix( d2, d1, h ) + k*h*(1.0-h); 
@@ -207,21 +209,28 @@ mat4 rotationMatrix(vec3 axis, float angle)
 
 float sceneSDF(vec3 point){
     float shapeSphere = sdSphere(point, 0.8);
-    return shapeSphere + fbm(distortionFactor * 5.0 * point);
+    float shapeCenter = sdSphere(point, 0.2);
+    float shapeHollow = opSubtraction(shapeCenter, shapeSphere);
+    mat4 rot = rotationMatrix(vec3(sin(clock), sin(clock), cos(clock)), 0.929);
+    vec3 rotPoint = vec3(dot(vec4(point,0.0), rot[0]),dot(vec4(point,0.0), rot[1]),dot(vec4(point,0.0), rot[2]));
+    return smoothIntersectionSDF(shapeHollow, shapeCenter - fbm(0.5 + distortionFactor * 2.3 * rotPoint), 0.8);
+
+
+/*
     float shapeCenter = sdSphere(point, 0.2);
     float cone = sdRoundCone(point, 0.2, 0.79, 0.9);
 
     float halfMoon = smoothSubtractionSDF(cone, shapeSphere, 0.3);
     float halfMoonC = smoothSubtractionSDF(shapeCenter, halfMoon, 0.1);
 
-    mat4 rot = rotationMatrix(vec3(sin(clock), sin(clock), cos(clock)), 0.929);    
+    mat4 rot = rotationMatrix(vec3(sin(clock), sin(clock), cos(clock)), 0.929);
     //fl5 * fbm distortion = 0.03 * sin(clock*point.x)*cos(clock*point.y)*sin(clock*point.z);
 
     vec3 rotPoint = vec3(dot(vec4(point,0.0), rot[0]),dot(vec4(point,0.0), rot[1]),dot(vec4(point,0.0), rot[2]));
     float distortion = 0.35 * fbm( 5.0 *distortionFactor * rotPoint );
     float mixer = halfMoon - distortion;
     //float mixer2 = smoothSubtractionSDF(mixer, halfMoonC, 0.4);
-    return smoothIntersectionSDF(maxSphere, mixer, 0.9);
+    return smoothIntersectionSDF(maxSphere, mixer, 0.9);*/
 }
 
 vec3 estimateNormal(vec3 p) {
