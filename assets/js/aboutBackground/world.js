@@ -9,7 +9,7 @@ class KrWorld {
         this.colorBackground = new THREE.Color("rgb(29, 45, 68)");
 
         this.colorCoreAmbient = new THREE.Color("rgb(14, 22, 34)");
-        this.colorCoreDiffuse = new THREE.Color("rgb(23, 36, 54)");
+        this.colorCoreDiffuse = new THREE.Color("rgb(53, 36, 24)");
         this.colorCoreSpecular = new THREE.Color("rgb(255, 196, 164)");
 
        /* this.colorCoreAmbient     = THREE.Color("rgb(29,45,68)");
@@ -18,7 +18,7 @@ class KrWorld {
 
         this.sphereCenter = this.setupCore(sphereCenterRadius, gateShader);
 
-        this.artifacts = this.setupArtifacts(0.03, 10, 2.0, 1.0, 0.5, sphereCenterRadius);
+        this.artifacts = this.setupArtifacts(0.03, 20, 2.0, 1.0, 0.5, sphereCenterRadius);
 
         this.background = this.setupBackground(backgroundShader);
 
@@ -56,7 +56,7 @@ class KrWorld {
         var artifacts = new THREE.Group();
 
         var material = new THREE.MeshStandardMaterial( {
-            color: 0xa7a3d4,
+            color: 0x0a0505,
             metalness: 1.00,
             roughness: 0.0,
             blending:  THREE.AdditiveBlending,
@@ -178,7 +178,7 @@ class Stars_sp{
         var shine = new Float32Array(NUMBER_OF_STARS_SP);
         var x = 20;
         var y = 20;
-        var z = 5;
+        var z = 1;
         for(var i= 0; i < NUMBER_OF_STARS_SP*3; i = i + 3){
             
             vertices[i] = (Math.random() - 0.5)*x;
@@ -249,7 +249,7 @@ class Stars_sp{
                 `gl_PointSize = size;`,
                 `
                 float shineCalc = cos((time + shine * 5000.0)/8.0)/0.5 + 0.5;
-                gl_PointSize = size * shine * 0.26;
+                gl_PointSize = size * shine * 0.19;
                 vShine = shineCalc;
                 `
             );
