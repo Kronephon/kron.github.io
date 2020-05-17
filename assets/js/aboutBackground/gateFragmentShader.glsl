@@ -290,7 +290,7 @@ vec4 rayMarch(Ray ray){
             extra += vec4(0.047,0.027,0.027,0.01);
         }
         if(length(pos) < 0.65 && dist < 0.03){
-                extra += vec4(0.02,0.002,0.02,0.4);
+                extra += vec4(0.02,0.002,0.02,0.2);
                 dir = mix(normalize(pos), dir, abs(0.65 - length(pos)));
             
             //break;
