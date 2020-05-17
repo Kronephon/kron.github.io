@@ -70,6 +70,7 @@ window.onresize = function(event) {
     camera_sp.aspect = width / height;
     camera_sp.updateProjectionMatrix();
     renderer_sp.setSize(width, height);
+    composer_sp.setSize(width, height);
 };
 
 
