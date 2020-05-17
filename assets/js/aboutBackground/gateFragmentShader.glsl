@@ -270,8 +270,8 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
 }
 
 vec4 rayMarch(Ray ray){
-    const float minStep = 0.001;
-    const int timeout = int(1.0/minStep) * 10;
+    const float minStep = 0.0001;
+    const int timeout = int(1.0/minStep) * 15;
 
     vec4 result = vec4(0.0,0.0,0.0,0.0);
     vec4 extra = vec4(0.0,0.0,0.0,0.0);
@@ -285,12 +285,13 @@ vec4 rayMarch(Ray ray){
             break;
         }
         float dist = sceneSDF(pos);
-
+        
         if(dist <= abs(distortionFactor)){
             extra += vec4(0.047,0.027,0.027,0.01);
         }
-        if(length(pos) < 0.55 && dist < 0.03){
+        if(length(pos) < 0.65 && dist < 0.03){
                 extra += vec4(0.02,0.002,0.02,0.4);
+                dir = mix(normalize(pos), dir, abs(0.65 - length(pos)));
             
             //break;
         }
