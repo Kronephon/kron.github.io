@@ -3,6 +3,7 @@ uniform vec3 colorDiffuse;
 uniform vec3 colorSpecular;
 uniform float clock;
 uniform float distortionFactor;
+uniform float distortionFactor2;
 varying vec3 worldPosition;
 
 const float EPSILON = 0.0001;
@@ -79,71 +80,6 @@ float smoothIntersectionSDF( float d1, float d2, float k ) {
     return mix( d2, d1, h ) + k*h*(1.0-h); 
 }
 
-/*
-float opDisplace( in sdf3d primitive, in vec3 p )
-{
-    float d1 = primitive(p);
-    float d2 = displacement(p);
-    return d1+d2;
-}
-
-
-float opTwist( in sdf3d primitive, in vec3 p )
-{
-    const float k = 10.0; // or some other amount
-    float c = cos(k*p.y);
-    float s = sin(k*p.y);
-    mat2  m = mat2(c,-s,s,c);
-    vec3  q = vec3(m*p.xz,p.y);
-    return primitive(q);
-}
-
-float opCheapBend( in sdf3d primitive, in vec3 p )
-{
-    const float k = 10.0; // or some other amount
-    float c = cos(k*p.x);
-    float s = sin(k*p.x);
-    mat2  m = mat2(c,-s,s,c);
-    vec3  q = vec3(m*p.xy,p.z);
-    return primitive(q);
-}*/
-// Based on Morgan McGuire @morgan3d
-// https://www.shadertoy.com/view/4dS3Wd
-/*float noise (in vec2 _st) {
-    vec2 i = floor(_st);
-    vec2 f = fract(_st);
-
-    // Four corners in 2D of a tile
-    float a = random(i);
-    float b = random(i + vec2(1.0, 0.0));
-    float c = random(i + vec2(0.0, 1.0));
-    float d = random(i + vec2(1.0, 1.0));
-
-    vec2 u = f * f * (3.0 - 2.0 * f);
-
-    return mix(a, b, u.x) +
-            (c - a)* u.y * (1.0 - u.x) +
-            (d - b) * u.x * u.y;
-}
-
-#define NUM_OCTAVES 2
-
-float fbm ( in vec2 _st) {
-    float v = 0.0;
-    float a = 0.5;
-    vec2 shift = vec2(100.0);
-    // Rotate to reduce axial bias
-    mat2 rot = mat2(cos(0.5), sin(0.5),
-                    -sin(0.5), cos(0.50));
-    for (int i = 0; i < NUM_OCTAVES; ++i) {
-        v += a * noise(_st);
-        _st = rot * _st * 2.0 + shift;
-        a *= 0.5;
-    }
-    return v;
-} */
-
-
 // rotation matrix for fbm octaves
 mat3 m = mat3( 0.00,  0.80,  0.60,
               -0.80,  0.36, -0.48,
@@ -176,7 +112,7 @@ float fbm( vec3 p )
 	p = m*p*2.02;
     f += 0.2500*noise( p ); 
 // set to 1 for 2 octaves	
-#if 2	
+#if 1	
 	return f/0.75;
 #else	
 	p = m*p*2.03;
@@ -208,13 +144,13 @@ mat4 rotationMatrix(vec3 axis, float angle)
 #define maxSphere sdSphere(point, 1.0)
 
 float sceneSDF(vec3 point){
-    float shapeSphere = sdSphere(point, 0.8);
-    float shapeCenter = sdSphere(point, 0.2);
+    float shapeSphere = sdSphere(point, 0.9);
+    float shapeCenter = sdSphere(point, distortionFactor * 0.2);
     float shapeHollow = opSubtraction(shapeCenter, shapeSphere);
     mat4 rot = rotationMatrix(vec3(sin(clock), sin(clock), cos(clock)), abs(distortionFactor * 2.929));
     vec3 rotPoint = vec3(dot(vec4(point,0.0), rot[0]),dot(vec4(point,0.0), rot[1]),dot(vec4(point,0.0), rot[2]));
-    float smoothed= smoothIntersectionSDF(shapeHollow, shapeCenter - fbm(0.4 + distortionFactor * 5.3 * rotPoint), 0.1 );
-    return smoothIntersectionSDF(maxSphere, smoothed, 0.9);
+    float smoothed= smoothIntersectionSDF(shapeHollow, shapeCenter + distortionFactor2 * fbm(0.4 + distortionFactor * 5.3 * rotPoint), 0.1 );
+    return smoothIntersectionSDF(maxSphere, smoothed, 0.7);
 
 
 
@@ -272,7 +208,7 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
 
 vec4 rayMarch(Ray ray){
     const float minStep = 0.0001;
-    const int timeout = 100;
+    const int timeout = 50;
 
     vec4 result = vec4(0.0,0.0,0.0,0.0);
     vec4 extra = vec4(0.0,0.0,0.0,0.0);

@@ -4,6 +4,7 @@ class KrWorld {
         this.clock = new THREE.Clock();
         this.clock.start();
 
+        this.openingTime = 2.0;
         const sphereCenterRadius = 1.0;
 
         this.colorBackground = new THREE.Color("rgb(29, 45, 68)");
@@ -36,7 +37,8 @@ class KrWorld {
             colorDiffuse: {type: 'vec3', value: this.colorCoreDiffuse},
             colorSpecular: {type: 'vec3', value: this.colorCoreSpecular},
             clock: {type: 'float', value: this.clock.getElapsedTime()},
-            distortionFactor: {type: 'float', value: 0.0}
+            distortionFactor: {type: 'float', value: 0.0},
+            distortionFactor2: {type: 'float', value: 0.0},
         };
         let material =  new THREE.ShaderMaterial({
             uniforms: uniforms,
@@ -140,6 +142,9 @@ class KrWorld {
 
     updateCore(){
         this.sphereCenter.material.uniforms.distortionFactor.value = Math.sin(this.clock.getElapsedTime()*0.1) + (Math.cos(this.clock.getElapsedTime()*0.2 + 0.3) + 0.08);
+        if(this.clock.getElapsedTime() <= this.openingTime*4/Math.PI){
+            this.sphereCenter.material.uniforms.distortionFactor2.value = Math.sin(this.clock.getElapsedTime()*this.openingTime);
+        }
         this.sphereCenter.material.uniforms.clock.value = this.clock.getElapsedTime();
     }
 
