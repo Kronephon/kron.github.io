@@ -289,8 +289,8 @@ vec4 rayMarch(Ray ray){
         if(dist <= abs(distortionFactor)){
             extra += vec4(0.047,0.027,0.027,0.01);
         }
-        if(length(pos) < 0.65 && dist < 0.03){
-                extra += vec4(0.01,0.001,0.01,0.3);
+        if(length(pos) < 0.55 && dist < 0.03){
+                extra += vec4(0.02,0.002,0.02,0.4);
             
             //break;
         }

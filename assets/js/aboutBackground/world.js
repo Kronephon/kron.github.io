@@ -8,7 +8,7 @@ class KrWorld {
 
         this.colorBackground = new THREE.Color("rgb(29, 45, 68)");
 
-        this.colorCoreAmbient = new THREE.Color("rgb(14, 22, 34)");
+        this.colorCoreAmbient = new THREE.Color("rgb(7, 11, 17)");
         this.colorCoreDiffuse = new THREE.Color("rgb(53, 36, 24)");
         this.colorCoreSpecular = new THREE.Color("rgb(255, 196, 164)");
 
