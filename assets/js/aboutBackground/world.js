@@ -18,13 +18,13 @@ class KrWorld {
 
         this.sphereCenter = this.setupCore(sphereCenterRadius, gateShader);
 
-        this.artifacts = this.setupArtifacts(0.03, 20, 2.0, 1.0, 0.5, sphereCenterRadius);
+        //this.artifacts = this.setupArtifacts(0.03, 20, 2.0, 1.0, 0.5, sphereCenterRadius);
 
         this.background = this.setupBackground(backgroundShader);
 
-        var light = new THREE.PointLight(0xf1f9c7, 10);
-        light.position.set(0, 0, 0);
-        scene_sp.add(light);
+        //var light = new THREE.PointLight(0xf1f9c7, 10);
+        //light.position.set(0, 0, 0);
+        //scene_sp.add(light);
         this.starfield = new Stars_sp();
     }
 
@@ -144,7 +144,7 @@ class KrWorld {
     }
 
     update() {
-        this.updateArtifacts();
+        //this.updateArtifacts();
         this.updateBackground();
         this.updateCore();
         this.starfield.update();

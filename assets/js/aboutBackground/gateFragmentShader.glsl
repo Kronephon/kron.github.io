@@ -211,9 +211,9 @@ float sceneSDF(vec3 point){
     float shapeSphere = sdSphere(point, 0.8);
     float shapeCenter = sdSphere(point, 0.2);
     float shapeHollow = opSubtraction(shapeCenter, shapeSphere);
-    mat4 rot = rotationMatrix(vec3(sin(clock), sin(clock), cos(clock)), 0.929);
+    mat4 rot = rotationMatrix(vec3(sin(clock), sin(clock), cos(clock)), abs(distortionFactor * 2.929));
     vec3 rotPoint = vec3(dot(vec4(point,0.0), rot[0]),dot(vec4(point,0.0), rot[1]),dot(vec4(point,0.0), rot[2]));
-    return smoothIntersectionSDF(shapeHollow, shapeCenter - fbm(0.5 + distortionFactor * 5.3 * rotPoint), 0.08);
+    return smoothIntersectionSDF(shapeHollow, shapeCenter - fbm(0.4 + distortionFactor * 5.3 * rotPoint), 0.1 );
 
 
 
@@ -270,7 +270,7 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
 }
 
 vec4 rayMarch(Ray ray){
-    const float minStep = 0.00001;
+    const float minStep = 0.001;
     const int timeout = int(1.0/minStep) * 10;
 
     vec4 result = vec4(0.0,0.0,0.0,0.0);
@@ -286,9 +286,13 @@ vec4 rayMarch(Ray ray){
         }
         float dist = sceneSDF(pos);
 
-        
-        if(dist <= 0.1){
-            extra += vec4(0.04,0.02,0.02,0.01);
+        if(dist <= abs(distortionFactor)){
+            extra += vec4(0.047,0.027,0.027,0.01);
+        }
+        if(length(pos) < 0.65 && dist < 0.03){
+                extra += vec4(0.01,0.001,0.01,0.3);
+            
+            //break;
         }
         
         if(dist <= EPSILON){
