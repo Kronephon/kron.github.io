@@ -101,7 +101,7 @@ function aboutScene(resources) {
     var postProcessingShader = [resources[0], resources[1]];
     var gateShader   = [resources[2], resources[3]];
     var backgroundShader   = [resources[4], resources[5]];
-    var statue = resources[6];
+    //var statue = resources[6];
 
     sceneSetup(postProcessingShader);
     worldSetup(gateShader, backgroundShader);

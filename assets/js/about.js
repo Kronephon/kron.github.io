@@ -20,7 +20,8 @@ function loadResourcesAndStart(canvas) {
         'assets/js/aboutBackground/worldBackgroundFragmentShader.glsl',
         ],
         function callback(result) {
-            loadGLTF(result);
+            //loadGLTF(result);
+            finishLoading(result);
         },
         function errorCallback() {
             throw ("Error in loading pre requisites. Missing Files.");
@@ -28,7 +29,6 @@ function loadResourcesAndStart(canvas) {
 }
 
 //bypass due to dedicated THREEjs loaders/parsers
-
 function loadGLTF(result) {
 
     const gltfLoader = new THREE.GLTFLoader();
@@ -39,10 +39,18 @@ function loadGLTF(result) {
                 if ( child.isMesh ) {
                     result.push(child);
                 }
-            } ); 
+            } );
             aboutScene(result);
         });
 }
 
+function finishLoading(result){
+    element = document.getElementById("loader");
+    if(typeof(element) !== 'undefined'){
+        element.style.display = "none";
+        aboutScene(result); 
+    }
+    
+}
 console.log("Cheeky little one aren't you? :)");
-loadResourcesAndStart();
+window.onload = loadResourcesAndStart();
