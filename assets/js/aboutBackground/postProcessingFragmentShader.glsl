@@ -16,11 +16,11 @@ float random (in vec2 _st) {
 void main() {
     vec4 previousPassColor = texture2D(tDiffuse, vUv);
     if(clicked){
-        if(mod(clock, 3.0) >= 1.0){
-            previousPassColor = texture2D(tDiffuse, vUv + 0.04 * (random(vec2(clock, vUv.x) - 0.5)));
-        }else{
-            previousPassColor = texture2D(tDiffuse, vUv + 0.04 * (random(vec2(clock, vUv.y) - 0.5)));
-        }
+            if(previousPassColor.x <= 0.8){
+                previousPassColor = texture2D(tDiffuse, vec2(vUv.x + 0.02 * (random(vec2(clock, vUv.y)) - 0.5)
+                                                        ,vUv.y + 0.02 * (random(vec2(clock, vUv.x)) - 0.5)));
+                previousPassColor.x = 0.0;                                                        
+            }
     }
     
     gl_FragColor = previousPassColor;
