@@ -27,9 +27,71 @@ layout: basic
                 height: 80vh;
                 position: fixed;
                 z-index: 2;
-                color: var(--white);
+                color: black;
      }
+     #mainMenu { 
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 55%;
+        left: 50%;
+        width: 90vw;
+    }
+    .text{
+        text-transform: uppercase;
+        user-select: none;
+        text-align: center;
+        overflow: hidden;
+        font-family: myTechFont;
+        color: rgb(252, 225, 186);
+     }
+     .text::before {
+        content: attr(data-text);
+        position: absolute;
+        color: rgb(177, 29, 29);
+        filter: blur(0.02em);
+        mix-blend-mode: difference;
+    }
+
+    .gradient {
+    position: absolute;
+    background: linear-gradient(45deg, red, gold, lightgreen, gold, red);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    mix-blend-mode: multiply;
+    }
+
+     #mainTitle{
+        max-height: 100px;
+        min-height: 20px;    
+        font-size: 70px;
+        opacity: 0.8;
+     }
+     #subTitle{
+
+     }
+     #FooterMain{
+        position: absolute;
+        bottom: 0px;
+        right: 5px;
+        font-family: myTechFont;
+        max-height: 20px;
+        min-height: 20px;
+        font-size: 15px;
+        text-align: right;
+    }
+    a{
+        text-decoration: none;
+        color: rgb(124, 116, 105);
+    }
+
 </style>
 <div class='aboutBar' id = 'aboutBarTop'></div>
+<div class='mainMenu' id = 'mainMenu'>
+<div class='text' id = 'mainTitle'>Pedro Pimentel</div>
+<div class='text' id = 'subTitle'>Engineer . Creator . Shenaniganizer</div>
+</div>
 <canvas id='aboutCanvas'></canvas>
 <div class='aboutBar' id = 'aboutBarBottom'></div>
+<div id='Footer'>{% include footer.html %}</div>

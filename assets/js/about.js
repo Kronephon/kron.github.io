@@ -44,4 +44,5 @@ function loadGLTF(result) {
         });
 }
 
+console.log("Cheeky little one aren't you? :)");
 loadResourcesAndStart();
