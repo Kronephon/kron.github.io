@@ -2,14 +2,16 @@
 layout: basic
 ---
 <style>
-    html, body{
+    html,
+    body {
         overflow: hidden;
         position: relative;
         height: 100%;
         margin: 0;
         padding: 0;
     }
-    .aboutBar{
+
+    .aboutBar {
 
         height: 0vh;
         width: 100vw;
@@ -17,61 +19,73 @@ layout: basic
         z-index: 1000;
         position: fixed;
     }
-    #aboutBarTop{
+
+    #aboutBarTop {
         top: 0;
     }
-    #aboutBarBottom{
+
+    #aboutBarBottom {
         bottom: 0;
     }
-    #aboutCanvas { 
-                height: 80vh;
-                position: fixed;
-                z-index: 2;
-                color: black;
-     }
-     #mainMenu { 
+
+    #aboutCanvas {
+        height: 80vh;
+        position: fixed;
+        z-index: 2;
+        color: black;
+    }
+
+    #mainMenu {
         position: absolute;
         transform: translate(-50%, -50%);
         top: 55%;
         left: 50%;
         width: 90vw;
     }
-    .text{
+
+    .text {
         text-transform: uppercase;
         user-select: none;
         text-align: center;
         overflow: hidden;
         font-family: myTechFont;
         color: rgb(252, 225, 186);
-     }
-     .text::before {
-        content: attr(data-text);
-        position: absolute;
-        color: rgb(177, 29, 29);
-        filter: blur(0.02em);
-        mix-blend-mode: difference;
     }
 
-    .gradient {
-    position: absolute;
-    background: linear-gradient(45deg, red, gold, lightgreen, gold, red);
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    mix-blend-mode: multiply;
-    }
-
-     #mainTitle{
-        max-height: 100px;
-        min-height: 20px;    
+    #mainTitle {
+        opacity: 0.0;
+        animation: fadeNScale;
+        animation-duration: 5s;
+        animation-delay: 2s;
+        animation-fill-mode: forwards;
         font-size: 70px;
-        opacity: 0.8;
-     }
-     #subTitle{
+        letter-spacing: 3px;
+    }
 
-     }
-     #FooterMain{
+    #subTitle {
+        opacity: 0.0;
+        animation: fadeNScale;
+        animation-duration: 4s;
+        animation-delay: 2.5s;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes fadeNScale {
+        from {
+            opacity: 0;
+            transform: scale(1.1, 1.1);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1, 1);
+            text-shadow: 0 0 5px black;
+        }
+    }
+
+
+
+    #FooterMain {
         position: absolute;
         bottom: 0px;
         right: 5px;
@@ -81,17 +95,17 @@ layout: basic
         font-size: 15px;
         text-align: right;
     }
-    a{
+
+    a {
         text-decoration: none;
         color: rgb(124, 116, 105);
     }
-
 </style>
-<div class='aboutBar' id = 'aboutBarTop'></div>
-<div class='mainMenu' id = 'mainMenu'>
-<div class='text' id = 'mainTitle'>Pedro Pimentel</div>
-<div class='text' id = 'subTitle'>Engineer . Creator . Shenaniganizer</div>
+<div class='aboutBar' id='aboutBarTop'></div>
+<div class='mainMenu' id='mainMenu'>
+    <div class='text' id='mainTitle'>Pedro Pimentel</div>
+    <div class='text' id='subTitle'>Engineer . Creator . Shenaniganizer</div>
 </div>
 <canvas id='aboutCanvas'></canvas>
-<div class='aboutBar' id = 'aboutBarBottom'></div>
+<div class='aboutBar' id='aboutBarBottom'></div>
 <div id='Footer'>{% include footer.html %}</div>
