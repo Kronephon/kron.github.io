@@ -36,7 +36,7 @@ class KrWorld {
             colorAmbient: {type: 'vec3', value: this.colorCoreAmbient},
             colorDiffuse: {type: 'vec3', value: this.colorCoreDiffuse},
             colorSpecular: {type: 'vec3', value: this.colorCoreSpecular},
-            clock: {type: 'float', value: this.clock.getElapsedTime()},
+            clock: {type: 'float', value: 0.0},
             distortionFactor: {type: 'float', value: 0.0},
             distortionFactor2: {type: 'float', value: 0.0},
         };
@@ -93,7 +93,9 @@ class KrWorld {
         scene_sp.add(artifacts);
         return artifacts;
     }
-
+    updateStars(){
+        this.starfield.starmap.rotateZ((Math.random() - 0.3) * 0.004);
+    }
     updateArtifacts(){
         this.artifacts.rotateY(0.0002);
         for ( var a = 1; a < this.artifacts.children.length; a ++ ) {
@@ -120,7 +122,7 @@ class KrWorld {
         var geometry = new THREE.DodecahedronBufferGeometry(20, 6);
 
         let uniforms = {
-            clock: {type: 'float', value: this.clock.getElapsedTime()}
+            clock: {type: 'float', value: 0.0}
         };
         let material =  new THREE.ShaderMaterial({
             uniforms: uniforms,
@@ -136,23 +138,23 @@ class KrWorld {
         return sphere;
     }
 
-    updateBackground(){
-        this.background.material.uniforms.clock.value = this.clock.getElapsedTime();
+    updateBackground(date){
+        this.background.material.uniforms.clock.value = date;
     }
 
-    updateCore(){
-        this.sphereCenter.material.uniforms.distortionFactor.value = Math.sin(this.clock.getElapsedTime()*0.1) + (Math.cos(this.clock.getElapsedTime()*0.2 + 0.3) + 0.08);
-        if(this.clock.getElapsedTime() <= this.openingTime*4/Math.PI){
-            this.sphereCenter.material.uniforms.distortionFactor2.value = Math.sin(this.clock.getElapsedTime()*this.openingTime);
+    updateCore(date){
+        this.sphereCenter.material.uniforms.distortionFactor.value = Math.sin(date*0.1) + (Math.cos(date*0.2 + 0.3) + 0.08);
+        if(date <= this.openingTime*4/Math.PI){
+            this.sphereCenter.material.uniforms.distortionFactor2.value = Math.sin(date*this.openingTime);
         }
-        this.sphereCenter.material.uniforms.clock.value = this.clock.getElapsedTime();
+        this.sphereCenter.material.uniforms.clock.value = date;
     }
 
-    update() {
+    update(date) {
         //this.updateArtifacts();
-        this.updateBackground();
-        this.updateCore();
-        this.starfield.update();
+        this.updateBackground(date);
+        this.updateCore(date);
+        this.starfield.update(date);
     }
 }
 
@@ -177,7 +179,6 @@ const STAR_R = 0.10;
 
 class Stars_sp{
     constructor(){
-        this.clock = new THREE.Clock();
         var vertices = new Float32Array(NUMBER_OF_STARS_SP * 3);
         var starclass = new Float32Array(NUMBER_OF_STARS_SP * 3);
         var shine = new Float32Array(NUMBER_OF_STARS_SP);
@@ -278,10 +279,9 @@ class Stars_sp{
                                             
         this.starmap = new THREE.Points(geometry, mat);
         scene_sp.add(this.starmap);
-        //console.log(this.starmap);
     }
-    update(){
-        this.pointsUniforms.time.value = this.clock.getElapsedTime();
+    update(date){
+        this.pointsUniforms.time.value = date;
         this.starmap.rotation.z += 0.000003;
     }
 }

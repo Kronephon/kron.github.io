@@ -5,42 +5,25 @@ class postProcessingShader_sp {
         this.uniforms = {
             tDiffuse: { type: 'float', value: null },
             amount: { type: 'float', value: 1.0 },
-            windowsResolution: { type: 'vec2', value: renderer_sp.getSize() }
+            windowsResolution: { type: 'vec2', value: renderer_sp.getSize()},
+            clock: {type: 'float', value: 0.0},
+            clicked: {type: 'bool', value: false}
         };
         this.vertexShader = vertexShader;
         this.fragmentShader = fragmentShader;
     }
 }
 
-
-function paralaxInit() {
-    camera_sp.userData.target = new THREE.Vector3(0, 0, 0);
-    camera_sp.userData.cameraLook = new THREE.Vector3(0, 0, 0);
-    camera_sp.userData.velocity = new THREE.Vector3(0, 0, 0);
-    camera_sp.userData.attraction = 0.001;
-    camera_sp.userData.attriction = 0.01;
-    document.addEventListener('mousemove', onDocumentMouseMove, false);
+function onMouseMove(event) {
+    world_sp.updateStars();
 }
 
-function paralax() {
-    var fx = (camera_sp.userData.target.x - camera_sp.userData.cameraLook.x) * camera_sp.userData.attraction;
-    var fy = (camera_sp.userData.target.y - camera_sp.userData.cameraLook.y) * camera_sp.userData.attraction;
-
-    camera_sp.userData.velocity.x += fx;
-    camera_sp.userData.velocity.y += fy;
-
-    camera_sp.userData.cameraLook.x += camera_sp.userData.velocity.x;
-    camera_sp.userData.cameraLook.y += camera_sp.userData.velocity.y;
-
-    camera_sp.lookAt(camera_sp.userData.cameraLook);
-
-    camera_sp.userData.velocity.x *= camera_sp.userData.attriction;
-    camera_sp.userData.velocity.y *= camera_sp.userData.attriction;
+function onPressStart(event) {
+    shaderPass_sp.uniforms.clicked.value = true;
 }
 
-function onDocumentMouseMove(event) {
-    camera_sp.userData.target.x = 2 * (event.clientX / window.innerWidth - 0.5) * 0.75;
-    camera_sp.userData.target.y = -2 * (event.clientY / window.innerWidth - 0.5) * 0.75;
+function onPressEnd(event) {
+    shaderPass_sp.uniforms.clicked.value = false;
 }
 
 function onKeyPress(event) {
@@ -79,7 +62,12 @@ function sceneSetup(postProcessingShader){
     camera_sp = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 2000);
     camera_sp.position.z = 4;
     camera_sp.position.y = -0.4;
-    paralaxInit();
+    document.addEventListener('mousedown', onPressStart, false);
+    document.addEventListener('touchstart', onPressStart, false);
+    document.addEventListener('mouseup', onPressEnd, false);
+    document.addEventListener('touchend', onPressEnd, false);
+
+    //document.addEventListener('mousemove', onMouseMove,false);
     document.addEventListener('keydown', onKeyPress, false); //test camera controls
     renderer_sp = new THREE.WebGLRenderer();
     renderer_sp.setSize(window.innerWidth, window.innerHeight); // change this for smaller resolutions (setSize(window.innerWidth/2, window.innerHeight/2, false) )    
@@ -105,11 +93,12 @@ function aboutScene(resources) {
 
     sceneSetup(postProcessingShader);
     worldSetup(gateShader, backgroundShader);
+    const clock = new THREE.Clock();
 
     function animate() {
         //paralax();
-        world_sp.update();
-        camera_sp.rotation.z += 0.0002;
+        world_sp.update(clock.getElapsedTime());
+        shaderPass_sp.uniforms.clock.value = clock.getElapsedTime();
         composer_sp.render();
         requestAnimationFrame(animate);
     }
