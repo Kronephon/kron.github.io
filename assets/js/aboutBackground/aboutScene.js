@@ -18,12 +18,36 @@ function onMouseMove(event) {
     world_sp.updateStars();
 }
 
+function makeid(length) {
+    var result           = '';
+    var characters       = 'áääåé®þüúíóö«»¬áßðø¶´æ©ñµç¿!@#$%^&*()_+DEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
+
+var clickMemory;
+
 function onPressStart(event) {
     shaderPass_sp.uniforms.clicked.value = true;
+    elements = document.getElementsByClassName('text');
+    for(i = 0; i< elements.length; i++){
+        //clickMemory[i] = elements[i].innerHTML; 
+        //elements[i].innerHTML = makeid(element.innerHTML.length);
+        //elements[i].style.filter = "invert(100%)";
+        elements[i].style.visibility = "hidden";
+    }
+    
 }
 
 function onPressEnd(event) {
     shaderPass_sp.uniforms.clicked.value = false;
+    elements = document.getElementsByClassName('text');
+    for(i = 0; i< elements.length; i++){
+        elements[i].style.visibility = "visible";
+    }
 }
 
 function onKeyPress(event) {

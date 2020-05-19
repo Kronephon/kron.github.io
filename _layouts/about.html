@@ -49,7 +49,8 @@ layout: basic
         text-align: center;
         overflow: hidden;
         font-family: myTechFont;
-        color: rgb(252, 225, 186);
+        color:rgb(238, 219, 180);
+
     }
 
     #mainTitle {
@@ -79,7 +80,6 @@ layout: basic
         to {
             opacity: 1;
             transform: scale(1, 1);
-            text-shadow: 0 0 5px black;
         }
     }
 
@@ -98,7 +98,28 @@ layout: basic
 
     a {
         text-decoration: none;
-        color: rgb(124, 116, 105);
+        color: rgb(238, 219, 180);
+    }
+
+    #ContactList {
+        font-size: 0px;
+
+        display: flex;
+        flex: 0 0 auto;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        align-items: center;
+        width: 200px;
+        padding-top: 10px;
+    }
+
+    #ContactList img {
+        width: 30px !important;
+        height: 30px !important;
+        filter: brightness(0) invert(0.9);
+
+        transition: transform 0.4s ease;
     }
 </style>
 {% include loader.html %}
@@ -106,6 +127,7 @@ layout: basic
 <div class='mainMenu' id='mainMenu'>
     <div class='text' id='mainTitle'>Pedro Pimentel</div>
     <div class='text' id='subTitle'>Engineer . Creator . Shenaniganizer</div>
+    <div class='text' id='ContactList'></div>
 </div>
 <canvas id='aboutCanvas'></canvas>
 <div class='aboutBar' id='aboutBarBottom'></div>
