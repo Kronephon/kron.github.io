@@ -151,9 +151,6 @@ float sceneSDF(vec3 point){
     vec3 rotPoint = vec3(dot(vec4(point,0.0), rot[0]),dot(vec4(point,0.0), rot[1]),dot(vec4(point,0.0), rot[2]));
     float smoothed= smoothIntersectionSDF(shapeHollow, shapeCenter + distortionFactor2 * fbm(0.4 + distortionFactor * 5.3 * rotPoint), 0.1 );
     return smoothIntersectionSDF(maxSphere, smoothed, 0.7);
-
-
-
     /*float shapeCenter = sdSphere(point, 0.2);
     float cone = sdRoundCone(point, 0.2, 0.79, 0.9);
 
@@ -195,6 +192,7 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
     //vec3 reflected = normalize(2.0 * dot(lightVector, normal) * normal - lightVector);
  
     vec3 ambientSection = ambient * ambientColor;
+    vec3 noiseColor = vec3(random(point.xz * 10.0));
     //vec3 diffuseSection = diffuse * (dot(lightVector, normal)) * diffuseColor;
 
     //vec3 specularSection = vec3(0.0,0.0,0.0);   
@@ -203,7 +201,7 @@ vec3 shade(vec3 point, vec3 direction){ // using phong for now
     //}
     
     //return max(ambientSection + mainLight.intensity * diffuseSection + specularSection, ambientSection);
-    return ambientSection;
+    return  ambientSection - 0.15 * noiseColor;
 }
 
 vec4 rayMarch(Ray ray){

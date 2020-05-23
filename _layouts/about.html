@@ -37,7 +37,7 @@ layout: basic
 
     #mainMenu {
         position: absolute;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, 30%);
         top: 55%;
         left: 50%;
         width: 90vw;
@@ -56,17 +56,18 @@ layout: basic
     #mainTitle {
         opacity: 0.0;
         animation: fadeNScale;
-        animation-duration: 5s;
-        animation-delay: 2s;
+        animation-duration: 2s;
+        animation-delay: 1.5s;
         animation-fill-mode: forwards;
         font-size: 70px;
         letter-spacing: 3px;
     }
 
     #subTitle {
+        color: rgb(230, 214, 231);
         opacity: 0.0;
         animation: fadeNScale;
-        animation-duration: 4s;
+        animation-duration: 2s;
         animation-delay: 2.5s;
         animation-fill-mode: forwards;
     }
@@ -83,7 +84,27 @@ layout: basic
         }
     }
 
+    @keyframes cycleSize {
+        from {
+            transform: scale(1.1, 1.1);
+        }
 
+        to {
+            transform: scale(1, 1);
+        }
+    }
+
+    @keyframes fadeNScale2 {
+        from {
+            opacity: 0;
+            transform: scale(0.9, 0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1, 1);
+        }
+    }
 
     #FooterMain {
         position: absolute;
@@ -103,23 +124,33 @@ layout: basic
 
     #ContactList {
         font-size: 0px;
-
+        position: relative;
         display: flex;
         flex: 0 0 auto;
         flex-direction: row;
-        justify-content: center;
-        width: 100%;
+        justify-content: space-between;
         align-items: center;
-        width: 200px;
-        padding-top: 10px;
+        width: 30%;
+        min-width: 300px;
+        padding-top: 20px;
+
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     #ContactList img {
-        width: 30px !important;
-        height: 30px !important;
-        filter: brightness(0) invert(0.9);
-
-        transition: transform 0.4s ease;
+        width: 30px;
+        padding-left: 10px;
+        padding-right: 10px;
+        height: 30px;
+        opacity: 0.0;
+        
+        animation: fadeNScale2;
+        animation-duration: 1s;
+        animation-delay: 1.6s;
+        animation-fill-mode: forwards;
+        filter: invert(87%) sepia(31%) saturate(250%) hue-rotate(357deg) brightness(97%) contrast(93%);
     }
 </style>
 {% include loader.html %}

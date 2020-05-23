@@ -37,7 +37,7 @@ function onPressStart(event) {
         //clickMemory[i] = elements[i].innerHTML; 
         //elements[i].innerHTML = makeid(element.innerHTML.length);
         //elements[i].style.filter = "invert(100%)";
-        elements[i].style.visibility = "hidden";
+        //elements[i].style.opacity = 0.2;
     }
     
 }
