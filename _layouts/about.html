@@ -31,7 +31,7 @@ layout: basic
     #aboutCanvas {
         height: 80vh;
         position: fixed;
-        z-index: 2;
+        z-index: -1;
         color: black;
     }
 
@@ -50,7 +50,6 @@ layout: basic
         overflow: hidden;
         font-family: myTechFont;
         color:rgb(238, 219, 180);
-
     }
 
     #mainTitle {
@@ -84,16 +83,6 @@ layout: basic
         }
     }
 
-    @keyframes cycleSize {
-        from {
-            transform: scale(1.1, 1.1);
-        }
-
-        to {
-            transform: scale(1, 1);
-        }
-    }
-
     @keyframes fadeNScale2 {
         from {
             opacity: 0;
@@ -115,6 +104,7 @@ layout: basic
         min-height: 20px;
         font-size: 15px;
         text-align: right;
+        user-select: none;
     }
 
     a {
@@ -124,28 +114,23 @@ layout: basic
 
     #ContactList {
         font-size: 0px;
-        position: relative;
         display: flex;
         flex: 0 0 auto;
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
         width: 30%;
         min-width: 300px;
         padding-top: 20px;
-
-        display: block;
         margin-left: auto;
         margin-right: auto;
+        clear: both;
     }
 
     #ContactList img {
         width: 30px;
         padding-left: 10px;
         padding-right: 10px;
-        height: 30px;
         opacity: 0.0;
-        
         animation: fadeNScale2;
         animation-duration: 1s;
         animation-delay: 1.6s;
