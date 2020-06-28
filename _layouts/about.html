@@ -49,7 +49,6 @@ layout: basic
         text-align: center;
         overflow: hidden;
         font-family: myTechFont;
-        color:rgb(238, 219, 180);
     }
 
     #mainTitle {
@@ -60,10 +59,12 @@ layout: basic
         animation-fill-mode: forwards;
         font-size: 70px;
         letter-spacing: 3px;
+        text-overflow: clip;
+        color: rgb(255, 169, 152);
     }
 
     #subTitle {
-        color: rgb(230, 214, 231);
+        color: rgb(179, 96, 111);
         opacity: 0.0;
         animation: fadeNScale;
         animation-duration: 2s;
@@ -109,7 +110,7 @@ layout: basic
 
     a {
         text-decoration: none;
-        color: rgb(238, 219, 180);
+        color: rgb(255, 167, 173);
     }
 
     #ContactList {
@@ -135,7 +136,45 @@ layout: basic
         animation-duration: 1s;
         animation-delay: 1.6s;
         animation-fill-mode: forwards;
-        filter: invert(87%) sepia(31%) saturate(250%) hue-rotate(357deg) brightness(97%) contrast(93%);
+        filter: invert(78%) sepia(16%) saturate(1515%) hue-rotate(314deg) brightness(100%) contrast(102%)
+
+
+    }
+
+    /* portrait sorta */
+    @media (max-width: 768px) {}
+
+    /* cellphone */
+    @media only screen and (max-device-width : 640px) {
+        #mainMenu {
+            transform: translate(-50%, 30%);
+            bottom: 20px;
+            width: 90vw;
+        }
+
+        #mainTitle {
+            font-size: 110px;
+        }
+
+        #subTitle {
+            font-size: 45px;
+        }
+
+        #FooterMain {
+            max-height: 35px;
+            min-height: 35px;
+            font-size: 30px;
+        }
+
+        #ContactList {
+            width: 90%;
+            min-width: 90%;
+            padding-top: 70px;
+        }
+
+        #ContactList img {
+            width: 100px;
+        }
     }
 </style>
 {% include loader.html %}
